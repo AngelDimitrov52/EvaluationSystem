@@ -1,0 +1,178 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\a.dimitrov\\source\\repos\\EvaluationSystem\\src\\Infrastructure\\EvaluationSystem.Infrastructure\\EvaluationSystem.Infrastructure.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\a.dimitrov\\source\\repos\\EvaluationSystem\\src\\Core\\EvaluationSystem.Application\\EvaluationSystem.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\a.dimitrov\\source\\repos\\EvaluationSystem\\src\\Core\\EvaluationSystem.Application\\EvaluationSystem.Application.csproj",
+        "projectName": "EvaluationSystem.Application",
+        "projectPath": "C:\\Users\\a.dimitrov\\source\\repos\\EvaluationSystem\\src\\Core\\EvaluationSystem.Application\\EvaluationSystem.Application.csproj",
+        "packagesPath": "C:\\Users\\a.dimitrov\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\a.dimitrov\\source\\repos\\EvaluationSystem\\src\\Core\\EvaluationSystem.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\a.dimitrov\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.1": {
+            "targetAlias": "netstandard2.1",
+            "projectReferences": {
+              "C:\\Users\\a.dimitrov\\source\\repos\\EvaluationSystem\\src\\Core\\EvaluationSystem.Domain\\EvaluationSystem.Domain.csproj": {
+                "projectPath": "C:\\Users\\a.dimitrov\\source\\repos\\EvaluationSystem\\src\\Core\\EvaluationSystem.Domain\\EvaluationSystem.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.1": {
+          "targetAlias": "netstandard2.1",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "NETStandard.Library": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\a.dimitrov\\source\\repos\\EvaluationSystem\\src\\Core\\EvaluationSystem.Domain\\EvaluationSystem.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\a.dimitrov\\source\\repos\\EvaluationSystem\\src\\Core\\EvaluationSystem.Domain\\EvaluationSystem.Domain.csproj",
+        "projectName": "EvaluationSystem.Domain",
+        "projectPath": "C:\\Users\\a.dimitrov\\source\\repos\\EvaluationSystem\\src\\Core\\EvaluationSystem.Domain\\EvaluationSystem.Domain.csproj",
+        "packagesPath": "C:\\Users\\a.dimitrov\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\a.dimitrov\\source\\repos\\EvaluationSystem\\src\\Core\\EvaluationSystem.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\a.dimitrov\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.1": {
+            "targetAlias": "netstandard2.1",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.1": {
+          "targetAlias": "netstandard2.1",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "NETStandard.Library": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\a.dimitrov\\source\\repos\\EvaluationSystem\\src\\Infrastructure\\EvaluationSystem.Infrastructure\\EvaluationSystem.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\a.dimitrov\\source\\repos\\EvaluationSystem\\src\\Infrastructure\\EvaluationSystem.Infrastructure\\EvaluationSystem.Infrastructure.csproj",
+        "projectName": "EvaluationSystem.Infrastructure",
+        "projectPath": "C:\\Users\\a.dimitrov\\source\\repos\\EvaluationSystem\\src\\Infrastructure\\EvaluationSystem.Infrastructure\\EvaluationSystem.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\a.dimitrov\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\a.dimitrov\\source\\repos\\EvaluationSystem\\src\\Infrastructure\\EvaluationSystem.Infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\a.dimitrov\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.1": {
+            "targetAlias": "netstandard2.1",
+            "projectReferences": {
+              "C:\\Users\\a.dimitrov\\source\\repos\\EvaluationSystem\\src\\Core\\EvaluationSystem.Application\\EvaluationSystem.Application.csproj": {
+                "projectPath": "C:\\Users\\a.dimitrov\\source\\repos\\EvaluationSystem\\src\\Core\\EvaluationSystem.Application\\EvaluationSystem.Application.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.1": {
+          "targetAlias": "netstandard2.1",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "NETStandard.Library": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
