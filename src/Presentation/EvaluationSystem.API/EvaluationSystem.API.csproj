@@ -9,7 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\EvaluationSystem.Application\EvaluationSystem.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\EvaluationSystem.Infrastructure\EvaluationSystem.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\EvaluationSystem.Persistence\EvaluationSystem.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
