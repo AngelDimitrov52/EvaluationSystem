@@ -11,15 +11,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{5D7D36E1-DE93-411D-AE5E-11CED8B4AC54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvaluationSystem.Domain", "src\Core\EvaluationSystem.Domain\EvaluationSystem.Domain.csproj", "{7321AECA-C58B-48E3-B3EF-B535831E2FE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EvaluationSystem.Domain", "src\Core\EvaluationSystem.Domain\EvaluationSystem.Domain.csproj", "{7321AECA-C58B-48E3-B3EF-B535831E2FE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvaluationSystem.Application", "src\Core\EvaluationSystem.Application\EvaluationSystem.Application.csproj", "{A75EBDE5-4901-44F2-B4C7-7A5D1D8DF830}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EvaluationSystem.Application", "src\Core\EvaluationSystem.Application\EvaluationSystem.Application.csproj", "{A75EBDE5-4901-44F2-B4C7-7A5D1D8DF830}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvaluationSystem.Infrastructure", "src\Infrastructure\EvaluationSystem.Infrastructure\EvaluationSystem.Infrastructure.csproj", "{6C20A537-E7DC-471E-8592-80290F9CCEA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EvaluationSystem.Persistence", "src\Infrastructure\EvaluationSystem.Persistence\EvaluationSystem.Persistence.csproj", "{F8F1031F-EA8D-41E1-905F-CF57E957B554}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvaluationSystem.Persistence", "src\Infrastructure\EvaluationSystem.Persistence\EvaluationSystem.Persistence.csproj", "{F8F1031F-EA8D-41E1-905F-CF57E957B554}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvaluationSystem.API", "src\Presentation\EvaluationSystem.API\EvaluationSystem.API.csproj", "{BEBB04C4-2722-45DE-9EED-3ADDCE49AC4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EvaluationSystem.API", "src\Presentation\EvaluationSystem.API\EvaluationSystem.API.csproj", "{BEBB04C4-2722-45DE-9EED-3ADDCE49AC4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +33,6 @@ Global
 		{A75EBDE5-4901-44F2-B4C7-7A5D1D8DF830}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A75EBDE5-4901-44F2-B4C7-7A5D1D8DF830}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A75EBDE5-4901-44F2-B4C7-7A5D1D8DF830}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6C20A537-E7DC-471E-8592-80290F9CCEA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6C20A537-E7DC-471E-8592-80290F9CCEA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6C20A537-E7DC-471E-8592-80290F9CCEA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6C20A537-E7DC-471E-8592-80290F9CCEA5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F8F1031F-EA8D-41E1-905F-CF57E957B554}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F8F1031F-EA8D-41E1-905F-CF57E957B554}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8F1031F-EA8D-41E1-905F-CF57E957B554}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -57,7 +51,6 @@ Global
 		{5D7D36E1-DE93-411D-AE5E-11CED8B4AC54} = {190EA71C-0204-4A8F-93D3-C6D04C8E5B80}
 		{7321AECA-C58B-48E3-B3EF-B535831E2FE3} = {E7A30A3E-EB5A-4A55-84E7-7EBC5338AE78}
 		{A75EBDE5-4901-44F2-B4C7-7A5D1D8DF830} = {E7A30A3E-EB5A-4A55-84E7-7EBC5338AE78}
-		{6C20A537-E7DC-471E-8592-80290F9CCEA5} = {BBD4E5A1-059E-4628-ACAB-4BCEB33BCE25}
 		{F8F1031F-EA8D-41E1-905F-CF57E957B554} = {BBD4E5A1-059E-4628-ACAB-4BCEB33BCE25}
 		{BEBB04C4-2722-45DE-9EED-3ADDCE49AC4C} = {5D7D36E1-DE93-411D-AE5E-11CED8B4AC54}
 	EndGlobalSection
