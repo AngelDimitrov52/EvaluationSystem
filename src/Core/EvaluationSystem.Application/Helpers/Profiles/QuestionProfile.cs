@@ -13,7 +13,7 @@ namespace EvaluationSystem.Application.Helpers.Profiles
     {
         public QuestionProfile()
         {
-            CreateMap<QuestionEntity, QuestionDto>().ReverseMap();
+            CreateMap<Question, QuestionDto>().ReverseMap();
         }
     }
 }

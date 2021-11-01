@@ -9,7 +9,7 @@ namespace EvaluationSystem.Application.Models.QuestionModels
 {
     public interface IQuestionRepository
     {
-        QuestionEntity GetAnswerById(int id);
+        Question GetAnswerById(int id);
 
     }
 }

@@ -20,7 +20,7 @@ namespace EvaluationSystem.Application.Services.AnswerService
         }
         public AnswerDto GetById(int id)
         {
-            АnswerEntity аnswer = _repository.GetAnswerById(id);
+            Аnswer аnswer = _repository.GetAnswerById(id);
 
             AnswerDto answerDto = _mapper.Map<AnswerDto>(аnswer);
 

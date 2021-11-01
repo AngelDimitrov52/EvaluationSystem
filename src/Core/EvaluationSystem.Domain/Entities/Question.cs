@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Domain.Entities
 {
-    public class АnswerEntity : BaseEntity
+   public class Question : BaseEntity
     {
-    
-        public int QuestionId { get; set; }
+        public int ModuleId { get; set; }
         public string Title { get; set; }
-        public string Type { get; set; }
+        public List<Аnswer> Answers { get; set; }
+
     }
 }

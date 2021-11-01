@@ -1,5 +1,7 @@
 ﻿
 
+using EvaluationSystem.Domain.Enums;
+
 namespace EvaluationSystem.Application.Models.AnswerModels
 {
    public class AnswerDto : BaseDto

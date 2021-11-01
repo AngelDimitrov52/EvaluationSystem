@@ -13,15 +13,15 @@ namespace EvaluationSystem.Persistence.Repositories
     {
         private DataBase data = new DataBase();
 
-        public List<АnswerEntity> GetAllAnswerByQuestionId(int id)
+        public List<Аnswer> GetAllAnswerByQuestionId(int id)
         {
-            List<АnswerEntity> result = data.answerData.Where(p => p.QuestionId == id).ToList();
+            List<Аnswer> result = data.answerData.Where(p => p.QuestionId == id).ToList();
 
             return result;
         }
-        public АnswerEntity GetAnswerById(int id)
+        public Аnswer GetAnswerById(int id)
         {
-            АnswerEntity аnswer = data.answerData.FirstOrDefault(p => p.Id == id);
+            Аnswer аnswer = data.answerData.FirstOrDefault(p => p.Id == id);
 
             return аnswer;
         }

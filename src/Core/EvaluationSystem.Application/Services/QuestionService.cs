@@ -21,7 +21,7 @@ namespace EvaluationSystem.Application.Services
         }
         public QuestionDto GetById(int id)
         {
-            QuestionEntity аnswer = _repository.GetAnswerById(id);
+            Question аnswer = _repository.GetAnswerById(id);
 
             QuestionDto answerDto = _mapper.Map<QuestionDto>(аnswer);
 

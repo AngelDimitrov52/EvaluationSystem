@@ -7,9 +7,7 @@ namespace EvaluationSystem.Application.Models.AnswerModels
 {
    public interface IAnswerRepository
     {
-         АnswerEntity GetAnswerById(int id);
-        List<АnswerEntity> GetAllAnswerByQuestionId(int id);
-
-
+         Аnswer GetAnswerById(int id);
+        List<Аnswer> GetAllAnswerByQuestionId(int id);
     }
 }

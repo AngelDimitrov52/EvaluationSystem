@@ -19,9 +19,9 @@ namespace EvaluationSystem.Persistence.Repositories
             data = new DataBase();
             _answerRepository = repository;
         }
-        public QuestionEntity GetAnswerById(int id)
+        public Question GetAnswerById(int id)
         {
-            QuestionEntity question = data.questionData.FirstOrDefault(p => p.Id == id);
+            Question question = data.questionData.FirstOrDefault(p => p.Id == id);
             question.Answers = _answerRepository.GetAllAnswerByQuestionId(id);
 
             return question;

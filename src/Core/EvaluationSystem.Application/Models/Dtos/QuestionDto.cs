@@ -11,6 +11,6 @@ namespace EvaluationSystem.Application.Models.Dtos
     {
         public int ModuleId { get; set; }
         public string Title { get; set; }
-        public List<АnswerEntity> Answers { get; set; }
+        public List<Аnswer> Answers { get; set; }
     }
 }
