@@ -19,11 +19,39 @@ namespace EvaluationSystem.API.Controllers
         {
             answerService = service;
         }
+
+        [HttpGet]
+        public List<AnswerDto> GetAllAnswer()
+        {
+            List<AnswerDto> result = answerService.GetAll();
+            return result;
+        }
+
         [HttpGet("{id}")]
         public AnswerDto GetAnswerById(int id)
         {
             AnswerDto result = answerService.GetById(id);
+            return result;
+        }
 
+        [HttpPost]
+        public AnswerDto CreateAnswer([FromBody] AnswerDto model)
+        {
+            AnswerDto result = answerService.Create(model);
+            return result;
+        }
+
+        [HttpPut]
+        public AnswerDto UpdateAnswer([FromBody] AnswerDto model)
+        {
+            AnswerDto result = answerService.Update(model);
+            return result;
+        }
+
+        [HttpDelete("{id}")]
+        public AnswerDto DeleteAnswer(int id)
+        {
+            AnswerDto result = answerService.Delete(id);
             return result;
         }
     }

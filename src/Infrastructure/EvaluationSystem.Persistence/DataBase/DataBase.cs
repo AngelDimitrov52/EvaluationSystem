@@ -6,11 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvaluationSystem.Persistence
+namespace EvaluationSystem.Persistence.DataBase
 {
-    public class DataBase
+    public class DataBase : IDataBase
+
     {
-        public List<Question> questionData = new List<Question>
+        private List<Question> _questionData = new List<Question>
         {
             new Question{Id = 1, Title= "Title 1" , Answers = new List<Аnswer>()},
             new Question{Id = 2, Title= "Title 2" , Answers = new List<Аnswer>()},
@@ -20,7 +21,7 @@ namespace EvaluationSystem.Persistence
             new Question{Id = 6, Title= "Title 6" , Answers = new List<Аnswer>()},
         };
 
-        public List<Аnswer> answerData = new List<Аnswer>
+        private List<Аnswer> _answerData = new List<Аnswer>
         {
             new Аnswer{Id = 1, Title= "Answer 1", Type = BottonsTypes.CheckBoxes.ToString() , QuestionId = 2},
             new Аnswer{Id = 2, Title= "Answer 2", Type = BottonsTypes.CheckBoxes.ToString() , QuestionId = 2},
@@ -35,5 +36,9 @@ namespace EvaluationSystem.Persistence
             new Аnswer{Id = 11, Title= "Answer 11", Type = BottonsTypes.TextField.ToString() , QuestionId = 3},
             new Аnswer{Id = 12, Title= "Answer 12", Type = BottonsTypes.TextField.ToString() , QuestionId = 3}
         };
+
+        public List<Question> questionData => _questionData;
+
+        public List<Аnswer> answerData => _answerData;
     }
 }

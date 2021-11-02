@@ -4,6 +4,7 @@ using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Services;
 using EvaluationSystem.Application.Services.AnswerService;
 using EvaluationSystem.Application.Validators;
+using EvaluationSystem.Persistence.DataBase;
 using EvaluationSystem.Persistence.Repositories;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -34,6 +35,8 @@ namespace EvaluationSystem.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IDataBase, DataBase>();
+
             services.AddScoped<IAnswerService, AnswerService>();
             services.AddScoped<IAnswerRepository, AnswerRepository>();
 

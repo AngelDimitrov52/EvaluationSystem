@@ -19,13 +19,40 @@ namespace EvaluationSystem.Application.Services
             _mapper = mapper;
             _repository = repository;
         }
+        public List<QuestionDto> GetAll()
+        {
+            List<Question> questions = _repository.GetAll();
+            List<QuestionDto> result = _mapper.Map<List<QuestionDto>>(questions);
+            return result;
+        }
         public QuestionDto GetById(int id)
         {
-            Question аnswer = _repository.GetAnswerById(id);
+            Question question = _repository.GetById(id);
+            QuestionDto questionDto = _mapper.Map<QuestionDto>(question);
+            return questionDto;
+        }
 
-            QuestionDto answerDto = _mapper.Map<QuestionDto>(аnswer);
+        public QuestionDto Update(QuestionDto model)
+        {
+            Question question = _mapper.Map<Question>(model);
+            var result = _repository.Update(question);
+            QuestionDto questionDto = _mapper.Map<QuestionDto>(result);
+            return questionDto;
+        }
 
-            return answerDto;
+        public QuestionDto Create(QuestionDto model)
+        {
+            Question question = _mapper.Map<Question>(model);
+            var result = _repository.AddNew(question);
+            QuestionDto questionDto = _mapper.Map<QuestionDto>(result);
+            return questionDto;
+        }
+
+        public QuestionDto Delete(int id)
+        {
+            Question question = _repository.Delete(id);
+            QuestionDto questionDto = _mapper.Map<QuestionDto>(question);
+            return questionDto;
         }
     }
 }

@@ -9,7 +9,11 @@ namespace EvaluationSystem.Application.Models.QuestionModels
 {
     public interface IQuestionRepository
     {
-        Question GetAnswerById(int id);
+        Question GetById(int id);
+        List<Question> GetAll();
+        Question Delete(int id);
+        Question AddNew(Question model);
+        Question Update(Question model);
 
     }
 }

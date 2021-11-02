@@ -13,18 +13,45 @@ namespace EvaluationSystem.API.Controllers
     [ApiController]
     public class QuestionController : ControllerBase
     {
-        private IQuestionService answerService;
+        private IQuestionService questionService;
         public QuestionController(IQuestionService service)
         {
-            answerService = service;
+            questionService = service;
         }
-        [HttpGet("{id}")]
-        public QuestionDto GetAnswerById(int id)
-        {
-            QuestionDto result = answerService.GetById(id);
 
+        [HttpGet]
+        public List<QuestionDto> GetAllQuestions()
+        {
+            List<QuestionDto> result = questionService.GetAll();
             return result;
         }
 
+        [HttpGet("{id}")]
+        public QuestionDto GetQuestionsById(int id)
+        {
+            QuestionDto result = questionService.GetById(id);
+            return result;
+        }
+
+        [HttpPost]
+        public QuestionDto CreateQuestion([FromBody] QuestionDto model)
+        {
+            QuestionDto result = questionService.Create(model);
+            return result;
+        }
+
+        [HttpPut]
+        public QuestionDto UpdateQuestion([FromBody] QuestionDto model)
+        {
+            QuestionDto result = questionService.Update(model);
+            return result;
+        }
+
+        [HttpDelete("{id}")]
+        public QuestionDto DeleteQuestion(int id)
+        {
+            QuestionDto result = questionService.Delete(id);
+            return result;
+        }
     }
 }

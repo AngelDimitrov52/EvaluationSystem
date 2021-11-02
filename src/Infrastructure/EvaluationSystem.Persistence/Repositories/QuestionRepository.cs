@@ -1,6 +1,7 @@
 ﻿using EvaluationSystem.Application.Models.AnswerModels;
 using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Domain.Entities;
+using EvaluationSystem.Persistence.DataBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,20 +12,47 @@ namespace EvaluationSystem.Persistence.Repositories
 {
     public class QuestionRepository : IQuestionRepository
     {
-        private DataBase data;
-        private IAnswerRepository _answerRepository;
 
-        public QuestionRepository(IAnswerRepository repository)
+        private IAnswerRepository _answerRepository;
+        private IDataBase data;
+
+        public QuestionRepository(IAnswerRepository repository, IDataBase dataBase)
         {
-            data = new DataBase();
+            data = dataBase;
             _answerRepository = repository;
         }
-        public Question GetAnswerById(int id)
+        public List<Question> GetAll()
+        {
+            List<Question> questions = data.questionData;
+            foreach (var question in questions)
+            {
+                question.Answers = _answerRepository.GetAllAnswerByQuestionId(question.Id);
+            }
+            return questions;
+        }
+        public Question GetById(int id)
         {
             Question question = data.questionData.FirstOrDefault(p => p.Id == id);
             question.Answers = _answerRepository.GetAllAnswerByQuestionId(id);
-
             return question;
+        }
+        public Question AddNew(Question model)
+        {
+            data.questionData.Add(model);
+            return model;
+        }
+
+        public Question Delete(int id)
+        {
+            Question question = data.questionData.FirstOrDefault(p => p.Id == id);
+            data.questionData.Remove(question);
+            return question;
+        }
+        public Question Update(Question model)
+        {
+            int index = data.questionData.FindIndex(p => p.Id == model.Id);
+            data.questionData[index] = model;
+            return model;
         }
     }
 }

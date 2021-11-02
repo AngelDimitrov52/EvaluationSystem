@@ -5,9 +5,13 @@ using System.Collections.Generic;
 
 namespace EvaluationSystem.Application.Models.AnswerModels
 {
-   public interface IAnswerRepository
+    public interface IAnswerRepository
     {
-         Аnswer GetAnswerById(int id);
+        Аnswer GetById(int id);
         List<Аnswer> GetAllAnswerByQuestionId(int id);
+        List<Аnswer> GetAll();
+        Аnswer Delete(int id);
+        Аnswer AddNew(Аnswer model);
+        Аnswer Update(Аnswer model);
     }
 }
