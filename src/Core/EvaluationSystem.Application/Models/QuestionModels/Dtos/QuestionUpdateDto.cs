@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvaluationSystem.Domain.Entities
+namespace EvaluationSystem.Application.Models.QuestionModels.Dtos
 {
-    public class Аnswer : BaseEntity
+    public class QuestionUpdateDto
     {
-        public int QuestionId { get; set; }
         public string Title { get; set; }
+        public AnswersTypes Type { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿
 using EvaluationSystem.Application.Models.AnswerModels;
+using EvaluationSystem.Application.Models.AnswerModels.Dtos;
 using EvaluationSystem.Application.Services.AnswerService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,49 +11,45 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/question/{questionId}/answers")]
     [ApiController]
     public class AnswerController : ControllerBase
     {
-        private IAnswerService answerService;
+        private readonly IAnswerService answerService;
         public AnswerController(IAnswerService service)
         {
             answerService = service;
         }
 
         [HttpGet]
-        public List<AnswerDto> GetAllAnswer()
+        public List<AnswerGetDto> GetAllAnswer(int questionId)
         {
-            List<AnswerDto> result = answerService.GetAll();
-            return result;
+            return answerService.GetAll(questionId);
         }
 
-        [HttpGet("{id}")]
-        public AnswerDto GetAnswerById(int id)
+        [HttpGet("{answerId}")]
+        public AnswerGetDto GetAnswerById(int questionId, int answerId)
         {
-            AnswerDto result = answerService.GetById(id);
-            return result;
+            return answerService.GetById(questionId, answerId);
         }
 
         [HttpPost]
-        public AnswerDto CreateAnswer([FromBody] AnswerDto model)
+        public AnswerGetDto CreateAnswer(int questionId, [FromBody] AnswerCreateDto model)
         {
-            AnswerDto result = answerService.Create(model);
-            return result;
+            return answerService.Create(questionId, model);
         }
 
-        [HttpPut]
-        public AnswerDto UpdateAnswer([FromBody] AnswerDto model)
+        [HttpPut("{answerId}")]
+        public AnswerGetDto UpdateAnswer(int questionId, int answerId, [FromBody] AnswerCreateDto model)
         {
-            AnswerDto result = answerService.Update(model);
-            return result;
+            return answerService.Update(questionId, answerId, model);
         }
 
-        [HttpDelete("{id}")]
-        public AnswerDto DeleteAnswer(int id)
+        [HttpDelete("{answerId}")]
+        public IActionResult DeleteAnswer(int questionId, int answerId)
         {
-            AnswerDto result = answerService.Delete(id);
-            return result;
+            answerService.Delete(answerId);
+            return NoContent();
         }
     }
 }

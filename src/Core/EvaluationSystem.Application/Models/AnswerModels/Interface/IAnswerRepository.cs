@@ -7,10 +7,10 @@ namespace EvaluationSystem.Application.Models.AnswerModels
 {
     public interface IAnswerRepository
     {
-        Аnswer GetById(int id);
+        Аnswer GetById(int questionId, int id);
         List<Аnswer> GetAllAnswerByQuestionId(int id);
         List<Аnswer> GetAll();
-        Аnswer Delete(int id);
+        void Delete(int id);
         Аnswer AddNew(Аnswer model);
         Аnswer Update(Аnswer model);
     }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EvaluationSystem.Application.Models.AnswerModels;
+using EvaluationSystem.Application.Models.AnswerModels.Dtos;
 using EvaluationSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,49 +10,53 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Application.Services.AnswerService
 {
-   public class AnswerService : IAnswerService
+    public class AnswerService : IAnswerService
     {
-        private IMapper _mapper;
-        private IAnswerRepository _repository;
+        private readonly IMapper _mapper;
+        private readonly IAnswerRepository _repository;
         public AnswerService(IMapper mapper, IAnswerRepository repository)
         {
             _mapper = mapper;
             _repository = repository;
         }
-        public List<AnswerDto> GetAll()
+        public List<AnswerGetDto> GetAll(int id)
         {
-            List<Аnswer> аnswer = _repository.GetAll();
-            List<AnswerDto> result = _mapper.Map<List<AnswerDto>>(аnswer);
-            return result;
+            var allAnswers = _repository.GetAll();
+            var answers = allAnswers.Where(x => x.QuestionId == id);
+            return _mapper.Map<List<AnswerGetDto>>(answers);
         }
-        public AnswerDto GetById(int id)
+        public AnswerGetDto GetById(int questionId, int id)
         {
-            Аnswer аnswer = _repository.GetById(id);
-            AnswerDto answerDto = _mapper.Map<AnswerDto>(аnswer);
-            return answerDto;
-        }
-
-        public AnswerDto Delete(int id)
-        {
-            Аnswer аnswer = _repository.Delete(id);
-            AnswerDto answerDto = _mapper.Map<AnswerDto>(аnswer);
-            return answerDto;
+            var аnswer = _repository.GetById(questionId, id);
+            if (аnswer == null)
+            {
+                throw new Exception($"There is no answer with id:{id} in question with id:{questionId}!");
+            }
+            return _mapper.Map<AnswerGetDto>(аnswer);
         }
 
-        public AnswerDto Create(AnswerDto model)
+        public void Delete(int id)
         {
-            Аnswer answer = _mapper.Map<Аnswer>(model);
-            var result =_repository.AddNew(answer);
-            AnswerDto answerDto = _mapper.Map<AnswerDto>(result);
-            return answerDto;
+            _repository.Delete(id);
         }
 
-        public AnswerDto Update(AnswerDto model)
+        public AnswerGetDto Create(int questionId, AnswerCreateDto model)
         {
-            Аnswer answer = _mapper.Map<Аnswer>(model);
+            var answer = _mapper.Map<Аnswer>(model);
+            answer.QuestionId = questionId;
+            var result = _repository.AddNew(answer);
+
+            return _mapper.Map<AnswerGetDto>(result);
+        }
+
+        public AnswerGetDto Update(int questionId, int id, AnswerCreateDto model)
+        {
+            var answer = _mapper.Map<Аnswer>(model);
+            answer.QuestionId = questionId;
+            answer.Id = id;
+
             var result = _repository.Update(answer);
-            AnswerDto answerDto = _mapper.Map<AnswerDto>(result);
-            return answerDto;
+            return _mapper.Map<AnswerGetDto>(result);
         }
     }
 }

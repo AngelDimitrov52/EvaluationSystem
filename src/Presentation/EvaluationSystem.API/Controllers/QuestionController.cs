@@ -1,5 +1,6 @@
 ﻿using EvaluationSystem.Application.Models.Dtos;
 using EvaluationSystem.Application.Models.QuestionModels;
+using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/question")]
     [ApiController]
     public class QuestionController : ControllerBase
     {
-        private IQuestionService questionService;
+        private readonly IQuestionService questionService;
         public QuestionController(IQuestionService service)
         {
             questionService = service;
@@ -22,36 +23,32 @@ namespace EvaluationSystem.API.Controllers
         [HttpGet]
         public List<QuestionDto> GetAllQuestions()
         {
-            List<QuestionDto> result = questionService.GetAll();
-            return result;
+            return questionService.GetAll();
         }
 
         [HttpGet("{id}")]
-        public QuestionDto GetQuestionsById(int id)
+        public QuestionGetDto GetQuestionsById(int id)
         {
-            QuestionDto result = questionService.GetById(id);
-            return result;
+            return questionService.GetById(id);
         }
 
         [HttpPost]
-        public QuestionDto CreateQuestion([FromBody] QuestionDto model)
+        public QuestionDto CreateQuestion([FromBody] QuestionCreateDto model)
         {
-            QuestionDto result = questionService.Create(model);
-            return result;
+            return questionService.Create(model);
         }
 
-        [HttpPut]
-        public QuestionDto UpdateQuestion([FromBody] QuestionDto model)
+        [HttpPut("{id}")]
+        public QuestionUpdateDto UpdateQuestion(int id, [FromBody] QuestionUpdateDto model)
         {
-            QuestionDto result = questionService.Update(model);
-            return result;
+            return questionService.Update(id, model);
         }
 
         [HttpDelete("{id}")]
-        public QuestionDto DeleteQuestion(int id)
+        public IActionResult DeleteQuestion(int id)
         {
-            QuestionDto result = questionService.Delete(id);
-            return result;
+            questionService.Delete(id);
+            return NoContent();
         }
     }
 }

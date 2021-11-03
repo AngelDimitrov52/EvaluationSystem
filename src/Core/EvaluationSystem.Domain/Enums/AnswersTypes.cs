@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Domain.Enums
 {
-    public enum BottonsTypes
+    public enum AnswersTypes
     {
         TextField,
         RadioButtons,

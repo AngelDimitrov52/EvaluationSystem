@@ -9,7 +9,7 @@ namespace EvaluationSystem.Persistence.DataBase
 {
     public interface IDataBase
     {
-        List<Question> questionData => null;
-        List<Аnswer> answerData => null;
+        List<Question> QuestionData => null;
+        List<Аnswer> AnswerData => null;
     }
 }

@@ -12,47 +12,48 @@ namespace EvaluationSystem.Persistence.Repositories
 {
     public class QuestionRepository : IQuestionRepository
     {
+        private readonly IDataBase _data;
 
-        private IAnswerRepository _answerRepository;
-        private IDataBase data;
-
-        public QuestionRepository(IAnswerRepository repository, IDataBase dataBase)
+        public QuestionRepository(IDataBase dataBase)
         {
-            data = dataBase;
-            _answerRepository = repository;
+            _data = dataBase;
         }
-        public List<Question> GetAll()
-        {
-            List<Question> questions = data.questionData;
-            foreach (var question in questions)
-            {
-                question.Answers = _answerRepository.GetAllAnswerByQuestionId(question.Id);
-            }
-            return questions;
-        }
+        public List<Question> GetAll() => _data.QuestionData;
         public Question GetById(int id)
         {
-            Question question = data.questionData.FirstOrDefault(p => p.Id == id);
-            question.Answers = _answerRepository.GetAllAnswerByQuestionId(id);
-            return question;
+            return _data.QuestionData.FirstOrDefault(p => p.Id == id);
         }
         public Question AddNew(Question model)
         {
-            data.questionData.Add(model);
+            GiveModelId(model);
+            _data.QuestionData.Add(model);
             return model;
         }
 
-        public Question Delete(int id)
+        public void Delete(int id)
         {
-            Question question = data.questionData.FirstOrDefault(p => p.Id == id);
-            data.questionData.Remove(question);
-            return question;
+            var question = _data.QuestionData.FirstOrDefault(p => p.Id == id);
+            _data.QuestionData.Remove(question);
+
         }
         public Question Update(Question model)
         {
-            int index = data.questionData.FindIndex(p => p.Id == model.Id);
-            data.questionData[index] = model;
+            int index = _data.QuestionData.FindIndex(p => p.Id == model.Id);
+            _data.QuestionData[index].Title = model.Title;
+            _data.QuestionData[index].Type = model.Type;
             return model;
+        }
+
+        private void GiveModelId(Question model)
+        {
+            var questionId = _data.QuestionData.Count();
+            model.Id = questionId + 1;
+            for (int i = 1; i <= model.Answers.Count; i++)
+            {
+                model.Answers[i-1].Id = _data.AnswerData.Count + 1;
+                model.Answers[i - 1].QuestionId = questionId + 1;
+                _data.AnswerData.Add(model.Answers[i - 1]);
+            }
         }
     }
 }

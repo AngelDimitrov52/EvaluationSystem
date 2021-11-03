@@ -12,47 +12,49 @@ namespace EvaluationSystem.Persistence.Repositories
 {
     public class AnswerRepository : IAnswerRepository
     {
-        private IDataBase data;
+        private readonly IDataBase _data;
 
         public AnswerRepository(IDataBase dataBase)
         {
-            data = dataBase;
+            _data = dataBase;
         }
 
         public Аnswer AddNew(Аnswer model)
         {
-            data.answerData.Add(model);
+            GiveModelId(model);
+            _data.AnswerData.Add(model);
             return model;
         }
 
-        public Аnswer Delete(int id)
+        public void Delete(int id)
         {
-            Аnswer аnswer = data.answerData.FirstOrDefault(p => p.Id == id);
-            data.answerData.Remove(аnswer);
-            return аnswer;
+            var аnswer = _data.AnswerData.FirstOrDefault(p => p.Id == id);
+            _data.AnswerData.Remove(аnswer);
         }
 
         public List<Аnswer> GetAll()
         {
-            List<Аnswer> result = data.answerData;
-            return result;
+            return _data.AnswerData;
         }
         public List<Аnswer> GetAllAnswerByQuestionId(int id)
         {
-            List<Аnswer> result = data.answerData.Where(p => p.QuestionId == id).ToList();
-            return result;
+            return _data.AnswerData.Where(p => p.QuestionId == id).ToList();
         }
-        public Аnswer GetById(int id)
+        public Аnswer GetById(int questionId, int id)
         {
-            Аnswer аnswer = data.answerData.FirstOrDefault(p => p.Id == id);
-            return аnswer;
+            return _data.AnswerData.FirstOrDefault(p => p.Id == id && p.QuestionId == questionId);
         }
 
         public Аnswer Update(Аnswer model)
         {
-            int index = data.answerData.FindIndex(p => p.Id == model.Id);
-            data.answerData[index] = model;
+            int index = _data.AnswerData.FindIndex(p => p.Id == model.Id);
+            _data.AnswerData[index] = model;
             return model;
+        }
+
+        private void GiveModelId(Аnswer model)
+        {
+            model.Id = _data.AnswerData.Count + 1;
         }
     }
 }
