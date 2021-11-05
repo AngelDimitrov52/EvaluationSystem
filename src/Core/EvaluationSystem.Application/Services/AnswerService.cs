@@ -19,20 +19,21 @@ namespace EvaluationSystem.Application.Services.AnswerService
             _mapper = mapper;
             _repository = repository;
         }
-        public List<AnswerGetDto> GetAll(int id)
+        public List<AnswerGetDto> GetAll(int questionId)
         {
-            var allAnswers = _repository.GetAll();
-            var answers = allAnswers.Where(x => x.QuestionId == id);
+            var allAnswers = _repository.GetAll().Result;
+            var answers = allAnswers.Where(x => x.IdQuestion == questionId);
             return _mapper.Map<List<AnswerGetDto>>(answers);
         }
         public AnswerGetDto GetById(int questionId, int id)
         {
-            var аnswer = _repository.GetById(questionId, id);
-            if (аnswer == null)
-            {
-                throw new Exception($"There is no answer with id:{id} in question with id:{questionId}!");
-            }
-            return _mapper.Map<AnswerGetDto>(аnswer);
+            var allAnswers = _repository.GetById(questionId ,id);
+            //var аnswer = allAnswers.FirstOrDefault(x => x.Id == id);
+            //if (аnswer == null)
+            //{
+            //    throw new Exception($"There is no answer with id:{id} in question with id:{questionId}!");
+            //}
+            return null;
         }
 
         public void Delete(int id)
@@ -43,16 +44,16 @@ namespace EvaluationSystem.Application.Services.AnswerService
         public AnswerGetDto Create(int questionId, AnswerCreateDto model)
         {
             var answer = _mapper.Map<Аnswer>(model);
-            answer.QuestionId = questionId;
-            var result = _repository.AddNew(answer);
+            answer.IdQuestion = questionId;
+            _repository.AddNew(answer);
 
-            return _mapper.Map<AnswerGetDto>(result);
+            return null;
         }
 
         public AnswerGetDto Update(int questionId, int id, AnswerCreateDto model)
         {
             var answer = _mapper.Map<Аnswer>(model);
-            answer.QuestionId = questionId;
+            answer.IdQuestion = questionId;
             answer.Id = id;
 
             var result = _repository.Update(answer);

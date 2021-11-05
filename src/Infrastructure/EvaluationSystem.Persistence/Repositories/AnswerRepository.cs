@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Persistence.Repositories
 {
-    public class AnswerRepository : IAnswerRepository
+    public class AnswerRepository 
     {
         private readonly IDataBase _data;
 
@@ -38,11 +38,11 @@ namespace EvaluationSystem.Persistence.Repositories
         }
         public List<Аnswer> GetAllAnswerByQuestionId(int id)
         {
-            return _data.AnswerData.Where(p => p.QuestionId == id).ToList();
+            return _data.AnswerData.Where(p => p.IdQuestion == id).ToList();
         }
         public Аnswer GetById(int questionId, int id)
         {
-            return _data.AnswerData.FirstOrDefault(p => p.Id == id && p.QuestionId == questionId);
+            return _data.AnswerData.FirstOrDefault(p => p.Id == id && p.IdQuestion == questionId);
         }
 
         public Аnswer Update(Аnswer model)

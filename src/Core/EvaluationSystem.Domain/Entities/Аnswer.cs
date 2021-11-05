@@ -9,7 +9,9 @@ namespace EvaluationSystem.Domain.Entities
 {
     public class Аnswer : BaseEntity
     {
-        public int QuestionId { get; set; }
-        public string Title { get; set; }
+        public int IdQuestion { get; set; }
+        public string AnswerText { get; set; }
+        public int Position { get; set; }
+        public bool IsDefault { get; set; }
     }
 }

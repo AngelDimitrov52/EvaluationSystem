@@ -51,7 +51,7 @@ namespace EvaluationSystem.Persistence.Repositories
             for (int i = 1; i <= model.Answers.Count; i++)
             {
                 model.Answers[i-1].Id = _data.AnswerData.Count + 1;
-                model.Answers[i - 1].QuestionId = questionId + 1;
+                model.Answers[i - 1].IdQuestion = questionId + 1;
                 _data.AnswerData.Add(model.Answers[i - 1]);
             }
         }

@@ -13,7 +13,7 @@ namespace EvaluationSystem.Application.Validators
     {
         public AnswerDtoValidator()
         {
-            RuleFor(t => t.Title)
+            RuleFor(t => t.AnswerText)
                   .NotEmpty().WithMessage("{PropertyName} can't be empty!");
         }
     }

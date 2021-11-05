@@ -23,18 +23,18 @@ namespace EvaluationSystem.Persistence.DataBase
 
         private List<Аnswer> _answerData = new List<Аnswer>
         {
-            new Аnswer{Id = 1, Title= "Answer 1", QuestionId = 2},
-            new Аnswer{Id = 2, Title= "Answer 2", QuestionId = 2},
-            new Аnswer{Id = 3, Title= "Answer 3", QuestionId = 1},
-            new Аnswer{Id = 4, Title= "Answer 4", QuestionId = 1},
-            new Аnswer{Id = 5, Title= "Answer 5", QuestionId = 5},
-            new Аnswer{Id = 6, Title= "Answer 6", QuestionId = 4},
-            new Аnswer{Id = 7, Title= "Answer 7", QuestionId = 4},
-            new Аnswer{Id = 8, Title= "Answer 8", QuestionId = 4},
-            new Аnswer{Id = 9, Title= "Answer 9", QuestionId = 6},
-            new Аnswer{Id = 10, Title= "Answer 10", QuestionId = 6},
-            new Аnswer{Id = 11, Title= "Answer 11", QuestionId = 3},
-            new Аnswer{Id = 12, Title= "Answer 12", QuestionId = 3}
+            new Аnswer{Id = 1, AnswerText= "Answer 1", IdQuestion = 2},
+            new Аnswer{Id = 2, AnswerText= "Answer 2", IdQuestion = 2},
+            new Аnswer{Id = 3, AnswerText= "Answer 3", IdQuestion = 1},
+            new Аnswer{Id = 4, AnswerText= "Answer 4", IdQuestion = 1},
+            new Аnswer{Id = 5, AnswerText= "Answer 5", IdQuestion = 5},
+            new Аnswer{Id = 6, AnswerText= "Answer 6", IdQuestion = 4},
+            new Аnswer{Id = 7, AnswerText= "Answer 7", IdQuestion = 4},
+            new Аnswer{Id = 8, AnswerText= "Answer 8", IdQuestion = 4},
+            new Аnswer{Id = 9, AnswerText= "Answer 9", IdQuestion = 6},
+            new Аnswer{Id = 10, AnswerText= "Answer 10", IdQuestion = 6},
+            new Аnswer{Id = 11, AnswerText= "Answer 11", IdQuestion = 3},
+            new Аnswer{Id = 12, AnswerText= "Answer 12", IdQuestion = 3}
         };
 
         public List<Question> QuestionData => _questionData;

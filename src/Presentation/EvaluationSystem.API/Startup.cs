@@ -38,7 +38,7 @@ namespace EvaluationSystem.API
             services.AddSingleton<IDataBase, DataBase>();
 
             services.AddScoped<IAnswerService, AnswerService>();
-            services.AddScoped<IAnswerRepository, AnswerRepository>();
+            services.AddScoped<IAnswerRepository, AnswerDbRepository>();
 
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IQuestionService, QuestionService>();

@@ -9,6 +9,6 @@ namespace EvaluationSystem.Application.Models.AnswerModels.Dtos
     public class AnswerGetDto
     {
         public int Id { get; set; }
-        public string Title { get; set; }
+        public string AnswerText { get; set; }
     }
 }

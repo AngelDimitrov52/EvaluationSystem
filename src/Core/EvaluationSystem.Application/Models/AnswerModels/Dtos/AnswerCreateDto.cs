@@ -8,6 +8,6 @@ namespace EvaluationSystem.Application.Models.AnswerModels.Dtos
 {
     public class AnswerCreateDto
     {
-        public string Title { get; set; }
+        public string AnswerText { get; set; }
     }
 }

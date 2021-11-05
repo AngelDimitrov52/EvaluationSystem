@@ -2,6 +2,7 @@
 
 using EvaluationSystem.Domain.Entities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace EvaluationSystem.Application.Models.AnswerModels
 {
@@ -9,9 +10,9 @@ namespace EvaluationSystem.Application.Models.AnswerModels
     {
         Аnswer GetById(int questionId, int id);
         List<Аnswer> GetAllAnswerByQuestionId(int id);
-        List<Аnswer> GetAll();
+        Task<List<Аnswer>> GetAll();
         void Delete(int id);
-        Аnswer AddNew(Аnswer model);
+        void AddNew(Аnswer model);
         Аnswer Update(Аnswer model);
     }
 }
