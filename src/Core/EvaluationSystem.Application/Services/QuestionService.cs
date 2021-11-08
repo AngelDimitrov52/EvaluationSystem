@@ -18,12 +18,14 @@ namespace EvaluationSystem.Application.Services
         private readonly IMapper _mapper;
         private readonly IQuestionRepository _questionRepository;
         private readonly IAnswerRepository _answerRepository;
+
         public QuestionService(IAnswerRepository answerRepository, IMapper mapper, IQuestionRepository repository)
         {
             _mapper = mapper;
             _questionRepository = repository;
             _answerRepository = answerRepository;
         }
+
         public List<QuestionDto> GetAll()
         {
             var questions = _questionRepository.GetAll();
@@ -33,11 +35,13 @@ namespace EvaluationSystem.Application.Services
             }
             return _mapper.Map<List<QuestionDto>>(questions);
         }
+
         public QuestionGetDto GetById(int id)
         {
             var question = GetQuestion(id);
             return _mapper.Map<QuestionGetDto>(question);
         }
+
         public QuestionUpdateDto Update(int id, QuestionUpdateDto model)
         {
             var question = _mapper.Map<Question>(model);
@@ -46,12 +50,14 @@ namespace EvaluationSystem.Application.Services
 
             return _mapper.Map<QuestionUpdateDto>(question); ;
         }
-        public QuestionCreateDto Create(QuestionCreateDto model)
+
+        public QuestionDto Create(QuestionCreateDto model)
         {
             var question = _mapper.Map<QuestionDbCreateDto>(model);
             int index = _questionRepository.AddNew(question);
 
             var questionWithAnswer = _mapper.Map<Question>(model);
+            questionWithAnswer.Id = index;
 
             foreach (var answer in questionWithAnswer.Answers)
             {
@@ -59,8 +65,9 @@ namespace EvaluationSystem.Application.Services
                 dto.IdQuestion = index;
                 _answerRepository.AddNew(dto);
             }
-            return _mapper.Map<QuestionCreateDto>(questionWithAnswer);
+            return _mapper.Map<QuestionDto>(questionWithAnswer);
         }
+
         public void Delete(int id)
         {
             var question = GetQuestion(id);
@@ -70,11 +77,13 @@ namespace EvaluationSystem.Application.Services
             }
             _questionRepository.Delete(id);
         }
+
         private Question GetQuestion(int id)
         {
             var question = _questionRepository.GetById(id);
             question.Answers = _answerRepository.GetAll(id);
             return question;
         }
+
     }
 }

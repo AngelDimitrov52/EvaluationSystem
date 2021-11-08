@@ -16,10 +16,12 @@ namespace EvaluationSystem.Persistence.Repositories
     public class QuestionRepository : IQuestionRepository
     {
         private readonly IConfiguration _configuration;
+
         public QuestionRepository(IConfiguration configuration)
         {
             _configuration = configuration;
         }
+
         public IDbConnection Connection => new SqlConnection(_configuration.GetConnectionString("EvaluationSystemDBConnection"));
 
         public List<Question> GetAll()
@@ -31,6 +33,7 @@ namespace EvaluationSystem.Persistence.Repositories
                 return (List<Question>)result;
             }
         }
+
         public Question GetById(int id)
         {
             using (IDbConnection connection = Connection)
@@ -40,6 +43,7 @@ namespace EvaluationSystem.Persistence.Repositories
                 return result;
             }
         }
+
         public int AddNew(QuestionDbCreateDto model)
         {
             using (IDbConnection connection = Connection)
@@ -49,6 +53,7 @@ namespace EvaluationSystem.Persistence.Repositories
                 return index;
             }
         }
+
         public void Update(Question model)
         {
             using (IDbConnection connection = Connection)
@@ -59,6 +64,7 @@ namespace EvaluationSystem.Persistence.Repositories
                 connection.Query<Question>(query, model);
             }
         }
+
         public void Delete(int id)
         {
             using (IDbConnection connection = Connection)
@@ -67,5 +73,6 @@ namespace EvaluationSystem.Persistence.Repositories
                 connection.Execute(query, new { Id = id });
             }
         }
+
     }
 }

@@ -14,25 +14,30 @@ namespace EvaluationSystem.Application.Services.AnswerService
     {
         private readonly IMapper _mapper;
         private readonly IAnswerRepository _repository;
+
         public AnswerService(IMapper mapper, IAnswerRepository repository)
         {
             _mapper = mapper;
             _repository = repository;
         }
+
         public List<AnswerGetDto> GetAll(int questionId)
         {
             var answers = _repository.GetAll(questionId);
             return _mapper.Map<List<AnswerGetDto>>(answers);
         }
+
         public AnswerGetDto GetById(int id)
         {
             var answer = _repository.GetById(id);
             return _mapper.Map<AnswerGetDto>(answer);
         }
+
         public void Delete(int id)
         {
             _repository.Delete(id);
         }
+
         public AnswerGetDto Create(int questionId, AnswerCreateDto model)
         {
             var answerToCreate = _mapper.Map<AnswerCreateDbDto>(model);
@@ -44,6 +49,7 @@ namespace EvaluationSystem.Application.Services.AnswerService
 
             return _mapper.Map<AnswerGetDto>(answerEntity); ;
         }
+
         public AnswerGetDto Update(int questionId, int id, AnswerCreateDto model)
         {
             var answer = _mapper.Map<Аnswer>(model);
