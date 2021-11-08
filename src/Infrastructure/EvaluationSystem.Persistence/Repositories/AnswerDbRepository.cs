@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using EvaluationSystem.Application.Models.AnswerModels;
+using EvaluationSystem.Application.Models.AnswerModels.Dtos;
 using EvaluationSystem.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -21,7 +22,7 @@ namespace EvaluationSystem.Persistence.Repositories
         }
         public IDbConnection Connection => new SqlConnection(_configuration.GetConnectionString("BooksDBConnection"));
 
-        public void AddNew(Аnswer model)
+        public void AddNew(AnswerCreateDbDto model)
         {
             using (IDbConnection connection = Connection)
             {
@@ -29,7 +30,6 @@ namespace EvaluationSystem.Persistence.Repositories
                 connection.Execute(query, model);
             }
         }
-
         public void Delete(int id)
         {
             using (IDbConnection connection = Connection)
@@ -39,32 +39,37 @@ namespace EvaluationSystem.Persistence.Repositories
             }
         }
 
-        public async Task<List<Аnswer>> GetAll()
+        public List<Аnswer> GetAll()
         {
             using (IDbConnection connection = Connection)
             {
                 string query = @"SELECT * FROM AnswerTemplate";
-                var result = await connection.QueryAsync<Аnswer>(query);
+                var result = connection.Query<Аnswer>(query);
                 return (List<Аnswer>)result;
             }
         }
 
-        public List<Аnswer> GetAllAnswerByQuestionId(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Аnswer GetById(int questionId, int id)
+        public Аnswer GetById(int id)
         {
             using (IDbConnection connection = Connection)
             {
                 string query = @$"SELECT * FROM AnswerTemplate WHERE Id=@Id";
-                var result =  connection.QueryFirst<Аnswer>(query,new {Id = id});
+                var result = connection.QueryFirst<Аnswer>(query, new { Id = id });
                 return result;
             }
         }
 
-        public Аnswer Update(Аnswer model)
+        public void Update(Аnswer model)
+        {
+            using (IDbConnection connection = Connection)
+            {
+                string query = @$"UPDATE AnswerTemplate
+                                SET IsDefault = @IsDefault, Position  = @Position, AnswerText = @AnswerText ,IdQuestion = @IdQuestion
+                                WHERE Id = @Id;";
+                connection.Query<Аnswer>(query, model);
+            }
+        }
+        public List<Аnswer> GetAllAnswerByQuestionId(int id)
         {
             throw new NotImplementedException();
         }

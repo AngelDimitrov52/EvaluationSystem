@@ -1,5 +1,5 @@
 ﻿
-using EvaluationSystem.Application.Models.AnswerModels;
+using EvaluationSystem.Application.Models.AnswerModels.Dtos;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Application.Validators
 {
-    public class AnswerDtoValidator : AbstractValidator<AnswerDto>
+    public class AnswerDtoValidator : AbstractValidator<AnswerCreateDto>
     {
         public AnswerDtoValidator()
         {

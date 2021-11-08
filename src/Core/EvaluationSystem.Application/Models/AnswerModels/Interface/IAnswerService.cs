@@ -7,10 +7,10 @@ namespace EvaluationSystem.Application.Models.AnswerModels
 {
     public interface IAnswerService
     {
-        AnswerGetDto GetById(int questionId, int id);
+        AnswerGetDto GetById(int id);
         List<AnswerGetDto> GetAll(int id);
         void Delete(int id);
-        AnswerGetDto Create(int questionId, AnswerCreateDto model);
+        AnswerCreateDto Create(int questionId, AnswerCreateDto model);
         AnswerGetDto Update(int questionId, int id, AnswerCreateDto model);
 
     }

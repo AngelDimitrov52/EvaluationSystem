@@ -1,5 +1,6 @@
 ﻿
 
+using EvaluationSystem.Application.Models.AnswerModels.Dtos;
 using EvaluationSystem.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,11 +9,11 @@ namespace EvaluationSystem.Application.Models.AnswerModels
 {
     public interface IAnswerRepository
     {
-        Аnswer GetById(int questionId, int id);
+        Аnswer GetById(int id);
         List<Аnswer> GetAllAnswerByQuestionId(int id);
-        Task<List<Аnswer>> GetAll();
+        List<Аnswer> GetAll();
         void Delete(int id);
-        void AddNew(Аnswer model);
-        Аnswer Update(Аnswer model);
+        void AddNew(AnswerCreateDbDto model);
+        void Update(Аnswer model);
     }
 }

@@ -21,43 +21,35 @@ namespace EvaluationSystem.Application.Services.AnswerService
         }
         public List<AnswerGetDto> GetAll(int questionId)
         {
-            var allAnswers = _repository.GetAll().Result;
+            var allAnswers = _repository.GetAll();
             var answers = allAnswers.Where(x => x.IdQuestion == questionId);
             return _mapper.Map<List<AnswerGetDto>>(answers);
         }
-        public AnswerGetDto GetById(int questionId, int id)
+        public AnswerGetDto GetById(int id)
         {
-            var allAnswers = _repository.GetById(questionId ,id);
-            //var аnswer = allAnswers.FirstOrDefault(x => x.Id == id);
-            //if (аnswer == null)
-            //{
-            //    throw new Exception($"There is no answer with id:{id} in question with id:{questionId}!");
-            //}
-            return null;
+            var answer = _repository.GetById(id);
+            return _mapper.Map<AnswerGetDto>(answer);
         }
-
         public void Delete(int id)
         {
             _repository.Delete(id);
         }
-
-        public AnswerGetDto Create(int questionId, AnswerCreateDto model)
+        public AnswerCreateDto Create(int questionId, AnswerCreateDto model)
         {
-            var answer = _mapper.Map<Аnswer>(model);
-            answer.IdQuestion = questionId;
-            _repository.AddNew(answer);
+            var answerToCreate = _mapper.Map<AnswerCreateDbDto>(model);
+            answerToCreate.IdQuestion = questionId;
+            _repository.AddNew(answerToCreate);
 
-            return null;
+            return _mapper.Map<AnswerCreateDto>(answerToCreate); ;
         }
-
         public AnswerGetDto Update(int questionId, int id, AnswerCreateDto model)
         {
             var answer = _mapper.Map<Аnswer>(model);
             answer.IdQuestion = questionId;
             answer.Id = id;
+            _repository.Update(answer);
 
-            var result = _repository.Update(answer);
-            return _mapper.Map<AnswerGetDto>(result);
+            return _mapper.Map<AnswerGetDto>(answer);
         }
     }
 }

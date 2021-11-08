@@ -30,11 +30,11 @@ namespace EvaluationSystem.API.Controllers
         [HttpGet("{answerId}")]
         public AnswerGetDto GetAnswerById(int questionId, int answerId)
         {
-            return answerService.GetById(questionId, answerId);
+            return answerService.GetById(answerId);
         }
 
         [HttpPost]
-        public AnswerGetDto CreateAnswer(int questionId, [FromBody] AnswerCreateDto model)
+        public AnswerCreateDto CreateAnswer(int questionId, [FromBody] AnswerCreateDto model)
         {
             return answerService.Create(questionId, model);
         }
