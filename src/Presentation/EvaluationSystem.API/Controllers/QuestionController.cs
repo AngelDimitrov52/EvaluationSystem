@@ -33,7 +33,7 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpPost]
-        public QuestionDto CreateQuestion([FromBody] QuestionCreateDto model)
+        public QuestionCreateDto CreateQuestion([FromBody] QuestionCreateDto model)
         {
             return questionService.Create(model);
         }

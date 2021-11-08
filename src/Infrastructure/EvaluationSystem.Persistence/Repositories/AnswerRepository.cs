@@ -1,60 +1,71 @@
-﻿
+﻿using Dapper;
 using EvaluationSystem.Application.Models.AnswerModels;
+using EvaluationSystem.Application.Models.AnswerModels.Dtos;
 using EvaluationSystem.Domain.Entities;
-using EvaluationSystem.Persistence.DataBase;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace EvaluationSystem.Persistence.Repositories
 {
-    public class AnswerRepository 
+    public class AnswerRepository : IAnswerRepository
     {
-        private readonly IDataBase _data;
-
-        public AnswerRepository(IDataBase dataBase)
+        private readonly IConfiguration _configuration;
+        public AnswerRepository(IConfiguration configuration)
         {
-            _data = dataBase;
+            _configuration = configuration;
         }
+        public IDbConnection Connection => new SqlConnection(_configuration.GetConnectionString("EvaluationSystemDBConnection"));
 
-        public Аnswer AddNew(Аnswer model)
+        public List<Аnswer> GetAll(int questionId)
         {
-            GiveModelId(model);
-            _data.AnswerData.Add(model);
-            return model;
+            using (IDbConnection connection = Connection)
+            {
+                string query = @"SELECT * FROM AnswerTemplate WHERE IdQuestion = @questionId";
+                var result = connection.Query<Аnswer>(query, new { questionId = questionId });
+                return (List<Аnswer>)result;
+            }
         }
-
+        public Аnswer GetById(int id)
+        {
+            using (IDbConnection connection = Connection)
+            {
+                string query = @$"SELECT * FROM AnswerTemplate WHERE Id=@Id";
+                var result = connection.QueryFirst<Аnswer>(query, new { Id = id });
+                return result;
+            }
+        }
+        public int AddNew(AnswerCreateDbDto model)
+        {
+            using (IDbConnection connection = Connection)
+            {
+                string query = @"INSERT AnswerTemplate(AnswerText,IdQuestion,Position,IsDefault) OUTPUT inserted.Id VALUES (@AnswerText,@IdQuestion,@Position,@IsDefault);";
+                var index = connection.QuerySingle<int>(query, model);
+                return index;
+            }
+        }
         public void Delete(int id)
         {
-            var аnswer = _data.AnswerData.FirstOrDefault(p => p.Id == id);
-            _data.AnswerData.Remove(аnswer);
+            using (IDbConnection connection = Connection)
+            {
+                string query = @"DELETE FROM AnswerTemplate WHERE Id = @Id";
+                connection.Execute(query, new { Id = id });
+            }
         }
-
-        public List<Аnswer> GetAll()
+        public void Update(Аnswer model)
         {
-            return _data.AnswerData;
-        }
-        public List<Аnswer> GetAllAnswerByQuestionId(int id)
-        {
-            return _data.AnswerData.Where(p => p.IdQuestion == id).ToList();
-        }
-        public Аnswer GetById(int questionId, int id)
-        {
-            return _data.AnswerData.FirstOrDefault(p => p.Id == id && p.IdQuestion == questionId);
-        }
-
-        public Аnswer Update(Аnswer model)
-        {
-            int index = _data.AnswerData.FindIndex(p => p.Id == model.Id);
-            _data.AnswerData[index] = model;
-            return model;
-        }
-
-        private void GiveModelId(Аnswer model)
-        {
-            model.Id = _data.AnswerData.Count + 1;
+            using (IDbConnection connection = Connection)
+            {
+                string query = @$"UPDATE AnswerTemplate
+                                SET IsDefault = @IsDefault, Position  = @Position, AnswerText = @AnswerText ,IdQuestion = @IdQuestion
+                                WHERE Id = @Id;";
+                connection.Query<Аnswer>(query, model);
+            }
         }
     }
 }

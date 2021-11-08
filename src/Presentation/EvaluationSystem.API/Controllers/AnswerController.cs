@@ -34,7 +34,7 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpPost]
-        public AnswerCreateDto CreateAnswer(int questionId, [FromBody] AnswerCreateDto model)
+        public AnswerGetDto CreateAnswer(int questionId, [FromBody] AnswerCreateDto model)
         {
             return answerService.Create(questionId, model);
         }

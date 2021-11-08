@@ -10,10 +10,9 @@ namespace EvaluationSystem.Application.Models.AnswerModels
     public interface IAnswerRepository
     {
         Аnswer GetById(int id);
-        List<Аnswer> GetAllAnswerByQuestionId(int id);
-        List<Аnswer> GetAll();
+        List<Аnswer> GetAll(int questionId);
         void Delete(int id);
-        void AddNew(AnswerCreateDbDto model);
+        int AddNew(AnswerCreateDbDto model);
         void Update(Аnswer model);
     }
 }

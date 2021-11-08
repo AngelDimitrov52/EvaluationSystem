@@ -9,7 +9,8 @@ namespace EvaluationSystem.Domain.Entities
 {
     public class Question : BaseEntity
     {
-        public string Title { get; set; }
+        public string Name { get; set; }
+        public bool IsReusable { get; set; }
         public AnswersTypes Type { get; set; }
         public List<Аnswer> Answers { get; set; }
 

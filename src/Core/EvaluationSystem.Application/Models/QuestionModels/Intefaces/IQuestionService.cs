@@ -13,7 +13,7 @@ namespace EvaluationSystem.Application.Models.QuestionModels
         List<QuestionDto> GetAll();
         QuestionGetDto GetById(int id);
         void Delete(int id);
-        QuestionDto Create(QuestionCreateDto model);
+        QuestionCreateDto Create(QuestionCreateDto model);
         QuestionUpdateDto Update(int id, QuestionUpdateDto model);
     }
 }

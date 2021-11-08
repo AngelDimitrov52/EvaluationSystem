@@ -10,8 +10,7 @@ namespace EvaluationSystem.Application.Models.AnswerModels
         AnswerGetDto GetById(int id);
         List<AnswerGetDto> GetAll(int id);
         void Delete(int id);
-        AnswerCreateDto Create(int questionId, AnswerCreateDto model);
+        AnswerGetDto Create(int questionId, AnswerCreateDto model);
         AnswerGetDto Update(int questionId, int id, AnswerCreateDto model);
-
     }
 }

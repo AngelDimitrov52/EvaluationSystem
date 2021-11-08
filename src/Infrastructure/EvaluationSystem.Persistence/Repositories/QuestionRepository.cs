@@ -1,9 +1,12 @@
-﻿using EvaluationSystem.Application.Models.AnswerModels;
+﻿using Dapper;
 using EvaluationSystem.Application.Models.QuestionModels;
+using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using EvaluationSystem.Domain.Entities;
-using EvaluationSystem.Persistence.DataBase;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,47 +15,56 @@ namespace EvaluationSystem.Persistence.Repositories
 {
     public class QuestionRepository : IQuestionRepository
     {
-        private readonly IDataBase _data;
-
-        public QuestionRepository(IDataBase dataBase)
+        private readonly IConfiguration _configuration;
+        public QuestionRepository(IConfiguration configuration)
         {
-            _data = dataBase;
+            _configuration = configuration;
         }
-        public List<Question> GetAll() => _data.QuestionData;
+        public IDbConnection Connection => new SqlConnection(_configuration.GetConnectionString("EvaluationSystemDBConnection"));
+
+        public List<Question> GetAll()
+        {
+            using (IDbConnection connection = Connection)
+            {
+                string query = @"SELECT * FROM QuestionTemplate";
+                var result = connection.Query<Question>(query);
+                return (List<Question>)result;
+            }
+        }
         public Question GetById(int id)
         {
-            return _data.QuestionData.FirstOrDefault(p => p.Id == id);
+            using (IDbConnection connection = Connection)
+            {
+                string query = @$"SELECT * FROM QuestionTemplate WHERE Id=@Id";
+                var result = connection.QueryFirst<Question>(query, new { Id = id });
+                return result;
+            }
         }
-        public Question AddNew(Question model)
+        public int AddNew(QuestionDbCreateDto model)
         {
-            GiveModelId(model);
-            _data.QuestionData.Add(model);
-            return model;
+            using (IDbConnection connection = Connection)
+            {
+                string query = @"INSERT QuestionTemplate([Name], [Type], IsReusable)  OUTPUT inserted.Id VALUES (@Name, @Type, @IsReusable);";
+                var index = connection.QuerySingle<int>(query, model);
+                return index;
+            }
         }
-
+        public void Update(Question model)
+        {
+            using (IDbConnection connection = Connection)
+            {
+                string query = @$"UPDATE QuestionTemplate
+                                SET [Name] = @Name, IsReusable  = @IsReusable, [Type] = @Type
+                                WHERE Id = @Id;";
+                connection.Query<Question>(query, model);
+            }
+        }
         public void Delete(int id)
         {
-            var question = _data.QuestionData.FirstOrDefault(p => p.Id == id);
-            _data.QuestionData.Remove(question);
-
-        }
-        public Question Update(Question model)
-        {
-            int index = _data.QuestionData.FindIndex(p => p.Id == model.Id);
-            _data.QuestionData[index].Title = model.Title;
-            _data.QuestionData[index].Type = model.Type;
-            return model;
-        }
-
-        private void GiveModelId(Question model)
-        {
-            var questionId = _data.QuestionData.Count();
-            model.Id = questionId + 1;
-            for (int i = 1; i <= model.Answers.Count; i++)
+            using (IDbConnection connection = Connection)
             {
-                model.Answers[i-1].Id = _data.AnswerData.Count + 1;
-                model.Answers[i - 1].IdQuestion = questionId + 1;
-                _data.AnswerData.Add(model.Answers[i - 1]);
+                string query = @"DELETE FROM QuestionTemplate WHERE Id = @Id";
+                connection.Execute(query, new { Id = id });
             }
         }
     }

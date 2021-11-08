@@ -16,6 +16,7 @@ namespace EvaluationSystem.Application.Helpers.Profiles
         {
             CreateMap<Question, QuestionDto>().ReverseMap();
             CreateMap<Question, QuestionUpdateDto>().ReverseMap();
+            CreateMap<QuestionDbCreateDto, QuestionCreateDto>().ReverseMap();
             CreateMap<Question, QuestionCreateDto>().ReverseMap();
             CreateMap<Question, QuestionGetDto>().ReverseMap();
         }

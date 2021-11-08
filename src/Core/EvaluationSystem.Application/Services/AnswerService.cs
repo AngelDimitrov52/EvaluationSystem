@@ -21,8 +21,7 @@ namespace EvaluationSystem.Application.Services.AnswerService
         }
         public List<AnswerGetDto> GetAll(int questionId)
         {
-            var allAnswers = _repository.GetAll();
-            var answers = allAnswers.Where(x => x.IdQuestion == questionId);
+            var answers = _repository.GetAll(questionId);
             return _mapper.Map<List<AnswerGetDto>>(answers);
         }
         public AnswerGetDto GetById(int id)
@@ -34,13 +33,16 @@ namespace EvaluationSystem.Application.Services.AnswerService
         {
             _repository.Delete(id);
         }
-        public AnswerCreateDto Create(int questionId, AnswerCreateDto model)
+        public AnswerGetDto Create(int questionId, AnswerCreateDto model)
         {
             var answerToCreate = _mapper.Map<AnswerCreateDbDto>(model);
             answerToCreate.IdQuestion = questionId;
-            _repository.AddNew(answerToCreate);
+            int answerId = _repository.AddNew(answerToCreate);
 
-            return _mapper.Map<AnswerCreateDto>(answerToCreate); ;
+            var answerEntity = _mapper.Map<Аnswer>(model);
+            answerEntity.Id = answerId;
+
+            return _mapper.Map<AnswerGetDto>(answerEntity); ;
         }
         public AnswerGetDto Update(int questionId, int id, AnswerCreateDto model)
         {
