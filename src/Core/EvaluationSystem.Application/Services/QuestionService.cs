@@ -28,11 +28,7 @@ namespace EvaluationSystem.Application.Services
 
         public List<QuestionDto> GetAll()
         {
-            var questions = _questionRepository.GetAll();
-            foreach (var question in questions)
-            {
-                question.Answers = _answerRepository.GetAll(question.Id);
-            }
+            var questions = GetAllQuestionsWithAnswers();
             return _mapper.Map<List<QuestionDto>>(questions);
         }
 
@@ -48,7 +44,6 @@ namespace EvaluationSystem.Application.Services
             var question = _mapper.Map<Question>(model);
             question.Id = id;
             _questionRepository.Update(question);
-
             return _mapper.Map<QuestionUpdateDto>(question); ;
         }
 
@@ -57,16 +52,7 @@ namespace EvaluationSystem.Application.Services
             var question = _mapper.Map<QuestionDbCreateDto>(model);
             int index = _questionRepository.AddNew(question);
 
-            var questionWithAnswer = _mapper.Map<Question>(model);
-            questionWithAnswer.Id = index;
-
-            foreach (var answer in questionWithAnswer.Answers)
-            {
-                var dto = _mapper.Map<AnswerCreateDbDto>(answer);
-                dto.IdQuestion = index;
-               int answerId = _answerRepository.AddNew(dto);
-                answer.Id = answerId;
-            }
+            var questionWithAnswer = SetQuestion(index, model);
             return _mapper.Map<QuestionDto>(questionWithAnswer);
         }
 
@@ -74,6 +60,30 @@ namespace EvaluationSystem.Application.Services
         {
             _answerRepository.DeleteWithQuestionId(id);
             _questionRepository.Delete(id);
+        }
+
+        private List<Question> GetAllQuestionsWithAnswers()
+        {
+            var questions = _questionRepository.GetAll();
+            foreach (var question in questions)
+            {
+                question.Answers = _answerRepository.GetAll(question.Id);
+            }
+            return questions;
+        }
+        private Question SetQuestion(int index, QuestionCreateDto model)
+        {
+            var questionWithAnswer = _mapper.Map<Question>(model);
+            questionWithAnswer.Id = index;
+
+            foreach (var answer in questionWithAnswer.Answers)
+            {
+                var dto = _mapper.Map<AnswerCreateDbDto>(answer);
+                dto.IdQuestion = index;
+                int answerId = _answerRepository.AddNew(dto);
+                answer.Id = answerId;
+            }
+            return questionWithAnswer;
         }
 
     }
