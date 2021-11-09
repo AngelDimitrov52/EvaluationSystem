@@ -45,7 +45,7 @@ namespace EvaluationSystem.Application.Services.AnswerService
             int answerId = _repository.AddNew(answerToCreate);
 
             var answerEntity = _mapper.Map<Аnswer>(model);
-            answerEntity.Id = answerId;
+            answerEntity.AnswerId = answerId;
 
             return _mapper.Map<AnswerGetDto>(answerEntity); ;
         }
@@ -54,7 +54,7 @@ namespace EvaluationSystem.Application.Services.AnswerService
         {
             var answer = _mapper.Map<Аnswer>(model);
             answer.IdQuestion = questionId;
-            answer.Id = id;
+            answer.AnswerId = id;
             _repository.Update(answer);
 
             return _mapper.Map<AnswerGetDto>(answer);

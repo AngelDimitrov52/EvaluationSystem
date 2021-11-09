@@ -35,9 +35,9 @@ namespace EvaluationSystem.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IAnswerService, AnswerService>();
-            services.AddScoped<IAnswerRepository, AnswerRepository>();
+            services.AddScoped<IAnswerRepository, AnswerDB>();
 
-            services.AddScoped<IQuestionRepository, QuestionRepository>();
+            services.AddScoped<IQuestionRepository, QuestionDB>();
             services.AddScoped<IQuestionService, QuestionService>();
 
             services.AddAutoMapper(typeof(AnswerProfile).Assembly);

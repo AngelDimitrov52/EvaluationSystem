@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Domain.Entities
 {
-    public class Question : BaseEntity
+    public class Question
     {
+        public int QuestionId { get; set; }
         public string Name { get; set; }
         public bool IsReusable { get; set; }
         public AnswersTypes Type { get; set; }

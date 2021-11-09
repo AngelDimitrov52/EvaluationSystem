@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Models.QuestionModels.Dtos;
+using EvaluationSystem.Application.Models.QuestionModels.QuestionRepository;
 using EvaluationSystem.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -13,34 +14,41 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Persistence.Repositories
 {
-    public class QuestionRepository : IQuestionRepository
+    public class QuestionDB : IQuestionRepository
     {
         private readonly IConfiguration _configuration;
 
-        public QuestionRepository(IConfiguration configuration)
+        public QuestionDB(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
         public IDbConnection Connection => new SqlConnection(_configuration.GetConnectionString("EvaluationSystemDBConnection"));
 
-        public List<Question> GetAll()
+        public List<QuestionRepositoryDto> GetAll()
         {
             using (IDbConnection connection = Connection)
             {
-                string query = @"SELECT * FROM QuestionTemplate";
-                var result = connection.Query<Question>(query);
-                return (List<Question>)result;
+                string query = @"SELECT q.QuestionId, q.[Name], q.[Type],a.AnswerId, a.AnswerText , a.Position, a.IsDefault
+                                 FROM AnswerTemplate AS a
+                                 JOIN QuestionTemplate AS q ON q.QuestionId = a.IdQuestion";
+                var result = connection.Query<QuestionRepositoryDto>(query);
+
+                return (List<QuestionRepositoryDto>)result;
             }
         }
 
-        public Question GetById(int id)
+        public List<QuestionRepositoryDto> GetById(int id)
         {
             using (IDbConnection connection = Connection)
             {
-                string query = @$"SELECT * FROM QuestionTemplate WHERE Id=@Id";
-                var result = connection.QueryFirst<Question>(query, new { Id = id });
-                return result;
+                string query = @$"SELECT q.QuestionId, q.[Name], q.[Type],a.AnswerId, a.AnswerText , a.Position, a.IsDefault
+                                FROM AnswerTemplate AS a
+                                JOIN QuestionTemplate AS q ON q.QuestionId = a.IdQuestion
+                                WHERE q.QuestionId = @Id";
+                var result = connection.Query<QuestionRepositoryDto>(query, new { Id = id });
+
+                return (List<QuestionRepositoryDto>)result;
             }
         }
 
@@ -48,8 +56,9 @@ namespace EvaluationSystem.Persistence.Repositories
         {
             using (IDbConnection connection = Connection)
             {
-                string query = @"INSERT QuestionTemplate([Name], [Type], IsReusable)  OUTPUT inserted.Id VALUES (@Name, @Type, @IsReusable);";
+                string query = @"INSERT QuestionTemplate([Name], [Type], IsReusable)  OUTPUT inserted.QuestionId VALUES (@Name, @Type, @IsReusable);";
                 var index = connection.QuerySingle<int>(query, model);
+
                 return index;
             }
         }
@@ -60,7 +69,7 @@ namespace EvaluationSystem.Persistence.Repositories
             {
                 string query = @$"UPDATE QuestionTemplate
                                 SET [Name] = @Name, IsReusable  = @IsReusable, [Type] = @Type
-                                WHERE Id = @Id;";
+                                WHERE QuestionId = @QuestionId;";
                 connection.Query<Question>(query, model);
             }
         }
@@ -69,8 +78,8 @@ namespace EvaluationSystem.Persistence.Repositories
         {
             using (IDbConnection connection = Connection)
             {
-                string query = @"DELETE FROM QuestionTemplate WHERE Id = @Id";
-                connection.Execute(query, new { Id = id });
+                string query = @"DELETE FROM QuestionTemplate WHERE QuestionId = @QuestionId";
+                connection.Execute(query, new { QuestionId = id });
             }
         }
 

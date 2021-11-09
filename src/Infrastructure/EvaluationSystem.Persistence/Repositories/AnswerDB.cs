@@ -13,11 +13,11 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Persistence.Repositories
 {
-    public class AnswerRepository : IAnswerRepository
+    public class AnswerDB : IAnswerRepository
     {
         private readonly IConfiguration _configuration;
 
-        public AnswerRepository(IConfiguration configuration)
+        public AnswerDB(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -30,6 +30,7 @@ namespace EvaluationSystem.Persistence.Repositories
             {
                 string query = @"SELECT * FROM AnswerTemplate WHERE IdQuestion = @questionId";
                 var result = connection.Query<Аnswer>(query, new { questionId = questionId });
+
                 return (List<Аnswer>)result;
             }
         }
@@ -38,8 +39,9 @@ namespace EvaluationSystem.Persistence.Repositories
         {
             using (IDbConnection connection = Connection)
             {
-                string query = @$"SELECT * FROM AnswerTemplate WHERE Id=@Id";
+                string query = @$"SELECT * FROM AnswerTemplate WHERE AnswerId=@Id";
                 var result = connection.QueryFirst<Аnswer>(query, new { Id = id });
+
                 return result;
             }
         }
@@ -48,8 +50,9 @@ namespace EvaluationSystem.Persistence.Repositories
         {
             using (IDbConnection connection = Connection)
             {
-                string query = @"INSERT AnswerTemplate(AnswerText,IdQuestion,Position,IsDefault) OUTPUT inserted.Id VALUES (@AnswerText,@IdQuestion,@Position,@IsDefault);";
+                string query = @"INSERT AnswerTemplate(AnswerText,IdQuestion,Position,IsDefault) OUTPUT inserted.AnswerId VALUES (@AnswerText,@IdQuestion,@Position,@IsDefault);";
                 var index = connection.QuerySingle<int>(query, model);
+
                 return index;
             }
         }
@@ -58,16 +61,16 @@ namespace EvaluationSystem.Persistence.Repositories
         {
             using (IDbConnection connection = Connection)
             {
-                string query = @"DELETE FROM AnswerTemplate WHERE Id = @Id";
+                string query = @"DELETE FROM AnswerTemplate WHERE AnswerId = @Id";
                 connection.Execute(query, new { Id = id });
             }
         }
-        public void DeleteWithQuestionId(int IdQuestion)
+        public void DeleteWithQuestionId(int id)
         {
             using (IDbConnection connection = Connection)
             {
                 string query = @"DELETE FROM AnswerTemplate WHERE IdQuestion = @IdQuestion";
-                connection.Execute(query, new { IdQuestion = IdQuestion });
+                connection.Execute(query, new { IdQuestion = id });
             }
         }
 
@@ -77,7 +80,7 @@ namespace EvaluationSystem.Persistence.Repositories
             {
                 string query = @$"UPDATE AnswerTemplate
                                 SET IsDefault = @IsDefault, Position  = @Position, AnswerText = @AnswerText ,IdQuestion = @IdQuestion
-                                WHERE Id = @Id;";
+                                WHERE AnswerId = @AnswerId;";
                 connection.Query<Аnswer>(query, model);
             }
         }

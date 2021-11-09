@@ -11,7 +11,7 @@ namespace EvaluationSystem.Application.Models.Dtos
 {
     public class QuestionDto
     {
-        public int Id { get; set; }
+        public int QuestionId { get; set; }
         public string Name { get; set; }
         public AnswersTypes Type { get; set; }
         public List<AnswerGetDto> Answers { get; set; }

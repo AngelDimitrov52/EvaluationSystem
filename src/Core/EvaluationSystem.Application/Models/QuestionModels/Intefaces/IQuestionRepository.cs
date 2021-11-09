@@ -1,4 +1,5 @@
 ﻿using EvaluationSystem.Application.Models.QuestionModels.Dtos;
+using EvaluationSystem.Application.Models.QuestionModels.QuestionRepository;
 using EvaluationSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,8 @@ namespace EvaluationSystem.Application.Models.QuestionModels
 {
     public interface IQuestionRepository
     {
-        Question GetById(int id);
-        List<Question> GetAll();
+        List<QuestionRepositoryDto> GetById(int id);
+        List<QuestionRepositoryDto> GetAll();
         void Delete(int id);
         int AddNew(QuestionDbCreateDto model);
         void Update(Question model);

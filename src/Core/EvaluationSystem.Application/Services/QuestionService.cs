@@ -28,21 +28,45 @@ namespace EvaluationSystem.Application.Services
 
         public List<QuestionDto> GetAll()
         {
-            var questions = GetAllQuestionsWithAnswers();
-            return _mapper.Map<List<QuestionDto>>(questions);
+            var questions = _questionRepository.GetAll();
+
+            List<QuestionDto> result = new List<QuestionDto>();
+
+            foreach (var question in questions)
+            {
+                var isQuestionIsCreated = result.FirstOrDefault(x => x.QuestionId == question.QuestionId);
+                if (isQuestionIsCreated == null)
+                {
+                    isQuestionIsCreated = new QuestionDto { QuestionId = question.QuestionId, Name = question.Name, Type = question.Type, Answers = new List<AnswerGetDto>() };
+                    result.Add(isQuestionIsCreated);
+                }
+                isQuestionIsCreated.Answers
+                    .Add(new AnswerGetDto { AnswerId = question.AnswerId, Position = question.Position, AnswerText = question.AnswerText, IsDefault = question.IsDefault });
+            }
+
+            return result;
         }
 
         public QuestionGetDto GetById(int id)
         {
-            var question = _questionRepository.GetById(id);
-            question.Answers = _answerRepository.GetAll(id);
-            return _mapper.Map<QuestionGetDto>(question);
+            var questionsResults = _questionRepository.GetById(id);
+
+            QuestionGetDto questionGetDto = new QuestionGetDto
+            { Name = questionsResults[0].Name, Type = questionsResults[0].Type, Answers = new List<AnswerGetDto>() };
+
+            foreach (var question in questionsResults)
+            {
+                questionGetDto.Answers
+                    .Add(new AnswerGetDto { AnswerId = question.AnswerId, Position = question.Position, AnswerText = question.AnswerText, IsDefault = question.IsDefault });
+            }
+
+            return questionGetDto;
         }
 
         public QuestionUpdateDto Update(int id, QuestionUpdateDto model)
         {
             var question = _mapper.Map<Question>(model);
-            question.Id = id;
+            question.QuestionId = id;
             _questionRepository.Update(question);
             return _mapper.Map<QuestionUpdateDto>(question); ;
         }
@@ -62,29 +86,19 @@ namespace EvaluationSystem.Application.Services
             _questionRepository.Delete(id);
         }
 
-        private List<Question> GetAllQuestionsWithAnswers()
-        {
-            var questions = _questionRepository.GetAll();
-            foreach (var question in questions)
-            {
-                question.Answers = _answerRepository.GetAll(question.Id);
-            }
-            return questions;
-        }
         private Question SetQuestion(int index, QuestionCreateDto model)
         {
             var questionWithAnswer = _mapper.Map<Question>(model);
-            questionWithAnswer.Id = index;
+            questionWithAnswer.QuestionId = index;
 
             foreach (var answer in questionWithAnswer.Answers)
             {
                 var dto = _mapper.Map<AnswerCreateDbDto>(answer);
                 dto.IdQuestion = index;
                 int answerId = _answerRepository.AddNew(dto);
-                answer.Id = answerId;
+                answer.AnswerId = answerId;
             }
             return questionWithAnswer;
         }
-
     }
 }
