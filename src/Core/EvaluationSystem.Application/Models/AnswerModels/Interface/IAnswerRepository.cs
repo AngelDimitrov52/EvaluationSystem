@@ -14,5 +14,6 @@ namespace EvaluationSystem.Application.Models.AnswerModels
         void Delete(int id);
         int AddNew(AnswerCreateDbDto model);
         void Update(Аnswer model);
+        void DeleteWithQuestionId(int IdQuestion);
     }
 }

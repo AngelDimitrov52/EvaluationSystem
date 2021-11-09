@@ -62,6 +62,14 @@ namespace EvaluationSystem.Persistence.Repositories
                 connection.Execute(query, new { Id = id });
             }
         }
+        public void DeleteWithQuestionId(int IdQuestion)
+        {
+            using (IDbConnection connection = Connection)
+            {
+                string query = @"DELETE FROM AnswerTemplate WHERE IdQuestion = @IdQuestion";
+                connection.Execute(query, new { IdQuestion = IdQuestion });
+            }
+        }
 
         public void Update(Аnswer model)
         {

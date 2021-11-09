@@ -38,7 +38,8 @@ namespace EvaluationSystem.Application.Services
 
         public QuestionGetDto GetById(int id)
         {
-            var question = GetQuestion(id);
+            var question = _questionRepository.GetById(id);
+            question.Answers = _answerRepository.GetAll(id);
             return _mapper.Map<QuestionGetDto>(question);
         }
 
@@ -63,26 +64,16 @@ namespace EvaluationSystem.Application.Services
             {
                 var dto = _mapper.Map<AnswerCreateDbDto>(answer);
                 dto.IdQuestion = index;
-                _answerRepository.AddNew(dto);
+               int answerId = _answerRepository.AddNew(dto);
+                answer.Id = answerId;
             }
             return _mapper.Map<QuestionDto>(questionWithAnswer);
         }
 
         public void Delete(int id)
         {
-            var question = GetQuestion(id);
-            foreach (var answer in question.Answers)
-            {
-                _answerRepository.Delete(answer.Id);
-            }
+            _answerRepository.DeleteWithQuestionId(id);
             _questionRepository.Delete(id);
-        }
-
-        private Question GetQuestion(int id)
-        {
-            var question = _questionRepository.GetById(id);
-            question.Answers = _answerRepository.GetAll(id);
-            return question;
         }
 
     }
