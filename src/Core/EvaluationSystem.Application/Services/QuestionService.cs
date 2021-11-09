@@ -46,8 +46,9 @@ namespace EvaluationSystem.Application.Services
                     };
                     result.Add(isQuestionIsCreated);
                 }
-
-                isQuestionIsCreated.Answers
+                if (question.AnswerId != 0)
+                {
+                    isQuestionIsCreated.Answers
                     .Add(new AnswerGetDto
                     {
                         AnswerId = question.AnswerId,
@@ -55,6 +56,7 @@ namespace EvaluationSystem.Application.Services
                         AnswerText = question.AnswerText,
                         IsDefault = question.IsDefault
                     });
+                }
             }
             return result;
         }
@@ -72,7 +74,9 @@ namespace EvaluationSystem.Application.Services
 
             foreach (var question in questionsResults)
             {
-                questionGetDto.Answers
+                if (question.AnswerId != 0)
+                {
+                    questionGetDto.Answers
                     .Add(new AnswerGetDto
                     {
                         AnswerId = question.AnswerId,
@@ -80,6 +84,7 @@ namespace EvaluationSystem.Application.Services
                         AnswerText = question.AnswerText,
                         IsDefault = question.IsDefault
                     });
+                }
             }
             return questionGetDto;
         }

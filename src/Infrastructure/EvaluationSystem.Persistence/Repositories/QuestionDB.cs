@@ -31,7 +31,7 @@ namespace EvaluationSystem.Persistence.Repositories
             {
                 string query = @"SELECT q.QuestionId, q.[Name], q.[Type],a.AnswerId, a.AnswerText , a.Position, a.IsDefault
                                  FROM AnswerTemplate AS a
-                                 JOIN QuestionTemplate AS q ON q.QuestionId = a.IdQuestion";
+                                 RIGHT JOIN QuestionTemplate AS q ON q.QuestionId = a.IdQuestion";
                 var result = connection.Query<QuestionRepositoryDto>(query);
 
                 return (List<QuestionRepositoryDto>)result;
@@ -44,7 +44,7 @@ namespace EvaluationSystem.Persistence.Repositories
             {
                 string query = @$"SELECT q.QuestionId, q.[Name], q.[Type],a.AnswerId, a.AnswerText , a.Position, a.IsDefault
                                 FROM AnswerTemplate AS a
-                                JOIN QuestionTemplate AS q ON q.QuestionId = a.IdQuestion
+                                RIGHT JOIN QuestionTemplate AS q ON q.QuestionId = a.IdQuestion
                                 WHERE q.QuestionId = @Id";
                 var result = connection.Query<QuestionRepositoryDto>(query, new { Id = id });
 
