@@ -37,13 +37,25 @@ namespace EvaluationSystem.Application.Services
                 var isQuestionIsCreated = result.FirstOrDefault(x => x.QuestionId == question.QuestionId);
                 if (isQuestionIsCreated == null)
                 {
-                    isQuestionIsCreated = new QuestionDto { QuestionId = question.QuestionId, Name = question.Name, Type = question.Type, Answers = new List<AnswerGetDto>() };
+                    isQuestionIsCreated = new QuestionDto
+                    {
+                        QuestionId = question.QuestionId,
+                        Name = question.Name,
+                        Type = question.Type,
+                        Answers = new List<AnswerGetDto>()
+                    };
                     result.Add(isQuestionIsCreated);
                 }
-                isQuestionIsCreated.Answers
-                    .Add(new AnswerGetDto { AnswerId = question.AnswerId, Position = question.Position, AnswerText = question.AnswerText, IsDefault = question.IsDefault });
-            }
 
+                isQuestionIsCreated.Answers
+                    .Add(new AnswerGetDto
+                    {
+                        AnswerId = question.AnswerId,
+                        Position = question.Position,
+                        AnswerText = question.AnswerText,
+                        IsDefault = question.IsDefault
+                    });
+            }
             return result;
         }
 
@@ -52,14 +64,23 @@ namespace EvaluationSystem.Application.Services
             var questionsResults = _questionRepository.GetById(id);
 
             QuestionGetDto questionGetDto = new QuestionGetDto
-            { Name = questionsResults[0].Name, Type = questionsResults[0].Type, Answers = new List<AnswerGetDto>() };
+            {
+                Name = questionsResults[0].Name,
+                Type = questionsResults[0].Type,
+                Answers = new List<AnswerGetDto>()
+            };
 
             foreach (var question in questionsResults)
             {
                 questionGetDto.Answers
-                    .Add(new AnswerGetDto { AnswerId = question.AnswerId, Position = question.Position, AnswerText = question.AnswerText, IsDefault = question.IsDefault });
+                    .Add(new AnswerGetDto
+                    {
+                        AnswerId = question.AnswerId,
+                        Position = question.Position,
+                        AnswerText = question.AnswerText,
+                        IsDefault = question.IsDefault
+                    });
             }
-
             return questionGetDto;
         }
 
