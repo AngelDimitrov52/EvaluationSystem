@@ -1,6 +1,6 @@
 ﻿using EvaluationSystem.Domain.Enums;
 
-namespace EvaluationSystem.Application.Models.QuestionModels.QuestionRepository
+namespace EvaluationSystem.Application.Models.QuestionModels
 {
     public class QuestionRepositoryDto
     {

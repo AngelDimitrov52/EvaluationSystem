@@ -13,16 +13,10 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Persistence.Repositories
 {
-    public class AnswerDB : IAnswerRepository
+    public class AnswerDB : BaseRepository, IAnswerRepository
     {
-        private readonly IConfiguration _configuration;
-
         public AnswerDB(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-
-        public IDbConnection Connection => new SqlConnection(_configuration.GetConnectionString("EvaluationSystemDBConnection"));
+            : base(configuration) { }
 
         public List<Аnswer> GetAll(int questionId)
         {

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvaluationSystem.Application.Services.AnswerService
+namespace EvaluationSystem.Application.Services
 {
     public class AnswerService : IAnswerService
     {
