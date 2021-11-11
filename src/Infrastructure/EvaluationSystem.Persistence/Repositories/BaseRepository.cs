@@ -15,9 +15,8 @@ namespace EvaluationSystem.Persistence.Repositories
 
         public BaseRepository(IConfiguration configuration)
         {
-            _configurationString = configuration.GetConnectionString("EvaluationSystemDBConnection");
+            _configurationString = configuration.GetConnectionString("DatabaseConnection");
         }
-
         public IDbConnection Connection => new SqlConnection(_configurationString);
     }
 }

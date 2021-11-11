@@ -1,5 +1,7 @@
 using EvaluationSystem.Application.Helpers.Configurations;
 using EvaluationSystem.Persistence.Configurations;
+using EvaluationSystem.Persistence.Migrations;
+using FluentMigrator.Runner;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace EvaluationSystem.API
@@ -30,6 +33,7 @@ namespace EvaluationSystem.API
         {
             services.AddConfigurationRepositories();
             services.AddConfigurationApplicationLayer();
+            services.AddConfigurationMigrations();
 
             services.AddSwaggerGen(c =>
             {
@@ -47,11 +51,16 @@ namespace EvaluationSystem.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EvaluationSystem.API v1"));
             }
 
+            DatabaseCreate
+                .Create("Data Source=.;Initial Catalog=master; Integrated Security=True; MultipleActiveResultSets=True;", "EvaluationSystem");
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.MigrateUpDatabase();
 
             app.UseEndpoints(endpoints =>
             {
