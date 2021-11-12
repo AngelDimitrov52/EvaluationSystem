@@ -7,50 +7,48 @@ using System.Collections.Generic;
 
 namespace EvaluationSystem.Persistence.Repositories
 {
-    public class AnswerDB : GenericRepository<Аnswer>, IAnswerRepository
+    public class AnswerDB : GenericRepository<AnswerTemplate>, IAnswerRepository
     {
-        private const string _tableName = "AnswerTemplate";
-        private const string _objIdName = "AnswerId";
-        public AnswerDB(IConfiguration configuration) : base(configuration, _tableName, _objIdName)
+        public AnswerDB(IConfiguration configuration) : base(configuration)
         {
         }
-        public List<Аnswer> GetAll(int questionId)
+        public List<AnswerTemplate> GetAllByQuestionId(int questionId)
         {
-            using var connection = Connection;
+            using var connection = Connection();
             string query = @"SELECT * FROM AnswerTemplate WHERE IdQuestion = @questionId";
-            var result = connection.Query<Аnswer>(query, new { questionId = questionId });
-            return (List<Аnswer>)result;
+            var result = connection.Query<AnswerTemplate>(query, new { questionId = questionId });
+            return (List<AnswerTemplate>)result;
         }
 
-        public Аnswer GetById(int id)
-        {
-            using var connection = Connection;
-            string query = @$"SELECT * FROM AnswerTemplate WHERE AnswerId=@Id";
-            var result = connection.QueryFirst<Аnswer>(query, new { Id = id });
-            return result;
-        }
+        //public AnswerTemplate GetById(int id)
+        //{
+        //    using var connection = Connection();
+        //    string query = @$"SELECT * FROM AnswerTemplate WHERE AnswerId=@Id";
+        //    var result = connection.QueryFirst<AnswerTemplate>(query, new { Id = id });
+        //    return result;
+        //}
 
         public int AddNew(AnswerCreateDbDto model)
         {
-            using var connection = Connection;
+            using var connection = Connection();
             string query = @"INSERT AnswerTemplate(AnswerText,IdQuestion,Position,IsDefault) OUTPUT inserted.AnswerId VALUES (@AnswerText,@IdQuestion,@Position,@IsDefault);";
             var index = connection.QuerySingle<int>(query, model);
             return index;
         }
         public void DeleteWithQuestionId(int idQuestion)
         {
-            using var connection = Connection;
+            using var connection = Connection();
             string query = @"DELETE FROM AnswerTemplate WHERE IdQuestion = @IdQuestion";
             connection.Execute(query, new { IdQuestion = idQuestion });
         }
 
-        public void Update(Аnswer model)
+        public void Update(AnswerTemplate model)
         {
-            using var connection = Connection;
+            using var connection = Connection();
             string query = @$"UPDATE AnswerTemplate
                               SET IsDefault = @IsDefault, Position  = @Position, AnswerText = @AnswerText ,IdQuestion = @IdQuestion
                               WHERE AnswerId = @AnswerId;";
-            connection.Query<Аnswer>(query, model);
+            connection.Query<AnswerTemplate>(query, model);
         }
 
         //public void Delete(int id)

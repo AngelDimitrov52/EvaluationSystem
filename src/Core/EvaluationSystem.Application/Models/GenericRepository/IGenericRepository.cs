@@ -8,6 +8,10 @@ namespace EvaluationSystem.Application.Models.GenericRepository
 {
     public interface IGenericRepository<T>
     {
-        public void Delete(object id);
+        List<T> GetAll (int questionId);
+        T GetById(int id);
+        int Create(T entity);
+        void Update(T entity);
+        public void Delete(int id);
     }
 }

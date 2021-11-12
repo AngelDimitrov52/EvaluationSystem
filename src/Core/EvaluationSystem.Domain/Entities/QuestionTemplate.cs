@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Domain.Entities
 {
-    public class Question
+    public class QuestionTemplate
     {
         public int QuestionId { get; set; }
         public string Name { get; set; }
         public bool IsReusable { get; set; }
         public AnswersTypes Type { get; set; }
-        public List<Аnswer> Answers { get; set; }
+        public List<AnswerTemplate> Answers { get; set; }
 
     }
 }

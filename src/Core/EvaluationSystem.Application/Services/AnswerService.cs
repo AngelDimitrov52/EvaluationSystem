@@ -25,7 +25,7 @@ namespace EvaluationSystem.Application.Services
 
         public List<AnswerGetDto> GetAll(int questionId)
         {
-            var answers = _repository.GetAll(questionId);
+            var answers = _repository.GetAllByQuestionId(questionId);
             return _mapper.Map<List<AnswerGetDto>>(answers);
         }
 
@@ -46,7 +46,7 @@ namespace EvaluationSystem.Application.Services
             answerToCreate.IdQuestion = questionId;
             int answerId = _repository.AddNew(answerToCreate);
 
-            var answerEntity = _mapper.Map<Аnswer>(model);
+            var answerEntity = _mapper.Map<AnswerTemplate>(model);
             answerEntity.AnswerId = answerId;
 
             return _mapper.Map<AnswerGetDto>(answerEntity); ;
@@ -54,7 +54,7 @@ namespace EvaluationSystem.Application.Services
 
         public AnswerGetDto Update(int questionId, int id, AnswerCreateDto model)
         {
-            var answer = _mapper.Map<Аnswer>(model);
+            var answer = _mapper.Map<AnswerTemplate>(model);
             answer.IdQuestion = questionId;
             answer.AnswerId = id;
             _repository.Update(answer);

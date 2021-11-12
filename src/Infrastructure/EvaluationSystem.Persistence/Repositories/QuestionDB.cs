@@ -7,17 +7,14 @@ using System.Collections.Generic;
 
 namespace EvaluationSystem.Persistence.Repositories
 {
-    public class QuestionDB : GenericRepository<Question>, IQuestionRepository
+    public class QuestionDB : GenericRepository<QuestionTemplate>, IQuestionRepository
     {
-
-        private const string _tableName = "QuestionTemplate";
-        private const string _objIdName = "QuestionId";
-        public QuestionDB(IConfiguration configuration) : base(configuration, _tableName, _objIdName)
+        public QuestionDB(IConfiguration configuration) : base(configuration)
         { 
         }
         public List<QuestionRepositoryDto> GetAll()
         {
-            using var connection = Connection;
+            using var connection = Connection();
             string query = @"SELECT q.QuestionId, q.[Name], q.[Type],a.AnswerId, a.AnswerText , a.Position, a.IsDefault
                                  FROM AnswerTemplate AS a
                                  RIGHT JOIN QuestionTemplate AS q ON q.QuestionId = a.IdQuestion";
@@ -27,7 +24,7 @@ namespace EvaluationSystem.Persistence.Repositories
 
         public List<QuestionRepositoryDto> GetById(int id)
         {
-            using var connection = Connection;
+            using var connection = Connection();
             string query = @$"SELECT q.QuestionId, q.[Name], q.[Type],a.AnswerId, a.AnswerText , a.Position, a.IsDefault
                                 FROM AnswerTemplate AS a
                                 RIGHT JOIN QuestionTemplate AS q ON q.QuestionId = a.IdQuestion
@@ -38,19 +35,19 @@ namespace EvaluationSystem.Persistence.Repositories
 
         public int AddNew(QuestionDbCreateDto model)
         {
-            using var connection = Connection;
+            using var connection = Connection();
             string query = @"INSERT QuestionTemplate([Name], [Type], IsReusable)  OUTPUT inserted.QuestionId VALUES (@Name, @Type, @IsReusable);";
             var index = connection.QuerySingle<int>(query, model);
             return index;
         }
 
-        public void Update(Question model)
+        public void Update(QuestionTemplate model)
         {
-            using var connection = Connection;
+            using var connection = Connection();
             string query = @$"UPDATE QuestionTemplate
                                 SET [Name] = @Name, IsReusable  = @IsReusable, [Type] = @Type
                                 WHERE QuestionId = @QuestionId;";
-            connection.Query<Question>(query, model);
+            connection.Query<QuestionTemplate>(query, model);
         }
         //public void Delete(int id)
         //{

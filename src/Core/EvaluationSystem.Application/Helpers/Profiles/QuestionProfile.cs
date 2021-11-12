@@ -14,11 +14,11 @@ namespace EvaluationSystem.Application.Helpers.Profiles
     {
         public QuestionProfile()
         {
-            CreateMap<Question, QuestionDto>().ReverseMap();
-            CreateMap<Question, QuestionUpdateDto>().ReverseMap();
+            CreateMap<QuestionTemplate, QuestionDto>().ReverseMap();
+            CreateMap<QuestionTemplate, QuestionUpdateDto>().ReverseMap();
             CreateMap<QuestionDbCreateDto, QuestionCreateDto>().ReverseMap();
-            CreateMap<Question, QuestionCreateDto>().ReverseMap();
-            CreateMap<Question, QuestionGetDto>().ReverseMap();
+            CreateMap<QuestionTemplate, QuestionCreateDto>().ReverseMap();
+            CreateMap<QuestionTemplate, QuestionGetDto>().ReverseMap();
         }
     }
 }

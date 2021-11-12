@@ -1,30 +1,50 @@
 ﻿using Dapper;
 using EvaluationSystem.Application.Models.GenericRepository;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace EvaluationSystem.Persistence.Repositories
 {
     public abstract class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         private readonly string _configurationString;
-        private readonly string _table;
-        private readonly string _objIdName;
 
-        public GenericRepository(IConfiguration configuration, string table, string objIdName)
+        public GenericRepository(IConfiguration configuration)
         {
-            _configurationString = configuration.GetConnectionString("DatabaseConnection");
-            _table = table;
-            _objIdName = objIdName;
+            _configurationString = configuration.GetConnectionString("DatabaseConnection");  
         }
-        public IDbConnection Connection => new SqlConnection(_configurationString);
+        public IDbConnection Connection() => new SqlConnection(_configurationString);
 
-        public void Delete(object id)
+        public List<T> GetAll(int questionId)
         {
-            using var connection = Connection;
-            string query = @$"DELETE FROM {_table} WHERE {_objIdName} = @Id";
-            connection.Execute(query, new { Id = id });
+            using var connection = Connection();
+            return connection.GetList<T>().ToList();
+        }
+
+        public T GetById(int id)
+        {
+            using var connection = Connection();
+            return connection.Get<T>(id);
+        }
+        public int Create(T entity)
+        {
+            using var connection = Connection();
+            var id= connection.Insert<T>(entity);
+            return (int)id;
+        }
+        public void Update(T entity)
+        {
+            using var connection = Connection();
+            var id = connection.Update(entity);
+            
+        }
+        public void Delete(int id)
+        {
+            using var connection = Connection();
+             connection.Delete(id);
         }
     }
 }

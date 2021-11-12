@@ -9,12 +9,11 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Application.Models.QuestionModels
 {
-    public interface IQuestionRepository : IGenericRepository<Question>
+    public interface IQuestionRepository : IGenericRepository<QuestionTemplate>
     {
         List<QuestionRepositoryDto> GetById(int id);
         List<QuestionRepositoryDto> GetAll();
-       // void Delete(int id);
         int AddNew(QuestionDbCreateDto model);
-        void Update(Question model);
+        void Update(QuestionTemplate model);
     }
 }

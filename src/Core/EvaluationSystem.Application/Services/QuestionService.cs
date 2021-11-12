@@ -91,7 +91,7 @@ namespace EvaluationSystem.Application.Services
 
         public QuestionUpdateDto Update(int id, QuestionUpdateDto model)
         {
-            var question = _mapper.Map<Question>(model);
+            var question = _mapper.Map<QuestionTemplate>(model);
             question.QuestionId = id;
             _questionRepository.Update(question);
             return _mapper.Map<QuestionUpdateDto>(question); ;
@@ -112,9 +112,9 @@ namespace EvaluationSystem.Application.Services
             _questionRepository.Delete(id);
         }
 
-        private Question SetQuestion(int index, QuestionCreateDto model)
+        private QuestionTemplate SetQuestion(int index, QuestionCreateDto model)
         {
-            var questionWithAnswer = _mapper.Map<Question>(model);
+            var questionWithAnswer = _mapper.Map<QuestionTemplate>(model);
             questionWithAnswer.QuestionId = index;
 
             foreach (var answer in questionWithAnswer.Answers)
