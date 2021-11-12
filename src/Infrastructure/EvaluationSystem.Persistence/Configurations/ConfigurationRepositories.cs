@@ -1,5 +1,7 @@
 ﻿using EvaluationSystem.Application.Models.AnswerModels;
+using EvaluationSystem.Application.Models.GenericRepository;
 using EvaluationSystem.Application.Models.QuestionModels;
+using EvaluationSystem.Domain.Entities;
 using EvaluationSystem.Persistence.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using System;

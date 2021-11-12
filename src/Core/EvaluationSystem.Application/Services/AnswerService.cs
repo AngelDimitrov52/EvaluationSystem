@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EvaluationSystem.Application.Models.AnswerModels;
 using EvaluationSystem.Application.Models.AnswerModels.Dtos;
+using EvaluationSystem.Application.Models.GenericRepository;
 using EvaluationSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -14,11 +15,12 @@ namespace EvaluationSystem.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IAnswerRepository _repository;
+ 
 
         public AnswerService(IMapper mapper, IAnswerRepository repository)
         {
             _mapper = mapper;
-            _repository = repository;
+             _repository = repository;    
         }
 
         public List<AnswerGetDto> GetAll(int questionId)

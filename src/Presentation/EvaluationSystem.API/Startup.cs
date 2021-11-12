@@ -53,14 +53,14 @@ namespace EvaluationSystem.API
 
             DatabaseCreate
                 .Create("Data Source=.;Initial Catalog=master; Integrated Security=True; MultipleActiveResultSets=True;", "EvaluationSystem");
+           
+            app.MigrateUpDatabase();
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthorization();
-
-            app.MigrateUpDatabase();
 
             app.UseEndpoints(endpoints =>
             {
