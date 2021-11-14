@@ -23,7 +23,6 @@ namespace EvaluationSystem.Persistence.Repositories
             using var connection = Connection();
             return connection.GetList<T>().ToList();
         }
-
         public T GetById(int id)
         {
             using var connection = Connection();
@@ -32,19 +31,17 @@ namespace EvaluationSystem.Persistence.Repositories
         public int Create(T entity)
         {
             using var connection = Connection();
-            var id= connection.Insert<T>(entity);
-            return (int)id;
+            return (int)connection.Insert<T>(entity);
         }
         public void Update(T entity)
         {
             using var connection = Connection();
-            var id = connection.Update(entity);
-            
+           connection.Update<T>(entity);
         }
         public void Delete(int id)
         {
             using var connection = Connection();
-             connection.Delete(id);
+             connection.Delete<T>(id);
         }
     }
 }

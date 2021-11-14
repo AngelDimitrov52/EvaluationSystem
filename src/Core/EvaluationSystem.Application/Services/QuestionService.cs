@@ -28,7 +28,7 @@ namespace EvaluationSystem.Application.Services
 
         public List<QuestionDto> GetAll()
         {
-            var questions = _questionRepository.GetAll();
+            var questions = _questionRepository.GetAllQuestions();
 
             List<QuestionDto> result = new List<QuestionDto>();
 
@@ -63,7 +63,7 @@ namespace EvaluationSystem.Application.Services
 
         public QuestionGetDto GetById(int id)
         {
-            var questionsResults = _questionRepository.GetById(id);
+            var questionsResults = _questionRepository.GetQuestionById(id);
 
             QuestionGetDto questionGetDto = new QuestionGetDto
             {
@@ -99,10 +99,11 @@ namespace EvaluationSystem.Application.Services
 
         public QuestionDto Create(QuestionCreateDto model)
         {
-            var question = _mapper.Map<QuestionDbCreateDto>(model);
-            int index = _questionRepository.AddNew(question);
+            //TODO DTO REMOVE
+            var question = _mapper.Map<QuestionTemplate>(model);
+            int index = _questionRepository.Create(question);
 
-            var questionWithAnswer = SetQuestion(index, model);
+            var questionWithAnswer = SetQuestion(index, question);
             return _mapper.Map<QuestionDto>(questionWithAnswer);
         }
 
@@ -112,19 +113,16 @@ namespace EvaluationSystem.Application.Services
             _questionRepository.Delete(id);
         }
 
-        private QuestionTemplate SetQuestion(int index, QuestionCreateDto model)
+        private QuestionTemplate SetQuestion(int index, QuestionTemplate model)
         {
-            var questionWithAnswer = _mapper.Map<QuestionTemplate>(model);
-            questionWithAnswer.QuestionId = index;
-
-            foreach (var answer in questionWithAnswer.Answers)
+            model.QuestionId = index;
+            foreach (var answer in model.Answers)
             {
-                var dto = _mapper.Map<AnswerCreateDbDto>(answer);
-                dto.IdQuestion = index;
-                int answerId = _answerRepository.AddNew(dto);
+                answer.IdQuestion = index;
+                int answerId = _answerRepository.Create(answer);
                 answer.AnswerId = answerId;
             }
-            return questionWithAnswer;
+            return model;
         }
     }
 }

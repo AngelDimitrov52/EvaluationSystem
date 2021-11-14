@@ -42,14 +42,12 @@ namespace EvaluationSystem.Application.Services
 
         public AnswerGetDto Create(int questionId, AnswerCreateDto model)
         {
-            var answerToCreate = _mapper.Map<AnswerCreateDbDto>(model);
-            answerToCreate.IdQuestion = questionId;
-            int answerId = _repository.AddNew(answerToCreate);
+            var answer = _mapper.Map<AnswerTemplate>(model);
+            answer.IdQuestion = questionId;
+            int answerId = _repository.Create(answer);
+            answer.AnswerId = answerId;
 
-            var answerEntity = _mapper.Map<AnswerTemplate>(model);
-            answerEntity.AnswerId = answerId;
-
-            return _mapper.Map<AnswerGetDto>(answerEntity); ;
+            return _mapper.Map<AnswerGetDto>(answer); 
         }
 
         public AnswerGetDto Update(int questionId, int id, AnswerCreateDto model)

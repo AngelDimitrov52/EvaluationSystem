@@ -12,7 +12,7 @@ namespace EvaluationSystem.Persistence.Repositories
         public QuestionDB(IConfiguration configuration) : base(configuration)
         { 
         }
-        public List<QuestionRepositoryDto> GetAll()
+        public List<QuestionRepositoryDto> GetAllQuestions()
         {
             using var connection = Connection();
             string query = @"SELECT q.QuestionId, q.[Name], q.[Type],a.AnswerId, a.AnswerText , a.Position, a.IsDefault
@@ -21,8 +21,7 @@ namespace EvaluationSystem.Persistence.Repositories
             var result = connection.Query<QuestionRepositoryDto>(query);
             return (List<QuestionRepositoryDto>)result;
         }
-
-        public List<QuestionRepositoryDto> GetById(int id)
+        public List<QuestionRepositoryDto> GetQuestionById(int id)
         {
             using var connection = Connection();
             string query = @$"SELECT q.QuestionId, q.[Name], q.[Type],a.AnswerId, a.AnswerText , a.Position, a.IsDefault
@@ -32,28 +31,5 @@ namespace EvaluationSystem.Persistence.Repositories
             var result = connection.Query<QuestionRepositoryDto>(query, new { Id = id });
             return (List<QuestionRepositoryDto>)result;
         }
-
-        public int AddNew(QuestionDbCreateDto model)
-        {
-            using var connection = Connection();
-            string query = @"INSERT QuestionTemplate([Name], [Type], IsReusable)  OUTPUT inserted.QuestionId VALUES (@Name, @Type, @IsReusable);";
-            var index = connection.QuerySingle<int>(query, model);
-            return index;
-        }
-
-        public void Update(QuestionTemplate model)
-        {
-            using var connection = Connection();
-            string query = @$"UPDATE QuestionTemplate
-                                SET [Name] = @Name, IsReusable  = @IsReusable, [Type] = @Type
-                                WHERE QuestionId = @QuestionId;";
-            connection.Query<QuestionTemplate>(query, model);
-        }
-        //public void Delete(int id)
-        //{
-        //    using var connection = Connection;
-        //    string query = @"DELETE FROM QuestionTemplate WHERE QuestionId = @QuestionId";
-        //    connection.Execute(query, new { QuestionId = id });
-        //}
     }
 }

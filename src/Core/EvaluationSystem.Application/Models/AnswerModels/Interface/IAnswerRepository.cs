@@ -10,10 +10,7 @@ namespace EvaluationSystem.Application.Models.AnswerModels
 {
     public interface IAnswerRepository : IGenericRepository<AnswerTemplate>
     {
-        
         List<AnswerTemplate> GetAllByQuestionId(int questionId);
-        int AddNew(AnswerCreateDbDto model);
-        void Update(AnswerTemplate model);
         void DeleteWithQuestionId(int IdQuestion);
     }
 }

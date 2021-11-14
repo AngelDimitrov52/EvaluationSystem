@@ -11,9 +11,7 @@ namespace EvaluationSystem.Application.Models.QuestionModels
 {
     public interface IQuestionRepository : IGenericRepository<QuestionTemplate>
     {
-        List<QuestionRepositoryDto> GetById(int id);
-        List<QuestionRepositoryDto> GetAll();
-        int AddNew(QuestionDbCreateDto model);
-        void Update(QuestionTemplate model);
+        List<QuestionRepositoryDto> GetQuestionById(int id);
+        List<QuestionRepositoryDto> GetAllQuestions(); 
     }
 }

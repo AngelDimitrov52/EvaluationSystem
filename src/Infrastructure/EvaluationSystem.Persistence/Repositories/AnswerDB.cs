@@ -19,43 +19,11 @@ namespace EvaluationSystem.Persistence.Repositories
             var result = connection.Query<AnswerTemplate>(query, new { questionId = questionId });
             return (List<AnswerTemplate>)result;
         }
-
-        //public AnswerTemplate GetById(int id)
-        //{
-        //    using var connection = Connection();
-        //    string query = @$"SELECT * FROM AnswerTemplate WHERE AnswerId=@Id";
-        //    var result = connection.QueryFirst<AnswerTemplate>(query, new { Id = id });
-        //    return result;
-        //}
-
-        public int AddNew(AnswerCreateDbDto model)
-        {
-            using var connection = Connection();
-            string query = @"INSERT AnswerTemplate(AnswerText,IdQuestion,Position,IsDefault) OUTPUT inserted.AnswerId VALUES (@AnswerText,@IdQuestion,@Position,@IsDefault);";
-            var index = connection.QuerySingle<int>(query, model);
-            return index;
-        }
         public void DeleteWithQuestionId(int idQuestion)
         {
             using var connection = Connection();
             string query = @"DELETE FROM AnswerTemplate WHERE IdQuestion = @IdQuestion";
             connection.Execute(query, new { IdQuestion = idQuestion });
         }
-
-        public void Update(AnswerTemplate model)
-        {
-            using var connection = Connection();
-            string query = @$"UPDATE AnswerTemplate
-                              SET IsDefault = @IsDefault, Position  = @Position, AnswerText = @AnswerText ,IdQuestion = @IdQuestion
-                              WHERE AnswerId = @AnswerId;";
-            connection.Query<AnswerTemplate>(query, model);
-        }
-
-        //public void Delete(int id)
-        //{
-        //    using var connection = Connection;
-        //    string query = @"DELETE FROM AnswerTemplate WHERE AnswerId = @Id";
-        //    connection.Execute(query, new { Id = id });
-        //}
     }
 }
