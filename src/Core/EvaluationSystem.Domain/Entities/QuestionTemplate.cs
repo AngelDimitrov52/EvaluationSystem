@@ -10,8 +10,7 @@ namespace EvaluationSystem.Domain.Entities
 {
     public class QuestionTemplate
     {
-        [Key]
-        public int QuestionId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public bool IsReusable { get; set; }
         public AnswersTypes Type { get; set; }

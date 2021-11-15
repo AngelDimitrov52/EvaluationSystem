@@ -10,8 +10,7 @@ namespace EvaluationSystem.Domain.Entities
 {
     public class AnswerTemplate 
     {
-        [Key]
-        public int AnswerId { get; set; }
+        public int Id { get; set; }
         public int IdQuestion { get; set; }
         public string AnswerText { get; set; }
         public int Position { get; set; }

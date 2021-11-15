@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using EvaluationSystem.Application.Models.AnswerModels;
 using EvaluationSystem.Application.Models.AnswerModels.Dtos;
-using EvaluationSystem.Application.Models.Dtos;
 using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using EvaluationSystem.Domain.Entities;
@@ -26,20 +25,21 @@ namespace EvaluationSystem.Application.Services
             _answerRepository = answerRepository;
         }
 
-        public List<QuestionDto> GetAll()
+        public List<QuestionGetDto> GetAll()
         {
             var questions = _questionRepository.GetAllQuestions();
 
-            List<QuestionDto> result = new List<QuestionDto>();
+            List<QuestionGetDto> result = new List<QuestionGetDto>();
 
             foreach (var question in questions)
             {
-                var isQuestionIsCreated = result.FirstOrDefault(x => x.QuestionId == question.QuestionId);
+                var isQuestionIsCreated = result.FirstOrDefault(x => x.Id == question.QuestionId);
                 if (isQuestionIsCreated == null)
                 {
-                    isQuestionIsCreated = new QuestionDto
+                    isQuestionIsCreated = new QuestionGetDto
                     {
-                        QuestionId = question.QuestionId,
+                        Id = question.QuestionId,
+                        IsReusable = question.IsReusable,
                         Name = question.Name,
                         Type = question.Type,
                         Answers = new List<AnswerGetDto>()
@@ -67,11 +67,12 @@ namespace EvaluationSystem.Application.Services
 
             QuestionGetDto questionGetDto = new QuestionGetDto
             {
+                Id = questionsResults[0].QuestionId,
+                IsReusable = questionsResults[0].IsReusable,
                 Name = questionsResults[0].Name,
                 Type = questionsResults[0].Type,
                 Answers = new List<AnswerGetDto>()
             };
-
             foreach (var question in questionsResults)
             {
                 if (question.AnswerId != 0)
@@ -91,20 +92,28 @@ namespace EvaluationSystem.Application.Services
 
         public QuestionUpdateDto Update(int id, QuestionUpdateDto model)
         {
+            var entity = _questionRepository.GetById(id);
+            if (entity == null)
+            {
+                throw new ArgumentException("Invalid question id");
+            }
+
+            //TODO
+            //var result = _mapper.Map(model, entity); 
+
             var question = _mapper.Map<QuestionTemplate>(model);
-            question.QuestionId = id;
+            question.Id = id;
             _questionRepository.Update(question);
             return _mapper.Map<QuestionUpdateDto>(question); ;
         }
 
-        public QuestionDto Create(QuestionCreateDto model)
+        public QuestionGetDto Create(QuestionCreateDto model)
         {
-            //TODO DTO REMOVE
             var question = _mapper.Map<QuestionTemplate>(model);
             int index = _questionRepository.Create(question);
 
-            var questionWithAnswer = SetQuestion(index, question);
-            return _mapper.Map<QuestionDto>(questionWithAnswer);
+            var questionWithAnswer = CreateQuestionAnsers(index, question);
+            return _mapper.Map<QuestionGetDto>(questionWithAnswer);
         }
 
         public void Delete(int id)
@@ -113,14 +122,14 @@ namespace EvaluationSystem.Application.Services
             _questionRepository.Delete(id);
         }
 
-        private QuestionTemplate SetQuestion(int index, QuestionTemplate model)
+        private QuestionTemplate CreateQuestionAnsers(int index, QuestionTemplate model)
         {
-            model.QuestionId = index;
+            model.Id = index;
             foreach (var answer in model.Answers)
             {
                 answer.IdQuestion = index;
                 int answerId = _answerRepository.Create(answer);
-                answer.AnswerId = answerId;
+                answer.Id = answerId;
             }
             return model;
         }

@@ -1,12 +1,6 @@
 ﻿using AutoMapper;
-using EvaluationSystem.Application.Models.Dtos;
 using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using EvaluationSystem.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EvaluationSystem.Application.Helpers.Profiles
 {
@@ -14,9 +8,8 @@ namespace EvaluationSystem.Application.Helpers.Profiles
     {
         public QuestionProfile()
         {
-            CreateMap<QuestionTemplate, QuestionDto>().ReverseMap();
-            CreateMap<QuestionTemplate, QuestionUpdateDto>().ReverseMap();
-            CreateMap<QuestionDbCreateDto, QuestionCreateDto>().ReverseMap();
+            CreateMap<QuestionUpdateDto, QuestionTemplate>()
+                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<QuestionTemplate, QuestionCreateDto>().ReverseMap();
             CreateMap<QuestionTemplate, QuestionGetDto>().ReverseMap();
         }

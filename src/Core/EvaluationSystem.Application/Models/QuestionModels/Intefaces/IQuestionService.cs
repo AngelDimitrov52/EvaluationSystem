@@ -1,19 +1,14 @@
-﻿using EvaluationSystem.Application.Models.Dtos;
-using EvaluationSystem.Application.Models.QuestionModels.Dtos;
-using System;
+﻿using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EvaluationSystem.Application.Models.QuestionModels
 {
     public interface IQuestionService
     {
-        List<QuestionDto> GetAll();
+        List<QuestionGetDto> GetAll();
         QuestionGetDto GetById(int id);
         void Delete(int id);
-        QuestionDto Create(QuestionCreateDto model);
+        QuestionGetDto Create(QuestionCreateDto model);
         QuestionUpdateDto Update(int id, QuestionUpdateDto model);
     }
 }

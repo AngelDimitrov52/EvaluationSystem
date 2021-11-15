@@ -18,7 +18,7 @@ namespace EvaluationSystem.Persistence.Migrations
         public override void Up()
         {
             Create.Table("QuestionTemplate")
-               .WithColumn("QuestionId").AsInt64().PrimaryKey().Identity()
+               .WithColumn("Id").AsInt64().PrimaryKey().Identity()
                .WithColumn("Name").AsString(255).NotNullable()
                .WithColumn("Type").AsInt64().NotNullable()
                .WithColumn("IsReusable").AsBoolean().NotNullable();

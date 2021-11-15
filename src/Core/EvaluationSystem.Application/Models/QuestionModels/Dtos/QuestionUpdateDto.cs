@@ -10,7 +10,7 @@ namespace EvaluationSystem.Application.Models.QuestionModels.Dtos
     public class QuestionUpdateDto
     {
         public string Name { get; set; }
-        public bool IsReusable { get; set; }
-        public AnswersTypes Type { get; set; }
+        public bool? IsReusable { get; set; }
+        public AnswersTypes? Type { get; set; }
     }
 }

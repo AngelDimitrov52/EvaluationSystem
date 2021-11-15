@@ -1,5 +1,4 @@
-﻿using EvaluationSystem.Application.Models.Dtos;
-using EvaluationSystem.Application.Models.QuestionModels;
+﻿using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +20,7 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpGet]
-        public List<QuestionDto> GetAllQuestions()
+        public List<QuestionGetDto> GetAllQuestions()
         {
             return questionService.GetAll();
         }
@@ -33,7 +32,7 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpPost]
-        public QuestionDto CreateQuestion([FromBody] QuestionCreateDto model)
+        public QuestionGetDto CreateQuestion([FromBody] QuestionCreateDto model)
         {
             return questionService.Create(model);
         }

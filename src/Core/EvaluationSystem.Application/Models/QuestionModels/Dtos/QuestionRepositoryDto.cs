@@ -11,5 +11,6 @@ namespace EvaluationSystem.Application.Models.QuestionModels
         public string AnswerText { get; set; }
         public int Position { get; set; }
         public bool IsDefault { get; set; }
+        public bool IsReusable { get; set; }
     }
 }
