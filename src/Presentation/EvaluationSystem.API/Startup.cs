@@ -1,4 +1,5 @@
 using EvaluationSystem.Application.Helpers.Configurations;
+using EvaluationSystem.Application.Middleware;
 using EvaluationSystem.Persistence.Configurations;
 using EvaluationSystem.Persistence.Migrations;
 using FluentMigrator.Runner;
@@ -51,14 +52,15 @@ namespace EvaluationSystem.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EvaluationSystem.API v1"));
             }
 
-            DatabaseCreate
-                .Create("Data Source=.;Initial Catalog=master; Integrated Security=True; MultipleActiveResultSets=True;", "EvaluationSystem");
+            DatabaseCreate.Create(Configuration);
            
             app.MigrateUpDatabase();
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseAuthorization();
 

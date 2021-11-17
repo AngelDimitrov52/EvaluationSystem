@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using EvaluationSystem.Application.Models.AnswerModels;
 using EvaluationSystem.Application.Models.AnswerModels.Dtos;
+using EvaluationSystem.Application.Models.Exceptions;
 using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using EvaluationSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,6 +20,8 @@ namespace EvaluationSystem.Application.Services
         private readonly IQuestionRepository _questionRepository;
         private readonly IAnswerRepository _answerRepository;
 
+        public HttpStatusCode BadRequest { get; private set; }
+
         public QuestionService(IAnswerRepository answerRepository, IMapper mapper, IQuestionRepository repository)
         {
             _mapper = mapper;
@@ -27,6 +31,7 @@ namespace EvaluationSystem.Application.Services
 
         public List<QuestionGetDto> GetAll()
         {
+            throw new ArgumentException("Not very good!");
             var questions = _questionRepository.GetAllQuestions();
 
             List<QuestionGetDto> result = new List<QuestionGetDto>();
@@ -51,7 +56,7 @@ namespace EvaluationSystem.Application.Services
                     isQuestionIsCreated.Answers
                     .Add(new AnswerGetDto
                     {
-                        AnswerId = question.AnswerId,
+                        Id = question.AnswerId,
                         Position = question.Position,
                         AnswerText = question.AnswerText,
                         IsDefault = question.IsDefault
@@ -80,7 +85,7 @@ namespace EvaluationSystem.Application.Services
                     questionGetDto.Answers
                     .Add(new AnswerGetDto
                     {
-                        AnswerId = question.AnswerId,
+                        Id = question.AnswerId,
                         Position = question.Position,
                         AnswerText = question.AnswerText,
                         IsDefault = question.IsDefault

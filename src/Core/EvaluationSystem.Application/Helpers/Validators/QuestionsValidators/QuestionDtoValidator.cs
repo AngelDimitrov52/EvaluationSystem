@@ -8,12 +8,14 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Application.Helpers.Validators
 {
-   public class QuestionDtoValidator : AbstractValidator<QuestionGetDto>
+    public class QuestionDtoValidator : AbstractValidator<QuestionCreateDto>
     {
         public QuestionDtoValidator()
         {
             RuleFor(t => t.Name)
-                .NotEmpty().WithMessage("{PropertyName} can't be empty!");
+                .NotEmpty().WithMessage("{PropertyName} can't be empty!")
+                .NotNull().WithMessage("{PropertyName} can't be null!")
+                .Length(2, 4).WithMessage("Length must be between 2 and 4");
         }
     }
 }

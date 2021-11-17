@@ -1,5 +1,4 @@
-﻿
-using EvaluationSystem.Application.Models.AnswerModels.Dtos;
+﻿using EvaluationSystem.Application.Models.AnswerModels.Dtos;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -14,7 +13,9 @@ namespace EvaluationSystem.Application.Validators
         public AnswerDtoValidator()
         {
             RuleFor(t => t.AnswerText)
-                  .NotEmpty().WithMessage("{PropertyName} can't be empty!");
+                  .NotEmpty().WithMessage("{PropertyName} can't be empty!")
+                    .NotNull().WithMessage("{PropertyName} can't be null!")
+                .Length(2, 4).WithMessage("Length must be between 2 and 4");
         }
     }
 }

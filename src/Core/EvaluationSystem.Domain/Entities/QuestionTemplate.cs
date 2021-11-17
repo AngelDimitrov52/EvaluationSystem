@@ -15,6 +15,5 @@ namespace EvaluationSystem.Domain.Entities
         public bool IsReusable { get; set; }
         public AnswersTypes Type { get; set; }
         public List<AnswerTemplate> Answers { get; set; }
-
     }
 }
