@@ -31,7 +31,6 @@ namespace EvaluationSystem.Application.Services
 
         public List<QuestionGetDto> GetAll()
         {
-            throw new ArgumentException("Not very good!");
             var questions = _questionRepository.GetAllQuestions();
 
             List<QuestionGetDto> result = new List<QuestionGetDto>();
@@ -102,9 +101,6 @@ namespace EvaluationSystem.Application.Services
             {
                 throw new ArgumentException("Invalid question id");
             }
-
-            //TODO
-            //var result = _mapper.Map(model, entity); 
 
             var question = _mapper.Map<QuestionTemplate>(model);
             question.Id = id;
