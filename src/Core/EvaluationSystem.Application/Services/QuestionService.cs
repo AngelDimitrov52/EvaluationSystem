@@ -49,8 +49,7 @@ namespace EvaluationSystem.Application.Services
                 }
                 if (question.AnswerId != 0)
                 {
-                    isQuestionIsCreated.Answers
-                    .Add(new AnswerGetDto
+                    isQuestionIsCreated.Answers.Add(new AnswerGetDto
                     {
                         Id = question.AnswerId,
                         Position = question.Position,
@@ -78,8 +77,7 @@ namespace EvaluationSystem.Application.Services
             {
                 if (question.AnswerId != 0)
                 {
-                    questionGetDto.Answers
-                    .Add(new AnswerGetDto
+                    questionGetDto.Answers.Add(new AnswerGetDto
                     {
                         Id = question.AnswerId,
                         Position = question.Position,

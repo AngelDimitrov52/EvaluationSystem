@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EvaluationSystem.Persistenc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EvaluationSystem.API", "src\Presentation\EvaluationSystem.API\EvaluationSystem.API.csproj", "{BEBB04C4-2722-45DE-9EED-3ADDCE49AC4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{EA892530-EDB6-4BF0-8A14-D546DFEF7A9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{BEBB04C4-2722-45DE-9EED-3ADDCE49AC4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEBB04C4-2722-45DE-9EED-3ADDCE49AC4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEBB04C4-2722-45DE-9EED-3ADDCE49AC4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA892530-EDB6-4BF0-8A14-D546DFEF7A9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA892530-EDB6-4BF0-8A14-D546DFEF7A9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA892530-EDB6-4BF0-8A14-D546DFEF7A9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA892530-EDB6-4BF0-8A14-D546DFEF7A9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
