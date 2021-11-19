@@ -1,14 +1,9 @@
 ﻿using FluentMigrator;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EvaluationSystem.Persistence.Migrations
 {
     [Migration(202111111320)]
-    public class  AddAnswerTable : Migration
+    public class AddAnswerTable : Migration
     {
         public override void Down()
         {

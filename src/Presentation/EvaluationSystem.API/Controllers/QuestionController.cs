@@ -13,40 +13,40 @@ namespace EvaluationSystem.API.Controllers
     [ApiController]
     public class QuestionController : ControllerBase
     {
-        private readonly IQuestionService questionService;
+        private readonly IQuestionService _questionService;
         public QuestionController(IQuestionService service)
         {
-            questionService = service;
+            _questionService = service;
         }
 
         [HttpGet]
-        public List<QuestionGetDto> GetAllQuestions()
+        public List<QuestionGetDto> GetAll()
         {
-            return questionService.GetAll();
+            return _questionService.GetAll();
         }
 
         [HttpGet("{id}")]
-        public QuestionGetDto GetQuestionsById(int id)
+        public QuestionGetDto GetById(int id)
         {
-            return questionService.GetById(id);
+            return _questionService.GetById(id);
         }
 
         [HttpPost]
-        public QuestionGetDto CreateQuestion([FromBody] QuestionCreateDto model)
+        public QuestionGetDto Create([FromBody] QuestionCreateDto model)
         {
-            return questionService.Create(model);
+            return _questionService.Create(model);
         }
 
         [HttpPut("{id}")]
-        public QuestionUpdateDto UpdateQuestion(int id, [FromBody] QuestionUpdateDto model)
+        public QuestionUpdateDto Update(int id, [FromBody] QuestionUpdateDto model)
         {
-            return questionService.Update(id, model);
+            return _questionService.Update(id, model);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteQuestion(int id)
+        public IActionResult Delete(int id)
         {
-            questionService.Delete(id);
+            _questionService.Delete(id);
             return NoContent();
         }
     }

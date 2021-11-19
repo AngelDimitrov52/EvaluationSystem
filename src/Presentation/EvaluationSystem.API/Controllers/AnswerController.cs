@@ -14,40 +14,40 @@ namespace EvaluationSystem.API.Controllers
     [ApiController]
     public class AnswerController : ControllerBase
     {
-        private readonly IAnswerService answerService;
+        private readonly IAnswerService _answerService;
         public AnswerController(IAnswerService service)
         {
-            answerService = service;
+            _answerService = service;
         }
 
         [HttpGet]
-        public List<AnswerGetDto> GetAllAnswer(int questionId)
+        public List<AnswerGetDto> GetAll(int questionId)
         {
-            return answerService.GetAll(questionId);
+            return _answerService.GetAll(questionId);
         }
 
         [HttpGet("{answerId}")]
-        public AnswerGetDto GetAnswerById(int questionId, int answerId)
+        public AnswerGetDto GetById(int questionId, int answerId)
         {
-            return answerService.GetById(answerId);
+            return _answerService.GetById(answerId);
         }
 
         [HttpPost]
-        public AnswerGetDto CreateAnswer(int questionId, [FromBody] AnswerCreateDto model)
+        public AnswerGetDto Create(int questionId, [FromBody] AnswerCreateDto model)
         {
-            return answerService.Create(questionId, model);
+            return _answerService.Create(questionId, model);
         }
 
         [HttpPut("{answerId}")]
-        public AnswerGetDto UpdateAnswer(int questionId, int answerId, [FromBody] AnswerCreateDto model)
+        public AnswerGetDto Update(int questionId, int answerId, [FromBody] AnswerCreateDto model)
         {
-            return answerService.Update(questionId, answerId, model);
+            return _answerService.Update(questionId, answerId, model);
         }
 
         [HttpDelete("{answerId}")]
-        public IActionResult DeleteAnswer(int questionId, int answerId)
+        public IActionResult Delete(int questionId, int answerId)
         {
-            answerService.Delete(answerId);
+            _answerService.Delete(answerId);
             return NoContent();
         }
     }

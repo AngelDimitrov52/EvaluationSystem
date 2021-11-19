@@ -40,7 +40,6 @@ namespace EvaluationSystem.Application.Services
             _memoryCache.Set($"allAnswer_{questionId}", answersGetDtos);
             return answersGetDtos;
         }
-
         public AnswerGetDto GetById(int id)
         {
             var answerCache = _memoryCache.Get($"answer_{id}");

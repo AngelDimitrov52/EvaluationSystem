@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace EvaluationSystem.Application.Models.GenericRepository
 {
     public interface IGenericRepository<T>
     {
-        List<T> GetAll (int questionId);
+        List<T> GetAll();
         T GetById(int id);
         int Create(T entity);
         void Update(T entity);

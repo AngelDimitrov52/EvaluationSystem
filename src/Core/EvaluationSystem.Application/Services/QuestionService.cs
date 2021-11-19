@@ -19,9 +19,6 @@ namespace EvaluationSystem.Application.Services
         private readonly IMapper _mapper;
         private readonly IQuestionRepository _questionRepository;
         private readonly IAnswerRepository _answerRepository;
-
-        public HttpStatusCode BadRequest { get; private set; }
-
         public QuestionService(IAnswerRepository answerRepository, IMapper mapper, IQuestionRepository repository)
         {
             _mapper = mapper;

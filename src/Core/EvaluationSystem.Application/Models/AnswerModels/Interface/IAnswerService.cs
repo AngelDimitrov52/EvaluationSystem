@@ -1,6 +1,5 @@
 ﻿
 using EvaluationSystem.Application.Models.AnswerModels.Dtos;
-using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace EvaluationSystem.Application.Models.AnswerModels

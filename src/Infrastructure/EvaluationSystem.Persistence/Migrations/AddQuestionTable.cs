@@ -1,9 +1,4 @@
 ﻿using FluentMigrator;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EvaluationSystem.Persistence.Migrations
 {
@@ -19,7 +14,7 @@ namespace EvaluationSystem.Persistence.Migrations
         {
             Create.Table("QuestionTemplate")
                .WithColumn("Id").AsInt64().PrimaryKey().Identity()
-               .WithColumn("Name").AsString(255).NotNullable()
+               .WithColumn("Name").AsString(1024).NotNullable()
                .WithColumn("Type").AsInt64().NotNullable()
                .WithColumn("IsReusable").AsBoolean().NotNullable();
         }

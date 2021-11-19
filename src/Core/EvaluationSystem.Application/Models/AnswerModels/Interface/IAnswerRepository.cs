@@ -1,10 +1,6 @@
-﻿
-
-using EvaluationSystem.Application.Models.AnswerModels.Dtos;
-using EvaluationSystem.Application.Models.GenericRepository;
+﻿using EvaluationSystem.Application.Models.GenericRepository;
 using EvaluationSystem.Domain.Entities;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace EvaluationSystem.Application.Models.AnswerModels
 {

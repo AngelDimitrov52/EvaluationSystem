@@ -18,7 +18,7 @@ namespace EvaluationSystem.Persistence.Repositories
         }
         public IDbConnection Connection() => new SqlConnection(_configurationString);
 
-        public List<T> GetAll(int questionId)
+        public List<T> GetAll()
         {
             using var connection = Connection();
             return connection.GetList<T>().ToList();

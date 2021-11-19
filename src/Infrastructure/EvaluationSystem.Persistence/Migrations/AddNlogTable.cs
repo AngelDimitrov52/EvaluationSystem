@@ -1,9 +1,4 @@
 ﻿using FluentMigrator;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EvaluationSystem.Persistence.Migrations
 {
@@ -12,7 +7,7 @@ namespace EvaluationSystem.Persistence.Migrations
     {
         public override void Down()
         {
-            Delete.Table("AnswerTemplate");
+            Delete.Table("NlogsErrors");
         }
 
         public override void Up()

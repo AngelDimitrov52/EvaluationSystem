@@ -1,5 +1,7 @@
 ﻿using EvaluationSystem.Application.Helpers.Profiles;
 using EvaluationSystem.Application.Models.AnswerModels;
+using EvaluationSystem.Application.Models.FormModels.Interface;
+using EvaluationSystem.Application.Models.ModuleModels.Interface;
 using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Services;
 using EvaluationSystem.Application.Validators;
@@ -29,6 +31,8 @@ namespace EvaluationSystem.Application.Helpers.Configurations
 
             services.AddScoped<IAnswerService, AnswerService>();
             services.AddScoped<IQuestionService, QuestionService>();
+            services.AddScoped<IModuleService, ModuleService>();
+            services.AddScoped<IFormService, FormService>();
 
             return services;
         }

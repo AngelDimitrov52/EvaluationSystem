@@ -1,14 +1,9 @@
 ﻿using EvaluationSystem.Application.Models.AnswerModels;
-using EvaluationSystem.Application.Models.GenericRepository;
+using EvaluationSystem.Application.Models.FormModels.Interface;
+using EvaluationSystem.Application.Models.ModuleModels.Interface;
 using EvaluationSystem.Application.Models.QuestionModels;
-using EvaluationSystem.Domain.Entities;
 using EvaluationSystem.Persistence.Repositories;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EvaluationSystem.Persistence.Configurations
 {
@@ -18,6 +13,8 @@ namespace EvaluationSystem.Persistence.Configurations
         {
             services.AddScoped<IAnswerRepository, AnswerDB>();
             services.AddScoped<IQuestionRepository, QuestionDB>();
+            services.AddScoped<IModuleRepository, ModuleDB>();
+            services.AddScoped<IFormRepository, FormDB>();
 
             return services;
         }
