@@ -31,7 +31,6 @@ namespace EvaluationSystem.Application.Services
 
         public List<QuestionGetDto> GetAll()
         {
-            throw new ArgumentException("Not very good!");
             var questions = _questionRepository.GetAllQuestions();
 
             List<QuestionGetDto> result = new List<QuestionGetDto>();
@@ -53,8 +52,7 @@ namespace EvaluationSystem.Application.Services
                 }
                 if (question.AnswerId != 0)
                 {
-                    isQuestionIsCreated.Answers
-                    .Add(new AnswerGetDto
+                    isQuestionIsCreated.Answers.Add(new AnswerGetDto
                     {
                         Id = question.AnswerId,
                         Position = question.Position,
@@ -82,8 +80,7 @@ namespace EvaluationSystem.Application.Services
             {
                 if (question.AnswerId != 0)
                 {
-                    questionGetDto.Answers
-                    .Add(new AnswerGetDto
+                    questionGetDto.Answers.Add(new AnswerGetDto
                     {
                         Id = question.AnswerId,
                         Position = question.Position,
