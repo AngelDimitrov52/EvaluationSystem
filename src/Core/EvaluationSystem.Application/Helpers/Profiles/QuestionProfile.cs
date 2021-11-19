@@ -8,8 +8,7 @@ namespace EvaluationSystem.Application.Helpers.Profiles
     {
         public QuestionProfile()
         {
-            CreateMap<QuestionUpdateDto, QuestionTemplate>()
-                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<QuestionUpdateDto, QuestionTemplate>().ReverseMap();
             CreateMap<QuestionTemplate, QuestionCreateDto>().ReverseMap();
             CreateMap<QuestionTemplate, QuestionGetDto>().ReverseMap();
         }

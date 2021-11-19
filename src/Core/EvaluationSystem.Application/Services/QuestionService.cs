@@ -100,9 +100,6 @@ namespace EvaluationSystem.Application.Services
                 throw new ArgumentException("Invalid question id");
             }
 
-            //TODO
-            //var result = _mapper.Map(model, entity); 
-
             var question = _mapper.Map<QuestionTemplate>(model);
             question.Id = id;
             _questionRepository.Update(question);

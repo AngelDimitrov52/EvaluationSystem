@@ -3,8 +3,11 @@ using EvaluationSystem.Application.Models.AnswerModels;
 using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Services;
 using EvaluationSystem.Application.Validators;
+using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +24,8 @@ namespace EvaluationSystem.Application.Helpers.Configurations
                 .AddFluentValidation(validator => validator.RegisterValidatorsFromAssemblyContaining<AnswerDtoValidator>());
 
             services.AddAutoMapper(typeof(AnswerProfile).Assembly);
+
+            services.AddMemoryCache();
 
             services.AddScoped<IAnswerService, AnswerService>();
             services.AddScoped<IQuestionService, QuestionService>();

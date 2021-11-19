@@ -30,8 +30,8 @@ namespace EvaluationSystem.Application.Middleware
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Log some error!");
-               ExceptionHandler(ex, context);
+                _logger.LogError(ex.ToString());
+                ExceptionHandler(ex, context);
             }
         }
 
