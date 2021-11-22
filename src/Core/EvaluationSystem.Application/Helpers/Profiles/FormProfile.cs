@@ -9,12 +9,14 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Application.Helpers.Profiles
 {
-   public class FormProfile : Profile
+    public class FormProfile : Profile
     {
         public FormProfile()
         {
             CreateMap<FormTemplate, FormGetDto>().ReverseMap();
             CreateMap<FormTemplate, FormCreateDto>().ReverseMap();
+            CreateMap<FormTemplate, FormWithModulesAndQuestionsDto>().ReverseMap();
+            CreateMap<FormTemplate, FormWithModulesDto>().ReverseMap();
         }
     }
 }

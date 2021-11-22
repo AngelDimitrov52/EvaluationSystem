@@ -50,6 +50,11 @@ namespace EvaluationSystem.Application.Services
         }
         public void Delete(int id)
         {
+            var questions = _moduleRepository.GetModuleQuestions(id);
+            foreach (var question in questions)
+            {
+                _moduleRepository.DeleteQuestionFromModule(id,question.IdQuestion);
+            }
             _moduleRepository.Delete(id);
         }
 
@@ -58,7 +63,7 @@ namespace EvaluationSystem.Application.Services
             _moduleRepository.AddQuestionToModule(modulelId, questionId, position);
         }
 
-        public void DeleteQuestionToModule(int moduleId, int questionId)
+        public void DeleteQuestionFromModule(int moduleId, int questionId)
         {
             _moduleRepository.DeleteQuestionFromModule(moduleId, questionId);
         }

@@ -50,7 +50,7 @@ namespace EvaluationSystem.API.Controllers
             return NoContent();
         }
 
-        [HttpPost("{moduleId}/question/{questionId}/position/{position}")]
+        [HttpPost("{moduleId}/question/{questionId}")]
         public IActionResult AddQuestionToModule(int moduleId, int questionId, int position)
         {
             _moduleService.AddQuestionToModule(moduleId, questionId, position);
@@ -60,11 +60,11 @@ namespace EvaluationSystem.API.Controllers
         [HttpDelete("{moduleId}/question/{questionId}")]
         public IActionResult DeleteQuestionFromModule(int moduleId, int questionId)
         {
-            _moduleService.DeleteQuestionToModule(moduleId, questionId);
+            _moduleService.DeleteQuestionFromModule(moduleId, questionId);
             return NoContent();
         }
 
-        [HttpGet("questions/{moduleId}")]
+        [HttpGet("GetAllQuestion")]
         public ModuleWithQuestionsDto GetmoduleWithQuestions(int moduleId)
         {
             return _moduleService.GetModuleWithQuestions(moduleId);

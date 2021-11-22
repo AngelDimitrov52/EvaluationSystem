@@ -15,15 +15,16 @@ using NUnit.Framework;
 
 namespace Tests
 {
+
     [TestFixture]
     public class QuestionServiceTests
     {
         private const int QuestionId = 1;
-        
+
         private IQuestionService _questionService;
 
         private QuestionRepositoryDto _questionRepositoryDto;
-        
+
         [SetUp]
         public void SetUp()
         {
@@ -32,7 +33,7 @@ namespace Tests
                 QuestionId = QuestionId,
                 AnswerId = 12
             };
-            
+
             var answerRepoMock = new Mock<IAnswerRepository>();
             var questionRepoMock = new Mock<IQuestionRepository>();
 
@@ -49,12 +50,11 @@ namespace Tests
                 mc.AddMaps(typeof(AnswerProfile).Assembly);
             }).CreateMapper(), new QuestionDB(config));
         }
-
         [Test]
         public void Verify_QuestionServiceGetById_ReturnsSameIdDTO()
         {
             var result = _questionService.GetById(QuestionId);
-            
+
             Assert.That(result.Id == QuestionId);
             Assert.That(result.Answers[0].Id == 1);
         }
@@ -72,7 +72,7 @@ namespace Tests
                     new() { AnswerText = "Test" }
                 }
             };
-            
+
             var insert = _questionService.Create(new QuestionCreateDto()
             {
                 Name = "asd",
@@ -85,7 +85,7 @@ namespace Tests
             });
 
             var result = _questionService.GetById(insert.Id);
-            
+
             Assert.That(insertable.Name == result.Name);
         }
     }

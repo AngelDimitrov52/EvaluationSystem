@@ -1,5 +1,6 @@
 ﻿using EvaluationSystem.Application.Models.FormModels.Dtos;
 using EvaluationSystem.Application.Models.FormModels.Interface;
+using EvaluationSystem.Application.Models.ModuleModels.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -48,6 +49,32 @@ namespace EvaluationSystem.API.Controllers
         {
             _formService.Delete(id);
             return NoContent();
+        }
+
+        [HttpPost("{formId}/module/{moduleId}")]
+        public IActionResult AddModuleToForm(int formId, int moduleId, int position)
+        {
+            _formService.AddModuleToForm(formId, moduleId, position);
+            return Ok($"Added module with ID:{moduleId} to form with ID:{formId} on position:{position}");
+        }
+
+        [HttpDelete("{formId}/module/{moduleId}")]
+        public IActionResult DeleteModuleFromForm(int formId, int moduleId)
+        {
+            _formService.DeleteModuldeFromForm(formId, moduleId);
+            return NoContent();
+        }
+
+        [HttpGet("GetAllModulesWithQuestions")]
+        public FormWithModulesAndQuestionsDto GetAllModuleWithQuestions(int formId)
+        {
+            return _formService.GetFormWithModulesAndQuestions(formId);
+        }
+
+        [HttpGet("GetAllModules")]
+        public FormWithModulesDto GetAllModule(int formId)
+        {
+            return _formService.GetFormWithModules(formId);
         }
     }
 }

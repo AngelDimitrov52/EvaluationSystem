@@ -11,7 +11,7 @@ namespace EvaluationSystem.Application.Models.ModuleModels.Interface
         ModuleGetDto Create(ModuleCreateDto model);
         ModuleGetDto Update(int id, ModuleCreateDto model);
         void AddQuestionToModule(int modulelId, int questionId, int position);
-        void DeleteQuestionToModule(int moduleId, int questionId);
+        void DeleteQuestionFromModule(int moduleId, int questionId);
         ModuleWithQuestionsDto GetModuleWithQuestions(int moduleId);
     }
 }

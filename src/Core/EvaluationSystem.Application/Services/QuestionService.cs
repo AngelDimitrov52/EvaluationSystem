@@ -117,7 +117,6 @@ namespace EvaluationSystem.Application.Services
             _answerRepository.DeleteWithQuestionId(id);
             _questionRepository.Delete(id);
         }
-
         private QuestionTemplate CreateQuestionAnsers(int index, QuestionTemplate model)
         {
             model.Id = index;
