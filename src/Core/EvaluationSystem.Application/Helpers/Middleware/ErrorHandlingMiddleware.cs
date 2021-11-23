@@ -1,4 +1,5 @@
 ﻿using EvaluationSystem.Application.Models.Exceptions;
+using EvaluationSystem.Application.Models.GenericRepository;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -22,16 +23,19 @@ namespace EvaluationSystem.Application.Middleware
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, IUnitOfWork unitOfWork)
         {
             try
             {
+                unitOfWork.Begin();
                 await _next.Invoke(context);
+                unitOfWork.Commit();
             }
             catch (Exception ex)
             {
+                unitOfWork.Rollback();
                 _logger.LogError(ex.ToString());
-                ExceptionHandler(ex, context);
+                await ExceptionHandler(ex, context);
             }
         }
 

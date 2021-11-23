@@ -33,14 +33,14 @@ namespace Tests
             var questionRepoMock = new Mock<IQuestionRepository>();
 
             var config = new ConfigurationBuilder()
-                    .SetBasePath(Environment.CurrentDirectory)
-                    .AddJsonFile("appsettings.json")
-                    .Build();
+                   .SetBasePath(Environment.CurrentDirectory)
+                  .AddJsonFile("appsettings.json")
+                  .Build();
 
-            _questionService = new QuestionService(new AnswerDB(config), new MapperConfiguration((mc) =>
-            {
-                mc.AddMaps(typeof(AnswerProfile).Assembly);
-            }).CreateMapper(), new QuestionDB(config));
+            _questionService = new QuestionService(new AnswerDB(new UnitOfWork(config)), new MapperConfiguration((mc) =>
+             {
+                 mc.AddMaps(typeof(AnswerProfile).Assembly);
+             }).CreateMapper(), new QuestionDB(new UnitOfWork(config)));
         }
         [Test]
         public void Verify_QuestionServiceGetById_ReturnsSameIdDTO()

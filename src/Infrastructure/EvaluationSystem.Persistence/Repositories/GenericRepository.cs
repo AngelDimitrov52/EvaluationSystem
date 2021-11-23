@@ -11,38 +11,34 @@ namespace EvaluationSystem.Persistence.Repositories
 {
     public abstract class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
-        private readonly string _configurationString;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public GenericRepository(IConfiguration configuration)
+        public GenericRepository(IUnitOfWork unitOfWork)
         {
-            _configurationString = configuration.GetConnectionString("DatabaseConnection");  
+            _unitOfWork = unitOfWork;
         }
-        public IDbConnection Connection() => new SqlConnection(_configurationString);
+        public IDbConnection Connection => _unitOfWork.Connection;
+        public IDbTransaction Transaction => _unitOfWork.Transaction;
 
         public List<T> GetAll()
         {
-            using var connection = Connection();
-            return connection.GetList<T>().ToList();
+            return Connection.GetList<T>(null, null, Transaction).ToList();
         }
         public T GetById(int id)
         {
-            using var connection = Connection();
-            return connection.Get<T>(id);
+            return Connection.Get<T>(id, Transaction);
         }
         public int Create(T entity)
         {
-            using var connection = Connection();
-            return (int)connection.Insert<T>(entity);
+            return (int)Connection.Insert<T>(entity,Transaction);
         }
         public void Update(T entity)
         {
-            using var connection = Connection();
-           connection.Update<T>(entity);
+           Connection.Update<T>(entity, Transaction);
         }
         public void Delete(int id)
         {
-            using var connection = Connection();
-             connection.Delete<T>(id);
+             Connection.Delete<T>(id,Transaction);
         }
     }
 }

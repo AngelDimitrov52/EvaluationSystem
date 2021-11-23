@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using EvaluationSystem.Application.Models.FormModels.Dtos;
 using EvaluationSystem.Application.Models.FormModels.Interface;
+using EvaluationSystem.Application.Models.GenericRepository;
 using EvaluationSystem.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -11,30 +12,27 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Persistence.Repositories
 {
-   public class FormDB : GenericRepository<FormTemplate>, IFormRepository
+    public class FormDB : GenericRepository<FormTemplate>, IFormRepository
     {
-        public FormDB(IConfiguration configuration) : base(configuration)
+        public FormDB(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
         public void AddModuleToForm(int formId, int moduleId, int position)
         {
-            using var connection = Connection();
             string query = "Insert Into FormModule (IdForm, IdModule, Position) Values(@IdForm, @IdModule, @Position)";
-            int index = connection.Execute(query, new { IdForm = formId, IdModule = moduleId, Position = position });
+            Connection.Execute(query, new { IdForm = formId, IdModule = moduleId, Position = position }, Transaction);
         }
 
         public void DeleteModuleFromForm(int formId, int moduleId)
         {
-            using var connection = Connection();
             string query = "Delete from FormModule where IdForm = @IdForm AND IdModule = @IdModule";
-            int index = connection.Execute(query, new { IdForm = formId, IdModule = moduleId });
+            Connection.Execute(query, new { IdForm = formId, IdModule = moduleId }, Transaction);
         }
 
         public List<FormModuleTemplateDto> GetFormModules(int formId)
         {
-            using var connection = Connection();
             string query = @"SELECT * FROM FormModule WHERE IdForm = @IdForm ORDER BY [Position] ASC";
-            var result = connection.Query<FormModuleTemplateDto>(query, new { IdForm = formId });
+            var result = Connection.Query<FormModuleTemplateDto>(query, new { IdForm = formId }, Transaction);
             return (List<FormModuleTemplateDto>)result;
         }
     }
