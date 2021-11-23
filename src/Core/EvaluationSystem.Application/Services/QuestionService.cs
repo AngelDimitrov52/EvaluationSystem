@@ -29,7 +29,6 @@ namespace EvaluationSystem.Application.Services
         public List<QuestionGetDto> GetAll()
         {
             var questions = _questionRepository.GetAllQuestions();
-
             List<QuestionGetDto> result = new List<QuestionGetDto>();
 
             foreach (var question in questions)
@@ -63,6 +62,7 @@ namespace EvaluationSystem.Application.Services
 
         public QuestionGetDto GetById(int id)
         {
+            IsQuestionExist(id);
             var questionsResults = _questionRepository.GetQuestionById(id);
 
             QuestionGetDto questionGetDto = new QuestionGetDto
@@ -73,33 +73,26 @@ namespace EvaluationSystem.Application.Services
                 Type = questionsResults[0].Type,
                 Answers = new List<AnswerGetDto>()
             };
-            foreach (var question in questionsResults)
-            {
-                if (question.AnswerId != 0)
-                {
-                    questionGetDto.Answers.Add(new AnswerGetDto
-                    {
-                        Id = question.AnswerId,
-                        Position = question.Position,
-                        AnswerText = question.AnswerText,
-                        IsDefault = question.IsDefault
-                    });
-                }
-            }
+            questionGetDto.Answers.AddRange(from question in questionsResults
+                                            where question.AnswerId != 0
+                                            select new AnswerGetDto
+                                            {
+                                                Id = question.AnswerId,
+                                                Position = question.Position,
+                                                AnswerText = question.AnswerText,
+                                                IsDefault = question.IsDefault
+                                            });
             return questionGetDto;
         }
 
         public QuestionUpdateDto Update(int id, QuestionUpdateDto model)
         {
-            var entity = _questionRepository.GetById(id);
-            if (entity == null)
-            {
-                throw new ArgumentException("Invalid question id");
-            }
+            IsQuestionExist(id);
 
             var question = _mapper.Map<QuestionTemplate>(model);
             question.Id = id;
             _questionRepository.Update(question);
+
             return _mapper.Map<QuestionUpdateDto>(question); ;
         }
 
@@ -116,6 +109,15 @@ namespace EvaluationSystem.Application.Services
         {
             _answerRepository.DeleteWithQuestionId(id);
             _questionRepository.Delete(id);
+        }
+
+        public void IsQuestionExist(int questionId)
+        {
+            var entity = _questionRepository.GetById(questionId);
+            if (entity == null)
+            {
+                throw new HttpException($"Question with ID:{questionId} doesn't exist!", HttpStatusCode.NotFound);
+            }
         }
         private QuestionTemplate CreateQuestionAnsers(int index, QuestionTemplate model)
         {

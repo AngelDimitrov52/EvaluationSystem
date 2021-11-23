@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using EvaluationSystem.Domain.Entities;
+using System.Collections.Generic;
 
 namespace EvaluationSystem.Application.Models.GenericRepository
 {

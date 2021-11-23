@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Domain.Entities
 {
-    public class FormTemplate : BaseEntity
+    public class BaseEntity
     {
-        public string Name { get; set; }
+        public int Id { get; set; }
     }
 }

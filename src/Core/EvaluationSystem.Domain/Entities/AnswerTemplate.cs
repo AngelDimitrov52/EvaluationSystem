@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Domain.Entities
 {
-    public class AnswerTemplate 
+    public class AnswerTemplate : BaseEntity
     {
-        public int Id { get; set; }
         public int IdQuestion { get; set; }
         public string AnswerText { get; set; }
         public int Position { get; set; }

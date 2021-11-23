@@ -10,15 +10,15 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Application.Helpers.Validators
 {
-    public class QuestionDtoValidator : AbstractValidator<QuestionCreateDto>
+    public class QuestionCreateDtoValidator : AbstractValidator<QuestionCreateDto>
     {
 
-        public QuestionDtoValidator()
+        public QuestionCreateDtoValidator()
         {
             RuleFor(t => t.Name)
               .NotEmpty().WithMessage("{PropertyName} can't be empty!")
-              .NotNull().WithMessage("{PropertyName} can't be null!")
-             .OnAnyFailure(x => throw new HttpException("Invalid Name", HttpStatusCode.BadRequest));
+              .NotNull().WithMessage("{PropertyName} can't be null!");
+            //.OnAnyFailure(x => throw new HttpException("Invalid Name", HttpStatusCode.BadRequest));
         }
     }
 }

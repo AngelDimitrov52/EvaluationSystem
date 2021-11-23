@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using EvaluationSystem.Application.Models.GenericRepository;
+using EvaluationSystem.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Data;
@@ -8,7 +9,7 @@ using System.Linq;
 
 namespace EvaluationSystem.Persistence.Repositories
 {
-    public abstract class GenericRepository<T> : IGenericRepository<T> where T : class
+    public abstract class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         private readonly string _configurationString;
 

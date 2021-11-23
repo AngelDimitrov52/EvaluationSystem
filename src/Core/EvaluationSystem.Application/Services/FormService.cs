@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
+using EvaluationSystem.Application.Models.Exceptions;
 using EvaluationSystem.Application.Models.FormModels.Dtos;
 using EvaluationSystem.Application.Models.FormModels.Interface;
+using EvaluationSystem.Application.Models.GenericRepository;
 using EvaluationSystem.Application.Models.ModuleModels.Dtos;
 using EvaluationSystem.Application.Models.ModuleModels.Interface;
 using EvaluationSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,6 +34,7 @@ namespace EvaluationSystem.Application.Services
         }
         public FormGetDto GetById(int id)
         {
+            IsFormExist(id);
             var form = _formRepository.GetById(id);
             return _mapper.Map<FormGetDto>(form);
         }
@@ -43,6 +47,7 @@ namespace EvaluationSystem.Application.Services
         }
         public FormGetDto Update(int id, FormCreateDto model)
         {
+            IsFormExist(id);
             var form = _mapper.Map<FormTemplate>(model);
             form.Id = id;
             _formRepository.Update(form);
@@ -59,6 +64,8 @@ namespace EvaluationSystem.Application.Services
         }
         public void AddModuleToForm(int formId, int moduleId, int position)
         {
+            IsFormExist(formId);
+            _moduleService.IsModuleExist(moduleId);
             _formRepository.AddModuleToForm(formId, moduleId, position);
         }
 
@@ -69,31 +76,39 @@ namespace EvaluationSystem.Application.Services
 
         public FormWithModulesAndQuestionsDto GetFormWithModulesAndQuestions(int formId)
         {
+            IsFormExist(formId);
+
             var formEntity = _formRepository.GetById(formId);
             var form = _mapper.Map<FormWithModulesAndQuestionsDto>(formEntity);
             form.Modules = new List<ModuleWithQuestionsDto>();
 
             var modules = _formRepository.GetFormModules(formId);
-            foreach (var module in modules)
-            {
-                var moduleWithQuestoins = _moduleService.GetModuleWithQuestions(module.IdModule);
-                form.Modules.Add(moduleWithQuestoins);
-            }
+            form.Modules.AddRange(from module in modules
+                                  let moduleWithQuestoins = _moduleService.GetModuleWithQuestions(module.IdModule)
+                                  select moduleWithQuestoins);
             return form;
         }
         public FormWithModulesDto GetFormWithModules(int formId)
         {
+            IsFormExist(formId);
+
             var formEntity = _formRepository.GetById(formId);
             var form = _mapper.Map<FormWithModulesDto>(formEntity);
             form.Modules = new List<ModuleGetDto>();
 
             var modules = _formRepository.GetFormModules(formId);
-            foreach (var module in modules)
-            {
-                var result = _mapper.Map<ModuleGetDto>(_moduleService.GetById(module.IdModule));
-                form.Modules.Add(result);
-            }
+            form.Modules.AddRange(from module in modules
+                                  let result = _mapper.Map<ModuleGetDto>(_moduleService.GetById(module.IdModule))
+                                  select result);
             return form;
+        }
+        private void IsFormExist(int fromId)
+        {
+            var entity = _formRepository.GetById(fromId);
+            if (entity == null)
+            {
+                throw new HttpException($"Form with ID:{fromId} doesn't exist!", HttpStatusCode.NotFound);
+            }
         }
     }
 }

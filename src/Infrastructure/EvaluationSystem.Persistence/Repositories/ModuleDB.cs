@@ -17,7 +17,6 @@ namespace EvaluationSystem.Persistence.Repositories
         public ModuleDB(IConfiguration configuration) : base(configuration)
         {
         }
-
         public void AddQuestionToModule(int moduleId, int questionId, int position)
         {
             using var connection = Connection();
