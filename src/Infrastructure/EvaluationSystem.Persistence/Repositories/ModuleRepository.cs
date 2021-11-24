@@ -1,15 +1,9 @@
-﻿
-using Dapper;
+﻿using Dapper;
 using EvaluationSystem.Application.Models.GenericRepository;
 using EvaluationSystem.Application.Models.ModuleModels.Dtos;
 using EvaluationSystem.Application.Models.ModuleModels.Interface;
 using EvaluationSystem.Domain.Entities;
-using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EvaluationSystem.Persistence.Repositories
 {
@@ -35,6 +29,11 @@ namespace EvaluationSystem.Persistence.Repositories
             string query = @"SELECT * FROM ModuleQuestion WHERE IdModule = @moduleId ORDER BY [Position] ASC";
             var result = Connection.Query<ModuleQuestionTemplateDto>(query, new { moduleId = moduleId }, Transaction);
             return (List<ModuleQuestionTemplateDto>)result;
+        }
+        public void DeleteModuleFromFormModuleTable(int moduleId)
+        {
+            string query = "Delete from FormModule where IdModule = @moduleId";
+            Connection.Execute(query, new { moduleId = moduleId }, Transaction);
         }
     }
 }

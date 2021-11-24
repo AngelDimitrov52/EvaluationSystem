@@ -2,21 +2,12 @@ using EvaluationSystem.Application.Helpers.Configurations;
 using EvaluationSystem.Application.Middleware;
 using EvaluationSystem.Persistence.Configurations;
 using EvaluationSystem.Persistence.Migrations;
-using FluentMigrator.Runner;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace EvaluationSystem.API
 {
@@ -54,7 +45,7 @@ namespace EvaluationSystem.API
             }
 
             DatabaseCreate.Create(Configuration);
-           
+
             app.MigrateUpDatabase();
 
             app.UseHttpsRedirection();

@@ -6,7 +6,6 @@ using EvaluationSystem.Application.Helpers.Profiles;
 using EvaluationSystem.Application.Models.AnswerModels;
 using EvaluationSystem.Application.Models.AnswerModels.Dtos;
 using EvaluationSystem.Application.Models.Exceptions;
-using EvaluationSystem.Application.Models.GenericRepository;
 using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using EvaluationSystem.Application.Services;

@@ -10,5 +10,6 @@ namespace EvaluationSystem.Application.Models.ModuleModels.Interface
         void AddQuestionToModule(int moduleId, int questionId, int position);
         void DeleteQuestionFromModule(int moduleId, int questionId);
         List<ModuleQuestionTemplateDto> GetModuleQuestions(int moduleId);
+        void DeleteModuleFromFormModuleTable(int moduleId);
     }
 }

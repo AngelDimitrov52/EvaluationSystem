@@ -4,7 +4,6 @@ using EvaluationSystem.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 
 namespace EvaluationSystem.Persistence.Repositories
@@ -12,7 +11,6 @@ namespace EvaluationSystem.Persistence.Repositories
     public abstract class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         private readonly IUnitOfWork _unitOfWork;
-
         public GenericRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -30,15 +28,15 @@ namespace EvaluationSystem.Persistence.Repositories
         }
         public int Create(T entity)
         {
-            return (int)Connection.Insert<T>(entity,Transaction);
+            return (int)Connection.Insert<T>(entity, Transaction);
         }
         public void Update(T entity)
         {
-           Connection.Update<T>(entity, Transaction);
+            Connection.Update<T>(entity, Transaction);
         }
         public void Delete(int id)
         {
-             Connection.Delete<T>(id,Transaction);
+            Connection.Delete<T>(id, Transaction);
         }
     }
 }

@@ -1,21 +1,12 @@
 ﻿using EvaluationSystem.Application.Helpers.Profiles;
 using EvaluationSystem.Application.Models.AnswerModels;
 using EvaluationSystem.Application.Models.FormModels.Interface;
-using EvaluationSystem.Application.Models.GenericRepository;
 using EvaluationSystem.Application.Models.ModuleModels.Interface;
 using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Services;
 using EvaluationSystem.Application.Validators;
-using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EvaluationSystem.Application.Helpers.Configurations
 {

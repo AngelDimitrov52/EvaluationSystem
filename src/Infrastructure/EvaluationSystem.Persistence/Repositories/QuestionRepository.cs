@@ -1,9 +1,7 @@
 ﻿using Dapper;
 using EvaluationSystem.Application.Models.GenericRepository;
 using EvaluationSystem.Application.Models.QuestionModels;
-using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using EvaluationSystem.Domain.Entities;
-using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 
 namespace EvaluationSystem.Persistence.Repositories
@@ -29,6 +27,11 @@ namespace EvaluationSystem.Persistence.Repositories
                                 WHERE q.Id = @Id";
             var result = Connection.Query<QuestionRepositoryDto>(query, new { Id = id }, Transaction);
             return (List<QuestionRepositoryDto>)result;
+        }
+        public void DeleteQuestionFromModuleQuestionTable( int questionId)
+        {
+            string query = "Delete from ModuleQuestion where IdQuestion = @IdQuestion ";
+            Connection.Execute(query, new { IdQuestion = questionId }, Transaction);
         }
     }
 }

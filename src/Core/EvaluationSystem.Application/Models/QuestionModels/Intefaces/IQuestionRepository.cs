@@ -8,5 +8,6 @@ namespace EvaluationSystem.Application.Models.QuestionModels
     {
         List<QuestionRepositoryDto> GetQuestionById(int id);
         List<QuestionRepositoryDto> GetAllQuestions();
+        void DeleteQuestionFromModuleQuestionTable(int questionId);
     }
 }

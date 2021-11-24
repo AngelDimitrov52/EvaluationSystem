@@ -1,9 +1,7 @@
 ﻿using Dapper;
 using EvaluationSystem.Application.Models.AnswerModels;
-using EvaluationSystem.Application.Models.AnswerModels.Dtos;
 using EvaluationSystem.Application.Models.GenericRepository;
 using EvaluationSystem.Domain.Entities;
-using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 
 namespace EvaluationSystem.Persistence.Repositories

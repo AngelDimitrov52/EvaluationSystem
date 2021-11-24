@@ -1,17 +1,12 @@
 ﻿using AutoMapper;
 using EvaluationSystem.Application.Models.AnswerModels;
 using EvaluationSystem.Application.Models.AnswerModels.Dtos;
-using EvaluationSystem.Application.Models.Exceptions;
 using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using EvaluationSystem.Application.Services.HelpServices;
 using EvaluationSystem.Domain.Entities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EvaluationSystem.Application.Services
 {
@@ -110,6 +105,7 @@ namespace EvaluationSystem.Application.Services
         public void Delete(int id)
         {
             _answerRepository.DeleteWithQuestionId(id);
+            _questionRepository.DeleteQuestionFromModuleQuestionTable(id);
             _questionRepository.Delete(id);
         }
         private QuestionTemplate CreateQuestionAnsers(int index, QuestionTemplate model)
