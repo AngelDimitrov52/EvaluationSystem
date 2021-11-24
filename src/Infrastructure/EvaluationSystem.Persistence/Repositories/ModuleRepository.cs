@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Persistence.Repositories
 {
-    public class ModuleDB : GenericRepository<ModuleTemplate>, IModuleRepository
+    public class ModuleRepository : GenericRepository<ModuleTemplate>, IModuleRepository
     {
-        public ModuleDB(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public ModuleRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
         public void AddQuestionToModule(int moduleId, int questionId, int position)

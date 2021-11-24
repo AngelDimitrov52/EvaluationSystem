@@ -8,9 +8,9 @@ using System.Collections.Generic;
 
 namespace EvaluationSystem.Persistence.Repositories
 {
-    public class AnswerDB : GenericRepository<AnswerTemplate>, IAnswerRepository
+    public class AnswerRepository : GenericRepository<AnswerTemplate>, IAnswerRepository
     {
-        public AnswerDB(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public AnswerRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
         public List<AnswerTemplate> GetAllByQuestionId(int questionId)

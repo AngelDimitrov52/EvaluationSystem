@@ -5,6 +5,7 @@ using EvaluationSystem.Application.Models.FormModels.Interface;
 using EvaluationSystem.Application.Models.GenericRepository;
 using EvaluationSystem.Application.Models.ModuleModels.Dtos;
 using EvaluationSystem.Application.Models.ModuleModels.Interface;
+using EvaluationSystem.Application.Services.HelpServices;
 using EvaluationSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -19,12 +20,14 @@ namespace EvaluationSystem.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IFormRepository _formRepository;
+        private readonly IModuleRepository _moduleRepository;
         private readonly IModuleService _moduleService;
 
-        public FormService(IMapper mapper, IFormRepository repository, IModuleService moduleService)
+        public FormService(IMapper mapper, IFormRepository repository, IModuleRepository moduleRepository, IModuleService moduleService)
         {
             _mapper = mapper;
             _formRepository = repository;
+            _moduleRepository = moduleRepository;
             _moduleService = moduleService;
         }
         public List<FormGetDto> GetAll()
@@ -34,7 +37,8 @@ namespace EvaluationSystem.Application.Services
         }
         public FormGetDto GetById(int id)
         {
-            IsFormExist(id);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(id, _formRepository);
+
             var form = _formRepository.GetById(id);
             return _mapper.Map<FormGetDto>(form);
         }
@@ -47,7 +51,8 @@ namespace EvaluationSystem.Application.Services
         }
         public FormGetDto Update(int id, FormCreateDto model)
         {
-            IsFormExist(id);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(id, _formRepository);
+
             var form = _mapper.Map<FormTemplate>(model);
             form.Id = id;
             _formRepository.Update(form);
@@ -64,8 +69,9 @@ namespace EvaluationSystem.Application.Services
         }
         public void AddModuleToForm(int formId, int moduleId, int position)
         {
-            IsFormExist(formId);
-            _moduleService.IsModuleExist(moduleId);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
+
             _formRepository.AddModuleToForm(formId, moduleId, position);
         }
 
@@ -76,7 +82,7 @@ namespace EvaluationSystem.Application.Services
 
         public FormWithModulesAndQuestionsDto GetFormWithModulesAndQuestions(int formId)
         {
-            IsFormExist(formId);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
 
             var formEntity = _formRepository.GetById(formId);
             var form = _mapper.Map<FormWithModulesAndQuestionsDto>(formEntity);
@@ -90,7 +96,7 @@ namespace EvaluationSystem.Application.Services
         }
         public FormWithModulesDto GetFormWithModules(int formId)
         {
-            IsFormExist(formId);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
 
             var formEntity = _formRepository.GetById(formId);
             var form = _mapper.Map<FormWithModulesDto>(formEntity);
@@ -101,14 +107,6 @@ namespace EvaluationSystem.Application.Services
                                   let result = _mapper.Map<ModuleGetDto>(_moduleService.GetById(module.IdModule))
                                   select result);
             return form;
-        }
-        private void IsFormExist(int fromId)
-        {
-            var entity = _formRepository.GetById(fromId);
-            if (entity == null)
-            {
-                throw new HttpException($"Form with ID:{fromId} doesn't exist!", HttpStatusCode.NotFound);
-            }
         }
     }
 }

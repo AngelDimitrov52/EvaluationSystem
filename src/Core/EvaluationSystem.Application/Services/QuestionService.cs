@@ -4,6 +4,7 @@ using EvaluationSystem.Application.Models.AnswerModels.Dtos;
 using EvaluationSystem.Application.Models.Exceptions;
 using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Models.QuestionModels.Dtos;
+using EvaluationSystem.Application.Services.HelpServices;
 using EvaluationSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -62,7 +63,8 @@ namespace EvaluationSystem.Application.Services
 
         public QuestionGetDto GetById(int id)
         {
-            IsQuestionExist(id);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(id, _questionRepository);
+
             var questionsResults = _questionRepository.GetQuestionById(id);
 
             QuestionGetDto questionGetDto = new QuestionGetDto
@@ -87,7 +89,7 @@ namespace EvaluationSystem.Application.Services
 
         public QuestionUpdateDto Update(int id, QuestionUpdateDto model)
         {
-            IsQuestionExist(id);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(id, _questionRepository);
 
             var question = _mapper.Map<QuestionTemplate>(model);
             question.Id = id;
@@ -109,15 +111,6 @@ namespace EvaluationSystem.Application.Services
         {
             _answerRepository.DeleteWithQuestionId(id);
             _questionRepository.Delete(id);
-        }
-
-        public void IsQuestionExist(int questionId)
-        {
-            var entity = _questionRepository.GetById(questionId);
-            if (entity == null)
-            {
-                throw new HttpException($"Question with ID:{questionId} doesn't exist!", HttpStatusCode.NotFound);
-            }
         }
         private QuestionTemplate CreateQuestionAnsers(int index, QuestionTemplate model)
         {

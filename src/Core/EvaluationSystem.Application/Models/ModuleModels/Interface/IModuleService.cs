@@ -13,6 +13,5 @@ namespace EvaluationSystem.Application.Models.ModuleModels.Interface
         void AddQuestionToModule(int modulelId, int questionId, int position);
         void DeleteQuestionFromModule(int moduleId, int questionId);
         ModuleWithQuestionsDto GetModuleWithQuestions(int moduleId);
-        void IsModuleExist(int moduleId);
     }
 }

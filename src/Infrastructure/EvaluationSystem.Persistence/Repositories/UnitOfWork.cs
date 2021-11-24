@@ -21,7 +21,6 @@ namespace EvaluationSystem.Persistence.Repositories
         }
         public IDbConnection Connection => _connection;
         public IDbTransaction Transaction => _transaction;
-
         public void Begin()
         {
             _transaction = _connection.BeginTransaction();

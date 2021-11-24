@@ -6,9 +6,12 @@ using EvaluationSystem.Application.Helpers.Profiles;
 using EvaluationSystem.Application.Models.AnswerModels;
 using EvaluationSystem.Application.Models.AnswerModels.Dtos;
 using EvaluationSystem.Application.Models.Exceptions;
+using EvaluationSystem.Application.Models.GenericRepository;
 using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using EvaluationSystem.Application.Services;
+using EvaluationSystem.Application.Services.HelpServices;
+using EvaluationSystem.Domain.Entities;
 using EvaluationSystem.Domain.Enums;
 using EvaluationSystem.Persistence.Repositories;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +26,7 @@ namespace Tests
     {
 
         private IQuestionService _questionService;
+        private IQuestionRepository _questionRepository;
         private string name;
         private int id;
 
@@ -37,10 +41,12 @@ namespace Tests
                   .AddJsonFile("appsettings.json")
                   .Build();
 
-            _questionService = new QuestionService(new AnswerDB(new UnitOfWork(config)), new MapperConfiguration((mc) =>
+            _questionRepository = new QuestionRepository(new UnitOfWork(config));
+
+            _questionService = new QuestionService(new AnswerRepository(new UnitOfWork(config)), new MapperConfiguration((mc) =>
              {
                  mc.AddMaps(typeof(AnswerProfile).Assembly);
-             }).CreateMapper(), new QuestionDB(new UnitOfWork(config)));
+             }).CreateMapper(), new QuestionRepository(new UnitOfWork(config)));
         }
         [Test]
         public void Verify_QuestionServiceGetById_ReturnsSameIdDTO()
@@ -98,7 +104,7 @@ namespace Tests
         public void Verify_QuestionServiceIsQuestionExist_ThrowWhenIdIsInvalid()
         {
             id = 2332;
-            Assert.Throws<HttpException>(() => _questionService.IsQuestionExist(id));
+            Assert.Throws<HttpException>(() => ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(id, _questionRepository)); 
         }
         [Test]
         public void Verify_QuestionServiceGetAll_ReturnCurrentResult()
@@ -117,7 +123,7 @@ namespace Tests
             id = 5;
             _questionService.Delete(id);
 
-            Assert.Throws<HttpException>(() => _questionService.IsQuestionExist(id));
+            Assert.Throws<HttpException>(() => ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(id, _questionRepository));
         }
     }
 }

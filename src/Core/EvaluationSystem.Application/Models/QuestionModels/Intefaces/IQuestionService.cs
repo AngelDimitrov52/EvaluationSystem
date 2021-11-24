@@ -10,6 +10,5 @@ namespace EvaluationSystem.Application.Models.QuestionModels
         void Delete(int id);
         QuestionGetDto Create(QuestionCreateDto model);
         QuestionUpdateDto Update(int id, QuestionUpdateDto model);
-        void IsQuestionExist(int questionId);
     }
 }

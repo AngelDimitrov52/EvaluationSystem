@@ -4,6 +4,7 @@ using EvaluationSystem.Application.Models.AnswerModels.Dtos;
 using EvaluationSystem.Application.Models.Exceptions;
 using EvaluationSystem.Application.Models.GenericRepository;
 using EvaluationSystem.Application.Models.QuestionModels;
+using EvaluationSystem.Application.Services.HelpServices;
 using EvaluationSystem.Domain.Entities;
 using Microsoft.Extensions.Caching.Memory;
 using System;
@@ -20,15 +21,15 @@ namespace EvaluationSystem.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IAnswerRepository _answerRepository;
-        private readonly IQuestionService _questionService;
+        private readonly IQuestionRepository _questionRepository;
         private readonly IMemoryCache _memoryCache;
 
-        public AnswerService(IMapper mapper, IAnswerRepository repository, IMemoryCache memoryCache, IQuestionService questionService)
+        public AnswerService(IMapper mapper, IAnswerRepository repository, IMemoryCache memoryCache, IQuestionService questionService, IQuestionRepository questionRepository)
         {
             _mapper = mapper;
             _answerRepository = repository;
             _memoryCache = memoryCache;
-            _questionService = questionService;
+            _questionRepository = questionRepository;
         }
 
         public List<AnswerGetDto> GetAll(int questionId)
@@ -38,7 +39,9 @@ namespace EvaluationSystem.Application.Services
             {
                 return (List<AnswerGetDto>)answerCache;
             }
-            _questionService.IsQuestionExist(questionId);
+
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
+
             var answers = _answerRepository.GetAllByQuestionId(questionId);
             var answersGetDtos = _mapper.Map<List<AnswerGetDto>>(answers);
 
@@ -55,7 +58,7 @@ namespace EvaluationSystem.Application.Services
             }
 
             var answer = _answerRepository.GetById(id);
-            IsAnswerIsExist(answer,id);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<AnswerTemplate>(id, _answerRepository);
 
             var answerGetDto = _mapper.Map<AnswerGetDto>(answer);
             _memoryCache.Set($"answer_{id}", answerGetDto);
@@ -65,7 +68,8 @@ namespace EvaluationSystem.Application.Services
 
         public AnswerGetDto Create(int questionId, AnswerCreateDto model)
         {
-            _questionService.IsQuestionExist(questionId);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
+
             var answer = _mapper.Map<AnswerTemplate>(model);
             answer.IdQuestion = questionId;
             int answerId = _answerRepository.Create(answer);
@@ -77,9 +81,8 @@ namespace EvaluationSystem.Application.Services
 
         public AnswerGetDto Update(int questionId, int id, AnswerCreateDto model)
         {
-            _questionService.IsQuestionExist(questionId);
-            var entity = _answerRepository.GetById(id);
-            IsAnswerIsExist(entity ,id);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<AnswerTemplate>(id, _answerRepository);
 
             var answer = _mapper.Map<AnswerTemplate>(model);
 
@@ -94,14 +97,6 @@ namespace EvaluationSystem.Application.Services
         {
             ClearMemoryCache();
             _answerRepository.Delete(id);
-        }
-
-        private void IsAnswerIsExist(AnswerTemplate entity,int id)
-        {
-            if (entity == null)
-            {
-                throw new HttpException($"Answer with ID:{id} doesn't exist!", HttpStatusCode.BadRequest);
-            }
         }
         public void ClearMemoryCache()
         {

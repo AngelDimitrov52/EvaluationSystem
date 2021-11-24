@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace EvaluationSystem.Persistence.Repositories
 {
-    public class FormDB : GenericRepository<FormTemplate>, IFormRepository
+    public class FormRepository : GenericRepository<FormTemplate>, IFormRepository
     {
-        public FormDB(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public FormRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
         public void AddModuleToForm(int formId, int moduleId, int position)

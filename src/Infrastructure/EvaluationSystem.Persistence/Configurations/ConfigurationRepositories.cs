@@ -13,10 +13,10 @@ namespace EvaluationSystem.Persistence.Configurations
         public static IServiceCollection AddConfigurationRepositories(this IServiceCollection services)
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IAnswerRepository, AnswerDB>();
-            services.AddScoped<IQuestionRepository, QuestionDB>();
-            services.AddScoped<IModuleRepository, ModuleDB>();
-            services.AddScoped<IFormRepository, FormDB>();
+            services.AddScoped<IAnswerRepository, AnswerRepository>();
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
+            services.AddScoped<IModuleRepository, ModuleRepository>();
+            services.AddScoped<IFormRepository, FormRepository>();
 
             return services;
         }

@@ -4,6 +4,7 @@ using EvaluationSystem.Application.Models.ModuleModels.Dtos;
 using EvaluationSystem.Application.Models.ModuleModels.Interface;
 using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Models.QuestionModels.Dtos;
+using EvaluationSystem.Application.Services.HelpServices;
 using EvaluationSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -19,12 +20,14 @@ namespace EvaluationSystem.Application.Services
         private readonly IMapper _mapper;
         private readonly IModuleRepository _moduleRepository;
         private readonly IQuestionService _questionService;
+        private readonly IQuestionRepository _questionRepository;
 
-        public ModuleService(IMapper mapper, IModuleRepository repository, IQuestionService questionService)
+        public ModuleService(IMapper mapper, IModuleRepository repository, IQuestionService questionService, IQuestionRepository questionRepository)
         {
             _mapper = mapper;
             _moduleRepository = repository;
             _questionService = questionService;
+            _questionRepository = questionRepository;
         }
         public List<ModuleGetDto> GetAll()
         {
@@ -34,9 +37,9 @@ namespace EvaluationSystem.Application.Services
         }
         public ModuleGetDto GetById(int id)
         {
-            IsModuleExist(id);
-            var module = _moduleRepository.GetById(id);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(id, _moduleRepository);
 
+            var module = _moduleRepository.GetById(id);
             return _mapper.Map<ModuleGetDto>(module);
         }
         public ModuleGetDto Create(ModuleCreateDto model)
@@ -49,7 +52,8 @@ namespace EvaluationSystem.Application.Services
         }
         public ModuleGetDto Update(int id, ModuleCreateDto model)
         {
-            IsModuleExist(id);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(id, _moduleRepository);
+
             var module = _mapper.Map<ModuleTemplate>(model);
             module.Id = id;
             _moduleRepository.Update(module);
@@ -68,8 +72,9 @@ namespace EvaluationSystem.Application.Services
 
         public void AddQuestionToModule(int moduleId, int questionId, int position)
         {
-            IsModuleExist(moduleId);
-            _questionService.IsQuestionExist(questionId);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
+
             _moduleRepository.AddQuestionToModule(moduleId, questionId, position);
         }
 
@@ -80,7 +85,8 @@ namespace EvaluationSystem.Application.Services
 
         public ModuleWithQuestionsDto GetModuleWithQuestions(int moduleId)
         {
-            IsModuleExist(moduleId);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
+
             var module = _moduleRepository.GetById(moduleId);
             var moduleWithQuestions = _mapper.Map<ModuleWithQuestionsDto>(module);
             moduleWithQuestions.Questions = new List<QuestionGetDto>();
@@ -91,14 +97,6 @@ namespace EvaluationSystem.Application.Services
                                                    select result);
 
             return moduleWithQuestions;
-        }
-        public void IsModuleExist(int moduleId)
-        {
-            var entity = _moduleRepository.GetById(moduleId);
-            if (entity == null)
-            {
-                throw new HttpException($"Module with ID:{moduleId} doesn't exist!", HttpStatusCode.NotFound);
-            }
         }
     }
 }
