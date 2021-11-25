@@ -66,5 +66,12 @@ namespace EvaluationSystem.API.Controllers
             return _moduleService.GetModuleWithQuestions(moduleId);
         }
 
+        [HttpPut("{moduleId}/question/{questionId}/position")]
+        public IActionResult EditQuestionPositionInModule(int moduleId, int questionId, int position)
+        {
+            _moduleService.EditQuestionPosition(moduleId, questionId, position);
+            return Ok($"Edit question with ID:{questionId} to module with ID:{moduleId} on position:{position}");
+        }
+
     }
 }

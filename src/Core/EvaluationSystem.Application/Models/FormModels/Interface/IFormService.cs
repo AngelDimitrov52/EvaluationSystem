@@ -14,5 +14,6 @@ namespace EvaluationSystem.Application.Models.FormModels.Interface
         void DeleteModuldeFromForm(int formId, int moduleId);
         FormWithModulesAndQuestionsDto GetFormWithModulesAndQuestions(int formId);
         FormWithModulesDto GetFormWithModules(int formId);
+        void EditModulePosition(int formId, int moduleId, int position);
     }
 }

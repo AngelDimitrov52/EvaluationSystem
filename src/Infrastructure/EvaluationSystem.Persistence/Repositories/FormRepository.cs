@@ -17,6 +17,11 @@ namespace EvaluationSystem.Persistence.Repositories
             string query = "Insert Into FormModule (IdForm, IdModule, Position) Values(@IdForm, @IdModule, @Position)";
             Connection.Execute(query, new { IdForm = formId, IdModule = moduleId, Position = position }, Transaction);
         }
+        public void EditModulePosition(int formId, int moduleId, int position)
+        {
+            string query = "UPDATE FormModule SET Position = @Position WHERE IdModule = @IdModule AND IdForm = @IdForm;";
+            Connection.Execute(query, new { IdModule = moduleId, IdForm = formId, Position = position }, Transaction);
+        }
 
         public void DeleteModuleFromForm(int formId, int moduleId)
         {

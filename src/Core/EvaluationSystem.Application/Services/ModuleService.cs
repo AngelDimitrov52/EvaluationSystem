@@ -95,6 +95,14 @@ namespace EvaluationSystem.Application.Services
 
             return moduleWithQuestions;
         }
+
+        public void EditQuestionPosition(int moduleId, int questionId, int position)
+        {
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
+
+            _moduleRepository.EditQuestionPosition(moduleId,questionId,position);
+        }
     }
 }
 

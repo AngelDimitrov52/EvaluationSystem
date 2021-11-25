@@ -19,7 +19,6 @@ using NUnit.Framework;
 
 namespace Tests
 {
-
     [TestFixture]
     public class QuestionServiceTests
     {
@@ -47,6 +46,7 @@ namespace Tests
                  mc.AddMaps(typeof(AnswerProfile).Assembly);
              }).CreateMapper(), new QuestionRepository(new UnitOfWork(config)));
         }
+
         [Test]
         public void Verify_QuestionServiceGetById_ReturnsSameIdDTO()
         {

@@ -102,5 +102,12 @@ namespace EvaluationSystem.Application.Services
                                   select result);
             return form;
         }
+        public void EditModulePosition(int formId, int moduleId, int position)
+        {
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
+
+            _formRepository.EditModulePosition(formId, moduleId, position);
+        }
     }
 }

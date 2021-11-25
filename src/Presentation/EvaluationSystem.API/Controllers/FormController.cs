@@ -71,5 +71,12 @@ namespace EvaluationSystem.API.Controllers
         {
             return _formService.GetFormWithModules(formId);
         }
+
+        [HttpPut("{formId}/module/{moduleId}/position")]
+        public IActionResult EditModulePositionInForm(int formId, int moduleId, int position)
+        {
+            _formService.EditModulePosition(formId, moduleId, position);
+            return Ok($"Edit module with ID:{moduleId} to form with ID:{formId} on position:{position}");
+        }
     }
 }

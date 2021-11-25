@@ -10,6 +10,7 @@ namespace EvaluationSystem.Application.Models.FormModels.Interface
         void AddModuleToForm(int formId, int moduleId, int position);
         void DeleteModuleFromForm(int formId, int moduleId);
         List<FormModuleTemplateDto> GetFormModules(int formId);
+        void EditModulePosition(int formId, int moduleId, int position);
 
     }
 }

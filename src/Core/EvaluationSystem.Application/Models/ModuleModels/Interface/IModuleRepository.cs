@@ -11,5 +11,6 @@ namespace EvaluationSystem.Application.Models.ModuleModels.Interface
         void DeleteQuestionFromModule(int moduleId, int questionId);
         List<ModuleQuestionTemplateDto> GetModuleQuestions(int moduleId);
         void DeleteModuleFromFormModuleTable(int moduleId);
+        void EditQuestionPosition(int moduleId, int questionId, int position);
     }
 }
