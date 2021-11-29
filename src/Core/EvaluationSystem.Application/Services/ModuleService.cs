@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using EvaluationSystem.Application.Models.FormModels.Interface;
 using EvaluationSystem.Application.Models.ModuleModels.Dtos;
 using EvaluationSystem.Application.Models.ModuleModels.Interface;
 using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Models.QuestionModels.Dtos;
+using EvaluationSystem.Application.Models.QuestionModels.Intefaces;
 using EvaluationSystem.Application.Services.HelpServices;
 using EvaluationSystem.Domain.Entities;
 using System.Collections.Generic;
@@ -15,35 +17,75 @@ namespace EvaluationSystem.Application.Services
         private readonly IMapper _mapper;
         private readonly IModuleRepository _moduleRepository;
         private readonly IQuestionService _questionService;
-        private readonly IQuestionRepository _questionRepository;
+        private readonly IFormRepository _formRepository;
 
-        public ModuleService(IMapper mapper, IModuleRepository repository, IQuestionService questionService, IQuestionRepository questionRepository)
+        public ModuleService(IMapper mapper, IModuleRepository repository, IQuestionService questionService, IFormRepository formRepository)
         {
             _mapper = mapper;
             _moduleRepository = repository;
+            _formRepository = formRepository;
             _questionService = questionService;
-            _questionRepository = questionRepository;
         }
-        public List<ModuleGetDto> GetAll()
+        public List<ModuleGetDto> GetAllModules(int formId)
         {
-            var modules = _moduleRepository.GetAll();
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
 
-            return _mapper.Map<List<ModuleGetDto>>(modules);
-        }
-        public ModuleGetDto GetById(int id)
-        {
-            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(id, _moduleRepository);
+            var resultModules = new List<ModuleGetDto>();
+            var modulesInForm = _moduleRepository.GetFormModulesByFormId(formId);
+            foreach (var moduleInForm in modulesInForm)
+            {
+                var module = _moduleRepository.GetById(moduleInForm.IdModule);
+                var mapModule = _mapper.Map<ModuleGetDto>(module);
+                mapModule.Questions = _questionService.GetAll(mapModule.Id);
+                mapModule.Position = moduleInForm.Position;
+                resultModules.Add(mapModule);
+            }
 
-            var module = _moduleRepository.GetById(id);
-            return _mapper.Map<ModuleGetDto>(module);
+            return resultModules;
         }
-        public ModuleGetDto Create(ModuleCreateDto model)
+        public ModuleGetDto GetById(int formId, int moduleId)
         {
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
+
+            var moduleName = _moduleRepository.GetById(moduleId);
+            var module = _mapper.Map<ModuleGetDto>(moduleName);
+
+            module.Questions = _questionService.GetAll(module.Id);
+            return module;
+        }
+        public ModuleGetDto Create(int formId, ModuleCreateDto model)
+        {
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
+
             var module = _mapper.Map<ModuleTemplate>(model);
             int moduleId = _moduleRepository.Create(module);
             module.Id = moduleId;
+            _moduleRepository.AddModuleToForm(formId, moduleId, model.Position);
+            var createModule = _mapper.Map<ModuleGetDto>(module);
+            createModule.Questions = new List<QuestionGetDto>();
 
-            return _mapper.Map<ModuleGetDto>(module);
+            foreach (var question in model.Questions)
+            {
+                var insertQuestion = _questionService.Create(moduleId, question);
+                createModule.Questions.Add(insertQuestion);
+            }
+            return createModule;
+        }
+        public void Delete(int moduleId)
+        {
+            var module = _moduleRepository.GetById(moduleId);
+            var moduleDto = _mapper.Map<ModuleGetDto>(module);
+            moduleDto.Questions = _questionService.GetAll(module.Id);
+
+            _moduleRepository.DeleteModuleFromFormModuleTable(moduleId);
+            _moduleRepository.DeleteModuleFromModuleQuestionTable(moduleId);
+
+            foreach (var question in moduleDto.Questions)
+            {
+                _questionService.Delete(question.Id);
+            }
+            _moduleRepository.Delete(moduleId);
         }
         public ModuleGetDto Update(int id, ModuleCreateDto model)
         {
@@ -55,54 +97,7 @@ namespace EvaluationSystem.Application.Services
 
             return _mapper.Map<ModuleGetDto>(module);
         }
-        public void Delete(int id)
-        {
-            _moduleRepository.DeleteModuleFromFormModuleTable(id);
 
-            var questions = _moduleRepository.GetModuleQuestions(id);
-            foreach (var question in questions)
-            {
-                _moduleRepository.DeleteQuestionFromModule(id, question.IdQuestion);
-            }
-            _moduleRepository.Delete(id);
-        }
-
-        public void AddQuestionToModule(int moduleId, int questionId, int position)
-        {
-            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
-            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
-
-            _moduleRepository.AddQuestionToModule(moduleId, questionId, position);
-        }
-
-        public void DeleteQuestionFromModule(int moduleId, int questionId)
-        {
-            _moduleRepository.DeleteQuestionFromModule(moduleId, questionId);
-        }
-
-        public ModuleWithQuestionsDto GetModuleWithQuestions(int moduleId)
-        {
-            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
-
-            var module = _moduleRepository.GetById(moduleId);
-            var moduleWithQuestions = _mapper.Map<ModuleWithQuestionsDto>(module);
-            moduleWithQuestions.Questions = new List<QuestionGetDto>();
-
-            var questions = _moduleRepository.GetModuleQuestions(moduleId);
-            moduleWithQuestions.Questions.AddRange(from question in questions
-                                                   let result = _mapper.Map<QuestionGetDto>(_questionService.GetById(question.IdQuestion))
-                                                   select result);
-
-            return moduleWithQuestions;
-        }
-
-        public void EditQuestionPosition(int moduleId, int questionId, int position)
-        {
-            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
-            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
-
-            _moduleRepository.EditQuestionPosition(moduleId,questionId,position);
-        }
     }
 }
 

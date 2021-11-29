@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace EvaluationSystem.API.Controllers
 {
-    [Route("api/module")]
+    [Route("api/form/{formId}/module")]
     [ApiController]
     public class ModuleController : ControllerBase
     {
@@ -16,62 +16,34 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpGet]
-        public List<ModuleGetDto> GetAll()
+        public List<ModuleGetDto> GetAll(int formId)
         {
-            return _moduleService.GetAll();
+            return _moduleService.GetAllModules(formId);
         }
 
-        [HttpGet("{id}")]
-        public ModuleGetDto GetById(int id)
+        [HttpGet("{moduleId}")]
+        public ModuleGetDto GetById(int formId, int moduleId)
         {
-            return _moduleService.GetById(id);
+            return _moduleService.GetById(formId, moduleId);
         }
 
         [HttpPost]
-        public ModuleGetDto Create([FromBody] ModuleCreateDto model)
+        public ModuleGetDto Create(int formId,[FromBody] ModuleCreateDto model)
         {
-            return _moduleService.Create(model);
+            return _moduleService.Create(formId, model);
         }
 
-        [HttpPut("{id}")]
-        public ModuleGetDto Update(int id, [FromBody] ModuleCreateDto model)
+        [HttpPut("{moduleId}")]
+        public ModuleGetDto Update(int formId,int moduleId, [FromBody] ModuleCreateDto model)
         {
-            return _moduleService.Update(id, model);
+            return _moduleService.Update(moduleId, model);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete("{moduleId}")]
+        public IActionResult Delete(int formId,int moduleId)
         {
-            _moduleService.Delete(id);
+            _moduleService.Delete(moduleId);
             return NoContent();
         }
-
-        [HttpPost("{moduleId}/question/{questionId}")]
-        public IActionResult AddQuestionToModule(int moduleId, int questionId, int position)
-        {
-            _moduleService.AddQuestionToModule(moduleId, questionId, position);
-            return Ok($"Added question with ID:{questionId} to module with ID:{moduleId} on position:{position}");
-        }
-
-        [HttpDelete("{moduleId}/question/{questionId}")]
-        public IActionResult DeleteQuestionFromModule(int moduleId, int questionId)
-        {
-            _moduleService.DeleteQuestionFromModule(moduleId, questionId);
-            return NoContent();
-        }
-
-        [HttpGet("GetAllQuestion")]
-        public ModuleWithQuestionsDto GetmoduleWithQuestions(int moduleId)
-        {
-            return _moduleService.GetModuleWithQuestions(moduleId);
-        }
-
-        [HttpPut("{moduleId}/question/{questionId}/position")]
-        public IActionResult EditQuestionPositionInModule(int moduleId, int questionId, int position)
-        {
-            _moduleService.EditQuestionPosition(moduleId, questionId, position);
-            return Ok($"Edit question with ID:{questionId} to module with ID:{moduleId} on position:{position}");
-        }
-
     }
 }

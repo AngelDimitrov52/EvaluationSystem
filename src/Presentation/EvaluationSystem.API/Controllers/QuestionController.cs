@@ -1,11 +1,15 @@
-﻿using EvaluationSystem.Application.Models.QuestionModels;
-using EvaluationSystem.Application.Models.QuestionModels.Dtos;
+﻿using EvaluationSystem.Application.Models.QuestionModels.Dtos;
+using EvaluationSystem.Application.Models.QuestionModels.Intefaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace EvaluationSystem.API.Controllers
 {
-    [Route("api/question")]
+    [Route("api/form/{formId}/module/{moduleId}/question")]
     [ApiController]
     public class QuestionController : ControllerBase
     {
@@ -16,33 +20,33 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpGet]
-        public List<QuestionGetDto> GetAll()
+        public List<QuestionGetDto> GetAll(int formId, int moduleId)
         {
-            return _questionService.GetAll();
+            return _questionService.GetAll(moduleId);
         }
 
-        [HttpGet("{id}")]
-        public QuestionGetDto GetById(int id)
+        [HttpGet("{questioId}")]
+        public QuestionGetDto GetById(int formId, int moduleId, int questioId)
         {
-            return _questionService.GetById(id);
+            return _questionService.GetById(questioId);
         }
 
         [HttpPost]
-        public QuestionGetDto Create([FromBody] QuestionCreateDto model)
+        public QuestionGetDto Create(int formId, int moduleId, [FromBody] QuestionCreateDto model)
         {
-            return _questionService.Create(model);
+            return _questionService.Create(moduleId, model);
         }
 
-        [HttpPut("{id}")]
-        public QuestionUpdateDto Update(int id, [FromBody] QuestionUpdateDto model)
+        [HttpPut("{questioId}")]
+        public QuestionUpdateDto Update(int formId, int moduleId, int questioId, [FromBody] QuestionUpdateDto model)
         {
-            return _questionService.Update(id, model);
+            return _questionService.Update(questioId, model);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete("{questioId}")]
+        public IActionResult Delete(int formId, int moduleId, int questioId)
         {
-            _questionService.Delete(id);
+            _questionService.Delete(questioId);
             return NoContent();
         }
     }

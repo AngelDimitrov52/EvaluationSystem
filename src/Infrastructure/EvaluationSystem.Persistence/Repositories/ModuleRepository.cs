@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using EvaluationSystem.Application.Models.FormModels.Dtos;
 using EvaluationSystem.Application.Models.GenericRepository;
 using EvaluationSystem.Application.Models.ModuleModels.Dtos;
 using EvaluationSystem.Application.Models.ModuleModels.Interface;
@@ -12,33 +13,26 @@ namespace EvaluationSystem.Persistence.Repositories
         public ModuleRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
-        public void AddQuestionToModule(int moduleId, int questionId, int position)
+        public List<FormModuleTemplateDto> GetFormModulesByFormId(int formId)
         {
-            string query = "Insert Into ModuleQuestion (IdModule, IdQuestion, Position) Values(@IdModule, @IdQuestion, @Position)";
-            Connection.Execute(query, new { IdModule = moduleId, IdQuestion = questionId, Position = position }, Transaction);
+            string query = @"SELECT * FROM FormModule WHERE IdForm = @IdForm  ORDER BY [Position] ASC";
+            var result = Connection.Query<FormModuleTemplateDto>(query, new { IdForm = formId }, Transaction);
+            return (List<FormModuleTemplateDto>)result;
         }
-        public void EditQuestionPosition(int moduleId, int questionId, int position)
+        public void AddModuleToForm(int formId, int moduleId, int position)
         {
-            string query = "UPDATE ModuleQuestion SET Position = @Position WHERE IdQuestion = @IdQuestion AND IdModule = @IdModule;";
-            Connection.Execute(query, new { IdModule = moduleId, IdQuestion = questionId, Position = position }, Transaction);
-        }
-
-        public void DeleteQuestionFromModule(int moduleId, int questionId)
-        {
-            string query = "Delete from ModuleQuestion where IdQuestion = @IdQuestion AND IdModule = @IdModule";
-            Connection.Execute(query, new { IdModule = moduleId, IdQuestion = questionId }, Transaction);
-        }
-
-        public List<ModuleQuestionTemplateDto> GetModuleQuestions(int moduleId)
-        {
-            string query = @"SELECT * FROM ModuleQuestion WHERE IdModule = @moduleId ORDER BY [Position] ASC";
-            var result = Connection.Query<ModuleQuestionTemplateDto>(query, new { moduleId = moduleId }, Transaction);
-            return (List<ModuleQuestionTemplateDto>)result;
+            string query = "Insert Into FormModule (IdForm, IdModule, Position) Values(@IdForm, @IdModule, @Position)";
+            Connection.Execute(query, new { IdModule = moduleId, IdForm = formId, Position = position }, Transaction);
         }
         public void DeleteModuleFromFormModuleTable(int moduleId)
         {
-            string query = "Delete from FormModule where IdModule = @moduleId";
-            Connection.Execute(query, new { moduleId = moduleId }, Transaction);
+            string query = @"Delete from FormModule where IdModule = @IdModule";
+            Connection.Execute(query, new { IdModule = moduleId }, Transaction);
+        }
+        public void DeleteModuleFromModuleQuestionTable(int moduleId)
+        {
+            string query = "Delete from ModuleQuestion where IdModule = @IdModule";
+            Connection.Execute(query, new { IdModule = moduleId }, Transaction);
         }
     }
 }

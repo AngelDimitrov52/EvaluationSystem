@@ -21,10 +21,10 @@ namespace EvaluationSystem.API.Controllers
             return _formService.GetAll();
         }
 
-        [HttpGet("{id}")]
-        public FormGetDto GetById(int id)
+        [HttpGet("{formId}")]
+        public FormGetDto GetById(int formId)
         {
-            return _formService.GetById(id);
+            return _formService.GetById(formId);
         }
 
         [HttpPost]
@@ -33,50 +33,17 @@ namespace EvaluationSystem.API.Controllers
             return _formService.Create(model);
         }
 
-        [HttpPut("{id}")]
-        public FormGetDto Update(int id, [FromBody] FormCreateDto model)
+        [HttpPut("{formId}")]
+        public FormGetDto Update(int formId, [FromBody] FormCreateDto model)
         {
-            return _formService.Update(id, model);
+            return _formService.Update(formId, model);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete("{formId}")]
+        public IActionResult Delete(int formId)
         {
-            _formService.Delete(id);
+            _formService.Delete(formId);
             return NoContent();
-        }
-
-        [HttpPost("{formId}/module/{moduleId}")]
-        public IActionResult AddModuleToForm(int formId, int moduleId, int position)
-        {
-            _formService.AddModuleToForm(formId, moduleId, position);
-            return Ok($"Added module with ID:{moduleId} to form with ID:{formId} on position:{position}");
-        }
-
-        [HttpDelete("{formId}/module/{moduleId}")]
-        public IActionResult DeleteModuleFromForm(int formId, int moduleId)
-        {
-            _formService.DeleteModuldeFromForm(formId, moduleId);
-            return NoContent();
-        }
-
-        [HttpGet("GetAllModulesWithQuestions")]
-        public FormWithModulesAndQuestionsDto GetAllModuleWithQuestions(int formId)
-        {
-            return _formService.GetFormWithModulesAndQuestions(formId);
-        }
-
-        [HttpGet("GetAllModules")]
-        public FormWithModulesDto GetAllModule(int formId)
-        {
-            return _formService.GetFormWithModules(formId);
-        }
-
-        [HttpPut("{formId}/module/{moduleId}/position")]
-        public IActionResult EditModulePositionInForm(int formId, int moduleId, int position)
-        {
-            _formService.EditModulePosition(formId, moduleId, position);
-            return Ok($"Edit module with ID:{moduleId} to form with ID:{formId} on position:{position}");
         }
     }
 }

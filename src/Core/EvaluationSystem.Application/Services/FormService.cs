@@ -14,34 +14,46 @@ namespace EvaluationSystem.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IFormRepository _formRepository;
-        private readonly IModuleRepository _moduleRepository;
         private readonly IModuleService _moduleService;
 
-        public FormService(IMapper mapper, IFormRepository repository, IModuleRepository moduleRepository, IModuleService moduleService)
+        public FormService(IMapper mapper, IFormRepository repository, IModuleService moduleService)
         {
             _mapper = mapper;
             _formRepository = repository;
-            _moduleRepository = moduleRepository;
             _moduleService = moduleService;
         }
         public List<FormGetDto> GetAll()
         {
-            var forms = _formRepository.GetAll();
-            return _mapper.Map<List<FormGetDto>>(forms);
+            var formsNames = _formRepository.GetAll();
+            var forms = _mapper.Map<List<FormGetDto>>(formsNames);
+            foreach (var form in forms)
+            {
+                form.Modules = _moduleService.GetAllModules(form.Id);
+            }
+            return forms;
         }
-        public FormGetDto GetById(int id)
+        public FormGetDto GetById(int formId)
         {
-            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(id, _formRepository);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
 
-            var form = _formRepository.GetById(id);
-            return _mapper.Map<FormGetDto>(form);
+            var formsName = _formRepository.GetById(formId);
+            var form = _mapper.Map<FormGetDto>(formsName);
+            form.Modules = _moduleService.GetAllModules(formId);
+            return form;
         }
         public FormGetDto Create(FormCreateDto model)
         {
             var form = _mapper.Map<FormTemplate>(model);
             int formId = _formRepository.Create(form);
             form.Id = formId;
-            return _mapper.Map<FormGetDto>(form);
+            var createForm = _mapper.Map<FormGetDto>(form);
+            createForm.Modules = new List<ModuleGetDto>();
+            foreach (var module in model.Modules)
+            {
+                var insertModule = _moduleService.Create(formId, module);
+                createForm.Modules.Add(insertModule);
+            }
+            return createForm;
         }
         public FormGetDto Update(int id, FormCreateDto model)
         {
@@ -54,60 +66,14 @@ namespace EvaluationSystem.Application.Services
         }
         public void Delete(int formId)
         {
-            var modules = _formRepository.GetFormModules(formId);
-            foreach (var module in modules)
+            var form = GetById(formId);
+            _formRepository.DeleteFormFromFormModuleTable(formId);
+
+            foreach (var module in form.Modules)
             {
-                _formRepository.DeleteModuleFromForm(formId, module.IdModule);
+                _moduleService.Delete(module.Id);
             }
             _formRepository.Delete(formId);
-        }
-        public void AddModuleToForm(int formId, int moduleId, int position)
-        {
-            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
-            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
-
-            _formRepository.AddModuleToForm(formId, moduleId, position);
-        }
-
-        public void DeleteModuldeFromForm(int formId, int moduleId)
-        {
-            _formRepository.DeleteModuleFromForm(formId, moduleId);
-        }
-
-        public FormWithModulesAndQuestionsDto GetFormWithModulesAndQuestions(int formId)
-        {
-            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
-
-            var formEntity = _formRepository.GetById(formId);
-            var form = _mapper.Map<FormWithModulesAndQuestionsDto>(formEntity);
-            form.Modules = new List<ModuleWithQuestionsDto>();
-
-            var modules = _formRepository.GetFormModules(formId);
-            form.Modules.AddRange(from module in modules
-                                  let moduleWithQuestoins = _moduleService.GetModuleWithQuestions(module.IdModule)
-                                  select moduleWithQuestoins);
-            return form;
-        }
-        public FormWithModulesDto GetFormWithModules(int formId)
-        {
-            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
-
-            var formEntity = _formRepository.GetById(formId);
-            var form = _mapper.Map<FormWithModulesDto>(formEntity);
-            form.Modules = new List<ModuleGetDto>();
-
-            var modules = _formRepository.GetFormModules(formId);
-            form.Modules.AddRange(from module in modules
-                                  let result = _mapper.Map<ModuleGetDto>(_moduleService.GetById(module.IdModule))
-                                  select result);
-            return form;
-        }
-        public void EditModulePosition(int formId, int moduleId, int position)
-        {
-            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
-            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
-
-            _formRepository.EditModulePosition(formId, moduleId, position);
         }
     }
 }

@@ -10,8 +10,6 @@ namespace EvaluationSystem.Application.Helpers.Profiles
         {
             CreateMap<FormTemplate, FormGetDto>().ReverseMap();
             CreateMap<FormTemplate, FormCreateDto>().ReverseMap();
-            CreateMap<FormTemplate, FormWithModulesAndQuestionsDto>().ReverseMap();
-            CreateMap<FormTemplate, FormWithModulesDto>().ReverseMap();
         }
     }
 }

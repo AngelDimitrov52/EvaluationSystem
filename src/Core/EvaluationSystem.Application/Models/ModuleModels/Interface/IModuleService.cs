@@ -5,14 +5,10 @@ namespace EvaluationSystem.Application.Models.ModuleModels.Interface
 {
     public interface IModuleService
     {
-        List<ModuleGetDto> GetAll();
-        ModuleGetDto GetById(int id);
-        void Delete(int id);
-        ModuleGetDto Create(ModuleCreateDto model);
+        List<ModuleGetDto> GetAllModules(int formId);
+        ModuleGetDto GetById(int formId, int moduleId);
+        ModuleGetDto Create(int formId, ModuleCreateDto model);
         ModuleGetDto Update(int id, ModuleCreateDto model);
-        void AddQuestionToModule(int modulelId, int questionId, int position);
-        void DeleteQuestionFromModule(int moduleId, int questionId);
-        ModuleWithQuestionsDto GetModuleWithQuestions(int moduleId);
-        void EditQuestionPosition(int moduleId, int questionId, int position);
+        void Delete(int moduleId);
     }
 }
