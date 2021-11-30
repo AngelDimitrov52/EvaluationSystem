@@ -6,7 +6,6 @@ using EvaluationSystem.Application.Models.ModuleModels.Interface;
 using EvaluationSystem.Application.Services.HelpServices;
 using EvaluationSystem.Domain.Entities;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace EvaluationSystem.Application.Services
 {

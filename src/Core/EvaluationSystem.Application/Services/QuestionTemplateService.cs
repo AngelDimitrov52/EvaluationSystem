@@ -1,17 +1,13 @@
 ﻿using AutoMapper;
 using EvaluationSystem.Application.Models.AnswerModels;
 using EvaluationSystem.Application.Models.AnswerModels.Dtos;
-using EvaluationSystem.Application.Models.Exceptions;
 using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using EvaluationSystem.Application.Models.QuestionModels.Intefaces;
 using EvaluationSystem.Application.Services.HelpServices;
 using EvaluationSystem.Domain.Entities;
-using EvaluationSystem.Domain.Enums;
-using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 
 namespace EvaluationSystem.Application.Services
 {
@@ -70,7 +66,7 @@ namespace EvaluationSystem.Application.Services
             questionResult.Answers = _answerService.GetAll(id);
             return questionResult;
         }
-        public QuestionGetDto Create(QuestionCreateDto model)
+        public QuestionTemplateGetDto Create(QuestionTemplateCreateDto model)
         {
             var question = _mapper.Map<QuestionTemplate>(model);
             question.IsReusable = true;
@@ -79,7 +75,7 @@ namespace EvaluationSystem.Application.Services
 
             int index = _questionRepository.Create(question);
             var questionWithAnswer = CreateQuestionAnswers(index, question);
-            return _mapper.Map<QuestionGetDto>(questionWithAnswer);
+            return _mapper.Map<QuestionTemplateGetDto>(questionWithAnswer);
         }
         public QuestionUpdateDto Update(int id, QuestionUpdateDto model)
         {

@@ -3,7 +3,6 @@ using EvaluationSystem.Application.Models.Exceptions;
 using EvaluationSystem.Application.Models.FormModels.Interface;
 using EvaluationSystem.Application.Models.ModuleModels.Dtos;
 using EvaluationSystem.Application.Models.ModuleModels.Interface;
-using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using EvaluationSystem.Application.Models.QuestionModels.Intefaces;
 using EvaluationSystem.Application.Services.HelpServices;
@@ -71,6 +70,7 @@ namespace EvaluationSystem.Application.Services
             module.Id = moduleId;
             _moduleRepository.AddModuleToForm(formId, moduleId, model.Position);
             var createModule = _mapper.Map<ModuleGetDto>(module);
+            createModule.Position = model.Position;
             createModule.Questions = new List<QuestionGetDto>();
 
             foreach (var question in model.Questions)

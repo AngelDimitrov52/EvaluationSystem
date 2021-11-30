@@ -8,7 +8,7 @@ namespace EvaluationSystem.Application.Models.QuestionModels
     {
         List<QuestionTemplateGetDto> GetAll();
         QuestionTemplateGetDto GetById(int id);
-        QuestionGetDto Create(QuestionCreateDto model);
+        QuestionTemplateGetDto Create(QuestionTemplateCreateDto model);
         QuestionUpdateDto Update(int id, QuestionUpdateDto model);
         void Delete(int id);
         QuestionTemplate CreateQuestionAnswers(int index, QuestionTemplate model);
