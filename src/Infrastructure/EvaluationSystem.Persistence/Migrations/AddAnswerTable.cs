@@ -13,11 +13,11 @@ namespace EvaluationSystem.Persistence.Migrations
         public override void Up()
         {
             Create.Table("AnswerTemplate")
-               .WithColumn("Id").AsInt64().PrimaryKey().Identity()
+               .WithColumn("Id").AsInt32().PrimaryKey().Identity()
                .WithColumn("IsDefault").AsBoolean().NotNullable()
-               .WithColumn("Position").AsInt64().NotNullable()
+               .WithColumn("Position").AsInt32().NotNullable()
                .WithColumn("AnswerText").AsString(255).NotNullable()
-               .WithColumn("IdQuestion").AsInt64().ForeignKey("QuestionTemplate", "Id").NotNullable();
+               .WithColumn("IdQuestion").AsInt32().ForeignKey("QuestionTemplate", "Id").NotNullable();
         }
     }
 }

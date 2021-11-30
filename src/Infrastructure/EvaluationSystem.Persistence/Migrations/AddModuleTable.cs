@@ -13,7 +13,7 @@ namespace EvaluationSystem.Persistence.Migrations
         public override void Up()
         {
             Create.Table("ModuleTemplate")
-              .WithColumn("Id").AsInt64().PrimaryKey().Identity()
+              .WithColumn("Id").AsInt32().PrimaryKey().Identity()
               .WithColumn("Name").AsString(255).NotNullable();
         }
     }

@@ -34,13 +34,13 @@ namespace EvaluationSystem.Persistence.Repositories
         }
         public void AddQuestionToModule(int moduleId, int questionId, int position)
         {
-           var query = "Insert Into ModuleQuestion (IdModule, IdQuestion, Position) Values(@IdModule, @IdQuestion, @Position)";
+            var query = "Insert Into ModuleQuestion (IdModule, IdQuestion, Position) Values(@IdModule, @IdQuestion, @Position)";
             Connection.Execute(query, new { IdModule = moduleId, IdQuestion = questionId, Position = position }, Transaction);
         }
         public void DeleteQuestionFromModule(int questionId)
         {
             string query = "Delete from ModuleQuestion where IdQuestion = @IdQuestion";
-            Connection.Execute(query, new { IdQuestion = questionId}, Transaction);
+            Connection.Execute(query, new { IdQuestion = questionId }, Transaction);
         }
         public List<QuestionRepositoryDto> GetAllQuestionTemplates()
         {

@@ -11,7 +11,7 @@ namespace EvaluationSystem.Application.Models.QuestionModels.Intefaces
     public interface IQuestionService
     {
         List<QuestionGetDto> GetAll(int moduleId);
-        QuestionGetDto GetById(int questionId);
+        QuestionGetDto GetById(int moduleId, int questionId);
         QuestionUpdateDto Update(int questionId, QuestionUpdateDto model);
         QuestionGetDto Create(int moduleId, QuestionCreateDto model);
         void Delete(int questionId);

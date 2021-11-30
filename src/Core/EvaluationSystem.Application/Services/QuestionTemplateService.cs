@@ -20,12 +20,14 @@ namespace EvaluationSystem.Application.Services
         private readonly IMapper _mapper;
         private readonly IQuestionRepository _questionRepository;
         private readonly IAnswerRepository _answerRepository;
+        private readonly IAnswerService _answerService;
 
-        public QuestionTemplateService(IAnswerRepository answerRepository, IMapper mapper, IQuestionRepository questionRepository)
+        public QuestionTemplateService(IAnswerRepository answerRepository, IMapper mapper, IQuestionRepository questionRepository, IAnswerService answerService)
         {
             _mapper = mapper;
             _answerRepository = answerRepository;
             _questionRepository = questionRepository;
+            _answerService = answerService;
         }
         public List<QuestionTemplateGetDto> GetAll()
         {
@@ -64,43 +66,19 @@ namespace EvaluationSystem.Application.Services
         {
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(id, _questionRepository);
 
-            var questionsResults = _questionRepository.GetQuestionById(id);
-
-            if (questionsResults[0].IsReusable == false)
-            {
-                throw new HttpException("Question is not reusable!", HttpStatusCode.BadRequest);
-            }
-
-            var questionGetDto = new QuestionTemplateGetDto
-            {
-                Id = questionsResults[0].QuestionId,
-                Name = questionsResults[0].Name,
-                Type = questionsResults[0].Type,
-                Answers = new List<AnswerGetDto>()
-            };
-            questionGetDto.Answers.AddRange(from question in questionsResults
-                                            where question.AnswerId != 0
-                                            select new AnswerGetDto
-                                            {
-                                                Id = question.AnswerId,
-                                                Position = question.Position,
-                                                AnswerText = question.AnswerText,
-                                                IsDefault = question.IsDefault
-                                            });
-            return questionGetDto;
+            var questionResult = _mapper.Map<QuestionTemplateGetDto>(_questionRepository.GetById(id));
+            questionResult.Answers = _answerService.GetAll(id);
+            return questionResult;
         }
         public QuestionGetDto Create(QuestionCreateDto model)
         {
             var question = _mapper.Map<QuestionTemplate>(model);
             question.IsReusable = true;
 
-            if (question.Type == AnswersTypes.NumericalOptions)
-            {
-                ThrowExceptionHeplService.ThrowExceptionWhenAnsersIsNotNumericalOptions(question.Answers);
-            }
+            ThrowExceptionHeplService.ThrowExceptionWhenAnsersIsNotNumericalOptions(question.Type, question.Answers);
 
             int index = _questionRepository.Create(question);
-            var questionWithAnswer = CreateQuestionAnsers(index, question);
+            var questionWithAnswer = CreateQuestionAnswers(index, question);
             return _mapper.Map<QuestionGetDto>(questionWithAnswer);
         }
         public QuestionUpdateDto Update(int id, QuestionUpdateDto model)
@@ -117,10 +95,11 @@ namespace EvaluationSystem.Application.Services
 
         public void Delete(int id)
         {
+            _questionRepository.DeleteQuestionFromModule(id);
             _answerRepository.DeleteWithQuestionId(id);
             _questionRepository.Delete(id);
         }
-        private QuestionTemplate CreateQuestionAnsers(int index, QuestionTemplate model)
+        public QuestionTemplate CreateQuestionAnswers(int index, QuestionTemplate model)
         {
             model.Id = index;
             foreach (var answer in model.Answers)

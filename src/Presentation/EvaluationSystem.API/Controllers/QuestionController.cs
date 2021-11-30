@@ -28,7 +28,7 @@ namespace EvaluationSystem.API.Controllers
         [HttpGet("{questioId}")]
         public QuestionGetDto GetById(int formId, int moduleId, int questioId)
         {
-            return _questionService.GetById(questioId);
+            return _questionService.GetById(moduleId, questioId);
         }
 
         [HttpPost]

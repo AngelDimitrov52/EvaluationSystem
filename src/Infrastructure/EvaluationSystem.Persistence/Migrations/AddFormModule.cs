@@ -13,10 +13,10 @@ namespace EvaluationSystem.Persistence.Migrations
         public override void Up()
         {
             Create.Table("FormModule")
-               .WithColumn("Id").AsInt64().PrimaryKey().Identity()
-               .WithColumn("IdForm").AsInt64().ForeignKey("FormTemplate", "Id").NotNullable()
-               .WithColumn("IdModule").AsInt64().ForeignKey("ModuleTemplate", "Id").NotNullable()
-               .WithColumn("Position").AsInt64().NotNullable();
+               .WithColumn("Id").AsInt32().PrimaryKey().Identity()
+               .WithColumn("IdForm").AsInt32().ForeignKey("FormTemplate", "Id").NotNullable()
+               .WithColumn("IdModule").AsInt32().ForeignKey("ModuleTemplate", "Id").NotNullable()
+               .WithColumn("Position").AsInt16().NotNullable();
         }
     }
 }

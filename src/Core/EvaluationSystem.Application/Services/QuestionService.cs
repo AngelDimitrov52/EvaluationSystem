@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using EvaluationSystem.Application.Models.AnswerModels;
 using EvaluationSystem.Application.Models.AnswerModels.Dtos;
+using EvaluationSystem.Application.Models.Exceptions;
 using EvaluationSystem.Application.Models.ModuleModels.Interface;
+using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using EvaluationSystem.Application.Models.QuestionModels.Intefaces;
 using EvaluationSystem.Application.Services.HelpServices;
@@ -10,6 +12,7 @@ using EvaluationSystem.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,14 +22,15 @@ namespace EvaluationSystem.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IQuestionRepository _questionRepository;
-        private readonly IAnswerRepository _answerRepository;
         private readonly IModuleRepository _moduleRepository;
-        public QuestionService(IMapper mapper, IAnswerRepository answerRepository, IQuestionRepository questionRepository, IModuleRepository moduleRepository)
+        private readonly IQuestionTemplateService _questionTemplateService;
+
+        public QuestionService(IMapper mapper, IQuestionTemplateService questionTemplateService, IQuestionRepository questionRepository, IModuleRepository moduleRepository)
         {
             _mapper = mapper;
             _questionRepository = questionRepository;
-            _answerRepository = answerRepository;
             _moduleRepository = moduleRepository;
+            _questionTemplateService = questionTemplateService;
         }
 
         public List<QuestionGetDto> GetAll(int moduleId)
@@ -36,35 +40,24 @@ namespace EvaluationSystem.Application.Services
             var questions = _questionRepository.GetModuleQuestions(moduleId);
             foreach (var question in questions)
             {
-                var questionFromDB = GetById(question.IdQuestion);
-                questionFromDB.Position = question.Position;
+                var questionFromDB = GetById(moduleId, question.IdQuestion);
                 result.Add(questionFromDB);
             }
             return result;
         }
-        public QuestionGetDto GetById(int questionId)
+        public QuestionGetDto GetById(int moduleId, int questionId)
         {
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
 
-            var questionsResults = _questionRepository.GetQuestionById(questionId);
-
-            QuestionGetDto questionGetDto = new QuestionGetDto
+            var question = _mapper.Map<QuestionGetDto>(_questionTemplateService.GetById(questionId));
+            var questionPosition = _questionRepository.GetModuleQuestions(moduleId).Where(x => x.IdModule == moduleId && x.IdQuestion == questionId).ToList();
+            if (questionPosition.Count == 0)
             {
-                Id = questionsResults[0].QuestionId,
-                Name = questionsResults[0].Name,
-                Type = questionsResults[0].Type,
-                Answers = new List<AnswerGetDto>(),
-            };
-            questionGetDto.Answers.AddRange(from question in questionsResults
-                                            where question.AnswerId != 0
-                                            select new AnswerGetDto
-                                            {
-                                                Id = question.AnswerId,
-                                                Position = question.Position,
-                                                AnswerText = question.AnswerText,
-                                                IsDefault = question.IsDefault
-                                            });
-            return questionGetDto;
+                throw new HttpException($"Question with ID:{questionId} doesn't exist in module with ID:{moduleId}!", HttpStatusCode.BadRequest);
+            }
+            question.Position = questionPosition[0].Position;
+            return question;
         }
         public QuestionGetDto Create(int moduleId, QuestionCreateDto model)
         {
@@ -72,13 +65,10 @@ namespace EvaluationSystem.Application.Services
             var question = _mapper.Map<QuestionTemplate>(model);
             question.IsReusable = false;
 
-            if (question.Type == AnswersTypes.NumericalOptions)
-            {
-                ThrowExceptionHeplService.ThrowExceptionWhenAnsersIsNotNumericalOptions(question.Answers);
-            }
+            ThrowExceptionHeplService.ThrowExceptionWhenAnsersIsNotNumericalOptions(question.Type, question.Answers);
 
             int index = _questionRepository.Create(question);
-            var questionWithAnswer = CreateQuestionAnsers(index, question);
+            var questionWithAnswer = _questionTemplateService.CreateQuestionAnswers(index, question);
             _questionRepository.AddQuestionToModule(moduleId, questionWithAnswer.Id, model.Position);
             return _mapper.Map<QuestionGetDto>(questionWithAnswer);
         }
@@ -97,20 +87,7 @@ namespace EvaluationSystem.Application.Services
 
         public void Delete(int questionId)
         {
-            _questionRepository.DeleteQuestionFromModule(questionId);
-            _answerRepository.DeleteWithQuestionId(questionId);
-            _questionRepository.Delete(questionId);
-        }
-        public QuestionTemplate CreateQuestionAnsers(int index, QuestionTemplate model)
-        {
-            model.Id = index;
-            foreach (var answer in model.Answers)
-            {
-                answer.IdQuestion = index;
-                int answerId = _answerRepository.Create(answer);
-                answer.Id = answerId;
-            }
-            return model;
+            _questionTemplateService.Delete(questionId);
         }
     }
 }

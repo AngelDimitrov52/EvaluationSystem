@@ -1,6 +1,7 @@
 ﻿using EvaluationSystem.Application.Models.Exceptions;
 using EvaluationSystem.Application.Models.GenericRepository;
 using EvaluationSystem.Domain.Entities;
+using EvaluationSystem.Domain.Enums;
 using System.Collections.Generic;
 using System.Net;
 
@@ -17,15 +18,18 @@ namespace EvaluationSystem.Application.Services.HelpServices
                 throw new HttpException($"{entityName} with ID:{id} doesn't exist!", HttpStatusCode.NotFound);
             }
         }
-        public static void ThrowExceptionWhenAnsersIsNotNumericalOptions(List<AnswerTemplate> answers)
+        public static void ThrowExceptionWhenAnsersIsNotNumericalOptions(AnswersTypes answersTypes, List<AnswerTemplate> answers)
         {
-            foreach (var answer in answers)
+            if (answersTypes == AnswersTypes.NumericalOptions)
             {
-                int numericValue;
-                bool isInt = int.TryParse(answer.AnswerText, out numericValue);
-                if (isInt == false)
+                foreach (var answer in answers)
                 {
-                    throw new HttpException("Answer is not NumericalOptions!", HttpStatusCode.BadRequest);
+                    int numericValue;
+                    bool isInt = int.TryParse(answer.AnswerText, out numericValue);
+                    if (isInt == false)
+                    {
+                        throw new HttpException("Answer is not NumericalOptions!", HttpStatusCode.BadRequest);
+                    }
                 }
             }
         }
