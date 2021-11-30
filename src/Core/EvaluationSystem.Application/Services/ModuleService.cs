@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EvaluationSystem.Application.Models.Exceptions;
 using EvaluationSystem.Application.Models.FormModels.Interface;
 using EvaluationSystem.Application.Models.ModuleModels.Dtos;
 using EvaluationSystem.Application.Models.ModuleModels.Interface;
@@ -9,6 +10,7 @@ using EvaluationSystem.Application.Services.HelpServices;
 using EvaluationSystem.Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace EvaluationSystem.Application.Services
 {
@@ -40,7 +42,6 @@ namespace EvaluationSystem.Application.Services
                 mapModule.Position = moduleInForm.Position;
                 resultModules.Add(mapModule);
             }
-
             return resultModules;
         }
         public ModuleGetDto GetById(int formId, int moduleId)
@@ -50,6 +51,13 @@ namespace EvaluationSystem.Application.Services
 
             var moduleName = _moduleRepository.GetById(moduleId);
             var module = _mapper.Map<ModuleGetDto>(moduleName);
+
+            var modulePosition = _moduleRepository.GetFormModulesByFormId(formId).Where(x => x.IdModule == moduleId && x.IdForm == formId).FirstOrDefault();
+            if (modulePosition == null)
+            {
+                throw new HttpException($"Module with ID:{moduleId} doesn't exist in form with ID:{formId}!", HttpStatusCode.BadRequest);
+            }
+            module.Position = modulePosition.Position;
 
             module.Questions = _questionService.GetAll(module.Id);
             return module;

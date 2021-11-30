@@ -51,12 +51,13 @@ namespace EvaluationSystem.Application.Services
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
 
             var question = _mapper.Map<QuestionGetDto>(_questionTemplateService.GetById(questionId));
-            var questionPosition = _questionRepository.GetModuleQuestions(moduleId).Where(x => x.IdModule == moduleId && x.IdQuestion == questionId).ToList();
-            if (questionPosition.Count == 0)
+            var questionPosition = _questionRepository.GetModuleQuestions(moduleId).Where(x => x.IdModule == moduleId && x.IdQuestion == questionId).FirstOrDefault();
+            if (questionPosition == null)
             {
                 throw new HttpException($"Question with ID:{questionId} doesn't exist in module with ID:{moduleId}!", HttpStatusCode.BadRequest);
             }
-            question.Position = questionPosition[0].Position;
+            question.Position = questionPosition.Position;
+
             return question;
         }
         public QuestionGetDto Create(int moduleId, QuestionCreateDto model)
