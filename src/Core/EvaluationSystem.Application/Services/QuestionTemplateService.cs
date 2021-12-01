@@ -77,16 +77,18 @@ namespace EvaluationSystem.Application.Services
             var questionWithAnswer = CreateQuestionAnswers(index, question);
             return _mapper.Map<QuestionTemplateGetDto>(questionWithAnswer);
         }
-        public QuestionUpdateDto Update(int questionId, QuestionUpdateDto model)
+        public QuestionTemplateUpdateDto Update(int questionId, QuestionTemplateUpdateDto model)
         {
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
 
+            var questionFromDB = _questionRepository.GetById(questionId);
             var question = _mapper.Map<QuestionTemplate>(model);
             question.IsReusable = true;
             question.Id = questionId;
-            _questionRepository.Update(question);
+            question.Type = questionFromDB.Type;
 
-            return _mapper.Map<QuestionUpdateDto>(question);
+            _questionRepository.Update(question);
+            return model;
         }
 
         public void Delete(int questionId)

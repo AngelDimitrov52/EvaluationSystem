@@ -76,8 +76,11 @@ namespace EvaluationSystem.Application.Services
             var questionPosition = _questionRepository.GetModuleQuestions(moduleId).Where(x => x.IdModule == moduleId && x.IdQuestion == questionId).FirstOrDefault();
             ThrowExceptionWhenQustionIsNotInModule(moduleId, questionId, questionPosition);
 
+            var questionFromDB = _questionRepository.GetById(questionId);
             var question = _mapper.Map<QuestionTemplate>(model);
             question.Id = questionId;
+            question.Type = questionFromDB.Type;
+
             _questionRepository.Update(question);
             _questionRepository.UpdateQuestionPosition( moduleId, questionId, model.Position);
 

@@ -1,6 +1,6 @@
 ﻿using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Models.QuestionModels.Dtos;
-using EvaluationSystem.Application.Models.QuestionModels.Intefaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
@@ -8,7 +8,7 @@ namespace EvaluationSystem.API.Controllers
 {
     [Route("api/questionTemplate")]
     [ApiController]
-    public class QuestionTemplateController : ControllerBase
+    public class QuestionTemplateController : BaseController
     {
         private readonly IQuestionTemplateService _questionTemplateService;
 
@@ -36,7 +36,7 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpPut("{questionId}")]
-        public QuestionUpdateDto Update(int questionId, [FromBody] QuestionUpdateDto model)
+        public QuestionTemplateUpdateDto Update(int questionId, [FromBody] QuestionTemplateUpdateDto model)
         {
             return _questionTemplateService.Update(questionId, model);
         }

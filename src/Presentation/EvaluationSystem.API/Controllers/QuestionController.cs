@@ -1,17 +1,13 @@
 ﻿using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using EvaluationSystem.Application.Models.QuestionModels.Intefaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EvaluationSystem.API.Controllers
 {
     [Route("api/form/{formId}/module/{moduleId}/question")]
     [ApiController]
-    public class QuestionController : ControllerBase
+    public class QuestionController : BaseController
     {
         private readonly IQuestionService _questionService;
         public QuestionController(IQuestionService service)
@@ -40,7 +36,7 @@ namespace EvaluationSystem.API.Controllers
         [HttpPut("{questioId}")]
         public QuestionUpdateDto Update(int formId, int moduleId, int questioId, [FromBody] QuestionUpdateDto model)
         {
-            return _questionService.Update(moduleId,questioId, model);
+            return _questionService.Update(moduleId, questioId, model);
         }
 
         [HttpDelete("{questioId}")]
