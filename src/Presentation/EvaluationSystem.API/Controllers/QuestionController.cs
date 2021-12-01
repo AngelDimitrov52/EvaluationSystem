@@ -40,7 +40,7 @@ namespace EvaluationSystem.API.Controllers
         [HttpPut("{questioId}")]
         public QuestionUpdateDto Update(int formId, int moduleId, int questioId, [FromBody] QuestionUpdateDto model)
         {
-            return _questionService.Update(questioId, model);
+            return _questionService.Update(moduleId,questioId, model);
         }
 
         [HttpDelete("{questioId}")]

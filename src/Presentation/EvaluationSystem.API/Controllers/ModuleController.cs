@@ -28,19 +28,19 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpPost]
-        public ModuleGetDto Create(int formId,[FromBody] ModuleCreateDto model)
+        public ModuleGetDto Create(int formId, [FromBody] ModuleCreateDto model)
         {
             return _moduleService.Create(formId, model);
         }
 
         [HttpPut("{moduleId}")]
-        public ModuleGetDto Update(int formId,int moduleId, [FromBody] ModuleCreateDto model)
+        public ModuleUpdateDto Update(int formId, int moduleId, [FromBody] ModuleUpdateDto model)
         {
-            return _moduleService.Update(moduleId, model);
+            return _moduleService.Update(formId, moduleId, model);
         }
 
         [HttpDelete("{moduleId}")]
-        public IActionResult Delete(int formId,int moduleId)
+        public IActionResult Delete(int formId, int moduleId)
         {
             _moduleService.Delete(moduleId);
             return NoContent();

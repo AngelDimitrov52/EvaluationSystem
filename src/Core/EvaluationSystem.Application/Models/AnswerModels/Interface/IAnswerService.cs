@@ -6,10 +6,10 @@ namespace EvaluationSystem.Application.Models.AnswerModels
 {
     public interface IAnswerService
     {
-        AnswerGetDto GetById(int id);
-        List<AnswerGetDto> GetAll(int id);
+        AnswerGetDto GetById(int answerId);
+        List<AnswerGetDto> GetAll(int questionId);
         AnswerGetDto Create(int questionId, AnswerCreateDto model);
-        AnswerGetDto Update(int questionId, int id, AnswerCreateDto model);
-        void Delete(int id);
+        AnswerGetDto Update(int questionId, int answerId, AnswerCreateDto model);
+        void Delete(int answerId);
     }
 }

@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using EvaluationSystem.Application.Models.AnswerModels;
 using EvaluationSystem.Application.Models.AnswerModels.Dtos;
-using EvaluationSystem.Application.Models.QuestionModels;
+using EvaluationSystem.Application.Models.Exceptions;
 using EvaluationSystem.Application.Models.QuestionModels.Intefaces;
 using EvaluationSystem.Application.Services.HelpServices;
 using EvaluationSystem.Domain.Entities;
-using Microsoft.Extensions.Caching.Memory;
+using EvaluationSystem.Domain.Enums;
 using System.Collections.Generic;
+using System.Net;
 
 namespace EvaluationSystem.Application.Services
 {
@@ -48,6 +49,16 @@ namespace EvaluationSystem.Application.Services
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
 
             var answer = _mapper.Map<AnswerTemplate>(model);
+            var question = _questionRepository.GetById(questionId);
+            if (question.Type == AnswersTypes.NumericalOptions)
+            {
+                int numericValue;
+                bool isInt = int.TryParse(answer.AnswerText, out numericValue);
+                if (isInt == false)
+                {
+                    throw new HttpException("Answer is not NumericalOptions!", HttpStatusCode.BadRequest);
+                }
+            }
             answer.IdQuestion = questionId;
             int answerId = _answerRepository.Create(answer);
             answer.Id = answerId;

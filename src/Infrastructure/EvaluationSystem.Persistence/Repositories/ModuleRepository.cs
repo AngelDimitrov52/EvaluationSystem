@@ -34,5 +34,10 @@ namespace EvaluationSystem.Persistence.Repositories
             string query = "Delete from ModuleQuestion where IdModule = @IdModule";
             Connection.Execute(query, new { IdModule = moduleId }, Transaction);
         }
+        public void UpdateModulePosition(int formId, int moduleId, int position)
+        {
+            string query = "UPDATE FormModule SET IdForm = @IdForm, IdModule = @IdModule, Position = @Position WHERE IdForm = @IdForm AND IdModule = @IdModule;";
+            Connection.Execute(query, new { IdForm = formId, IdModule = moduleId, Position =position }, Transaction);
+        }
     }
 }

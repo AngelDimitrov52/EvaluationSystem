@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EvaluationSystem.Application.Models.Exceptions;
+using EvaluationSystem.Application.Models.ModuleModels.Dtos;
 using EvaluationSystem.Application.Models.ModuleModels.Interface;
 using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Models.QuestionModels.Dtos;
@@ -43,13 +44,10 @@ namespace EvaluationSystem.Application.Services
         {
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
+            var questionPosition = _questionRepository.GetModuleQuestions(moduleId).Where(x => x.IdModule == moduleId && x.IdQuestion == questionId).FirstOrDefault();
+            ThrowExceptionWhenQustionIsNotInModule(moduleId, questionId, questionPosition);
 
             var question = _mapper.Map<QuestionGetDto>(_questionTemplateService.GetById(questionId));
-            var questionPosition = _questionRepository.GetModuleQuestions(moduleId).Where(x => x.IdModule == moduleId && x.IdQuestion == questionId).FirstOrDefault();
-            if (questionPosition == null)
-            {
-                throw new HttpException($"Question with ID:{questionId} doesn't exist in module with ID:{moduleId}!", HttpStatusCode.BadRequest);
-            }
             question.Position = questionPosition.Position;
 
             return question;
@@ -71,21 +69,31 @@ namespace EvaluationSystem.Application.Services
             return result;
         }
 
-        public QuestionUpdateDto Update(int questionId, QuestionUpdateDto model)
+        public QuestionUpdateDto Update(int moduleId, int questionId, QuestionUpdateDto model)
         {
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
+            var questionPosition = _questionRepository.GetModuleQuestions(moduleId).Where(x => x.IdModule == moduleId && x.IdQuestion == questionId).FirstOrDefault();
+            ThrowExceptionWhenQustionIsNotInModule(moduleId, questionId, questionPosition);
 
             var question = _mapper.Map<QuestionTemplate>(model);
-            question.IsReusable = false;
             question.Id = questionId;
             _questionRepository.Update(question);
+            _questionRepository.UpdateQuestionPosition( moduleId, questionId, model.Position);
 
-            return _mapper.Map<QuestionUpdateDto>(question);
+            return model;
         }
 
         public void Delete(int questionId)
         {
             _questionTemplateService.Delete(questionId);
+        }
+        private void ThrowExceptionWhenQustionIsNotInModule(int moduleId, int questionId, ModuleQuestionTemplateDto dto)
+        {
+            if (dto == null)
+            {
+                throw new HttpException($"Question with ID:{questionId} doesn't exist in module with ID:{moduleId}!", HttpStatusCode.BadRequest);
+            }
         }
     }
 }

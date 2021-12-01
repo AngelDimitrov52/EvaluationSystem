@@ -34,7 +34,7 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpPut("{formId}")]
-        public FormGetDto Update(int formId, [FromBody] FormCreateDto model)
+        public FormUpdateDto Update(int formId, [FromBody] FormUpdateDto model)
         {
             return _formService.Update(formId, model);
         }

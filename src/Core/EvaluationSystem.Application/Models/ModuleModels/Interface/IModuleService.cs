@@ -8,7 +8,7 @@ namespace EvaluationSystem.Application.Models.ModuleModels.Interface
         List<ModuleGetDto> GetAllModules(int formId);
         ModuleGetDto GetById(int formId, int moduleId);
         ModuleGetDto Create(int formId, ModuleCreateDto model);
-        ModuleGetDto Update(int id, ModuleCreateDto model);
+        ModuleUpdateDto Update(int formId, int moduleId, ModuleUpdateDto model);
         void Delete(int moduleId);
     }
 }

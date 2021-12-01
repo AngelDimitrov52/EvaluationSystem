@@ -12,8 +12,8 @@ namespace EvaluationSystem.Application.Models.QuestionModels.Intefaces
     {
         List<QuestionGetDto> GetAll(int moduleId);
         QuestionGetDto GetById(int moduleId, int questionId);
-        QuestionUpdateDto Update(int questionId, QuestionUpdateDto model);
         QuestionGetDto Create(int moduleId, QuestionCreateDto model);
+        QuestionUpdateDto Update(int moduleId, int questionId, QuestionUpdateDto model);
         void Delete(int questionId);
     }
 }

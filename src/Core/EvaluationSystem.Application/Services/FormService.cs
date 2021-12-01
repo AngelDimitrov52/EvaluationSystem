@@ -54,14 +54,14 @@ namespace EvaluationSystem.Application.Services
             }
             return createForm;
         }
-        public FormGetDto Update(int id, FormCreateDto model)
+        public FormUpdateDto Update(int id, FormUpdateDto model)
         {
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(id, _formRepository);
 
             var form = _mapper.Map<FormTemplate>(model);
             form.Id = id;
             _formRepository.Update(form);
-            return _mapper.Map<FormGetDto>(form);
+            return _mapper.Map<FormUpdateDto>(form);
         }
         public void Delete(int formId)
         {

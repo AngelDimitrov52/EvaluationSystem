@@ -12,5 +12,6 @@ namespace EvaluationSystem.Application.Models.ModuleModels.Interface
         List<FormModuleTemplateDto> GetFormModulesByFormId(int formId);
         void DeleteModuleFromFormModuleTable(int moduleId);
         void DeleteModuleFromModuleQuestionTable(int moduleId);
+        void UpdateModulePosition(int formId, int moduleId, int position);
     }
 }

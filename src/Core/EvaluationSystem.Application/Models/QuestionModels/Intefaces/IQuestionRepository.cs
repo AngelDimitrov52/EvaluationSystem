@@ -16,5 +16,6 @@ namespace EvaluationSystem.Application.Models.QuestionModels.Intefaces
         List<ModuleQuestionTemplateDto> GetModuleQuestions(int moduleId);
         void AddQuestionToModule(int moduleId, int questionId, int position);
         void DeleteQuestionFromModule(int questionId);
+        void UpdateQuestionPosition(int moduleId, int questionId, int position);
     }
 }

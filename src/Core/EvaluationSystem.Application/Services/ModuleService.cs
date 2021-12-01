@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EvaluationSystem.Application.Models.Exceptions;
+using EvaluationSystem.Application.Models.FormModels.Dtos;
 using EvaluationSystem.Application.Models.FormModels.Interface;
 using EvaluationSystem.Application.Models.ModuleModels.Dtos;
 using EvaluationSystem.Application.Models.ModuleModels.Interface;
@@ -47,17 +48,13 @@ namespace EvaluationSystem.Application.Services
         {
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
+            var modulePosition = _moduleRepository.GetFormModulesByFormId(formId).Where(x => x.IdModule == moduleId && x.IdForm == formId).FirstOrDefault();
+            ThrowExceptionWhenModuleIsNotInForm(formId, moduleId, modulePosition);
 
             var moduleName = _moduleRepository.GetById(moduleId);
             var module = _mapper.Map<ModuleGetDto>(moduleName);
 
-            var modulePosition = _moduleRepository.GetFormModulesByFormId(formId).Where(x => x.IdModule == moduleId && x.IdForm == formId).FirstOrDefault();
-            if (modulePosition == null)
-            {
-                throw new HttpException($"Module with ID:{moduleId} doesn't exist in form with ID:{formId}!", HttpStatusCode.BadRequest);
-            }
             module.Position = modulePosition.Position;
-
             module.Questions = _questionService.GetAll(module.Id);
             return module;
         }
@@ -80,6 +77,20 @@ namespace EvaluationSystem.Application.Services
             }
             return createModule;
         }
+        public ModuleUpdateDto Update(int formId, int moduleId, ModuleUpdateDto model)
+        {
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
+            var modulePosition = _moduleRepository.GetFormModulesByFormId(formId).Where(x => x.IdModule == moduleId && x.IdForm == formId).FirstOrDefault();
+            ThrowExceptionWhenModuleIsNotInForm(formId, moduleId, modulePosition);
+
+            var module = _mapper.Map<ModuleTemplate>(model);
+            module.Id = moduleId;
+            _moduleRepository.Update(module);
+            _moduleRepository.UpdateModulePosition(formId, moduleId, model.Position);
+
+            return model;
+        }
         public void Delete(int moduleId)
         {
             var module = _moduleRepository.GetById(moduleId);
@@ -95,17 +106,14 @@ namespace EvaluationSystem.Application.Services
             }
             _moduleRepository.Delete(moduleId);
         }
-        public ModuleGetDto Update(int id, ModuleCreateDto model)
+
+        private void ThrowExceptionWhenModuleIsNotInForm(int formId, int moduleId, FormModuleTemplateDto dto)
         {
-            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(id, _moduleRepository);
-
-            var module = _mapper.Map<ModuleTemplate>(model);
-            module.Id = id;
-            _moduleRepository.Update(module);
-
-            return _mapper.Map<ModuleGetDto>(module);
+            if (dto == null)
+            {
+                throw new HttpException($"Module with ID:{moduleId} doesn't exist in form with ID:{formId}!", HttpStatusCode.BadRequest);
+            }
         }
-
     }
 }
 

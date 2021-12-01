@@ -6,9 +6,9 @@ namespace EvaluationSystem.Application.Models.FormModels.Interface
     public interface IFormService
     {
         List<FormGetDto> GetAll();
-        FormGetDto GetById(int id);
-        void Delete(int id);
+        FormGetDto GetById(int formId);
         FormGetDto Create(FormCreateDto model);
-        FormGetDto Update(int id, FormCreateDto model);
+        FormUpdateDto Update(int formId, FormUpdateDto model);
+        void Delete(int formId);
     }
 }

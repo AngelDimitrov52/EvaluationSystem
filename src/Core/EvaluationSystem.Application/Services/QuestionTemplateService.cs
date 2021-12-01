@@ -58,12 +58,12 @@ namespace EvaluationSystem.Application.Services
             }
             return result;
         }
-        public QuestionTemplateGetDto GetById(int id)
+        public QuestionTemplateGetDto GetById(int questionId)
         {
-            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(id, _questionRepository);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
 
-            var questionResult = _mapper.Map<QuestionTemplateGetDto>(_questionRepository.GetById(id));
-            questionResult.Answers = _answerService.GetAll(id);
+            var questionResult = _mapper.Map<QuestionTemplateGetDto>(_questionRepository.GetById(questionId));
+            questionResult.Answers = _answerService.GetAll(questionId);
             return questionResult;
         }
         public QuestionTemplateGetDto Create(QuestionTemplateCreateDto model)
@@ -77,30 +77,30 @@ namespace EvaluationSystem.Application.Services
             var questionWithAnswer = CreateQuestionAnswers(index, question);
             return _mapper.Map<QuestionTemplateGetDto>(questionWithAnswer);
         }
-        public QuestionUpdateDto Update(int id, QuestionUpdateDto model)
+        public QuestionUpdateDto Update(int questionId, QuestionUpdateDto model)
         {
-            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(id, _questionRepository);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
 
             var question = _mapper.Map<QuestionTemplate>(model);
             question.IsReusable = true;
-            question.Id = id;
+            question.Id = questionId;
             _questionRepository.Update(question);
 
             return _mapper.Map<QuestionUpdateDto>(question);
         }
 
-        public void Delete(int id)
+        public void Delete(int questionId)
         {
-            _questionRepository.DeleteQuestionFromModule(id);
-            _answerRepository.DeleteWithQuestionId(id);
-            _questionRepository.Delete(id);
+            _questionRepository.DeleteQuestionFromModule(questionId);
+            _answerRepository.DeleteWithQuestionId(questionId);
+            _questionRepository.Delete(questionId);
         }
-        public QuestionTemplate CreateQuestionAnswers(int index, QuestionTemplate model)
+        public QuestionTemplate CreateQuestionAnswers(int questionId, QuestionTemplate model)
         {
-            model.Id = index;
+            model.Id = questionId;
             foreach (var answer in model.Answers)
             {
-                answer.IdQuestion = index;
+                answer.IdQuestion = questionId;
                 int answerId = _answerRepository.Create(answer);
                 answer.Id = answerId;
             }

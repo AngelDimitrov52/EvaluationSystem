@@ -7,10 +7,10 @@ namespace EvaluationSystem.Application.Models.QuestionModels
     public interface IQuestionTemplateService
     {
         List<QuestionTemplateGetDto> GetAll();
-        QuestionTemplateGetDto GetById(int id);
+        QuestionTemplateGetDto GetById(int questionId);
         QuestionTemplateGetDto Create(QuestionTemplateCreateDto model);
-        QuestionUpdateDto Update(int id, QuestionUpdateDto model);
-        void Delete(int id);
-        QuestionTemplate CreateQuestionAnswers(int index, QuestionTemplate model);
+        QuestionUpdateDto Update(int questionId, QuestionUpdateDto model);
+        void Delete(int questionId);
+        QuestionTemplate CreateQuestionAnswers(int questionId, QuestionTemplate model);
     }
 }

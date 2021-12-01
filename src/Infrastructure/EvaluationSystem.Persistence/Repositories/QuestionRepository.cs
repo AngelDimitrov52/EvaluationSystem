@@ -17,6 +17,15 @@ namespace EvaluationSystem.Persistence.Repositories
         public QuestionRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
+        public List<QuestionRepositoryDto> GetAllQuestionTemplates()
+        {
+            string query = @"SELECT q.Id AS QuestionId, q.[Name],q.IsReusable, q.[Type],a.Id AS AnswerId, a.AnswerText , a.Position, a.IsDefault
+                                 FROM AnswerTemplate AS a
+                                 RIGHT JOIN QuestionTemplate AS q ON q.Id = a.IdQuestion
+                                 WHERE IsReusable = 1 ";
+            var result = Connection.Query<QuestionRepositoryDto>(query, null, Transaction);
+            return (List<QuestionRepositoryDto>)result;
+        }
         public List<QuestionRepositoryDto> GetQuestionById(int questionId)
         {
             string query = @$"SELECT q.Id AS QuestionId, q.[Name],q.IsReusable, q.[Type],a.Id AS AnswerId, a.AnswerText , a.Position, a.IsDefault
@@ -42,14 +51,10 @@ namespace EvaluationSystem.Persistence.Repositories
             string query = "Delete from ModuleQuestion where IdQuestion = @IdQuestion";
             Connection.Execute(query, new { IdQuestion = questionId }, Transaction);
         }
-        public List<QuestionRepositoryDto> GetAllQuestionTemplates()
+        public void UpdateQuestionPosition(int moduleId, int questionId, int position)
         {
-            string query = @"SELECT q.Id AS QuestionId, q.[Name],q.IsReusable, q.[Type],a.Id AS AnswerId, a.AnswerText , a.Position, a.IsDefault
-                                 FROM AnswerTemplate AS a
-                                 RIGHT JOIN QuestionTemplate AS q ON q.Id = a.IdQuestion
-                                 WHERE IsReusable = 1 ";
-            var result = Connection.Query<QuestionRepositoryDto>(query, null, Transaction);
-            return (List<QuestionRepositoryDto>)result;
+            string query = "UPDATE ModuleQuestion SET IdModule = @IdModule, IdQuestion = @IdQuestion, Position =@Position WHERE IdModule = @IdModule AND IdQuestion = @IdQuestion;";
+            Connection.Execute(query, new { IdModule = moduleId, IdQuestion = questionId, Position = position }, Transaction);
         }
     }
 }
