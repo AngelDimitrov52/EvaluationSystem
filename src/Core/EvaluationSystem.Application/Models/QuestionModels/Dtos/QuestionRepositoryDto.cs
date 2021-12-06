@@ -1,4 +1,5 @@
 ﻿using EvaluationSystem.Domain.Enums;
+using System;
 
 namespace EvaluationSystem.Application.Models.QuestionModels
 {
@@ -10,6 +11,7 @@ namespace EvaluationSystem.Application.Models.QuestionModels
         public int AnswerId { get; set; }
         public string AnswerText { get; set; }
         public int Position { get; set; }
+        public DateTime DateOfCreation { get; set; }
         public bool IsDefault { get; set; }
         public bool IsReusable { get; set; }
     }

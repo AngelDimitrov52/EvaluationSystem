@@ -12,7 +12,6 @@ namespace EvaluationSystem.Application.Models.QuestionModels.Intefaces
     public interface IQuestionRepository : IGenericRepository<QuestionTemplate>
     {
         List<QuestionRepositoryDto> GetAllQuestionTemplates();
-        List<QuestionRepositoryDto> GetQuestionById(int questionId);
         List<ModuleQuestionTemplateDto> GetModuleQuestions(int moduleId);
         void AddQuestionToModule(int moduleId, int questionId, int position);
         void DeleteQuestionFromModule(int questionId);

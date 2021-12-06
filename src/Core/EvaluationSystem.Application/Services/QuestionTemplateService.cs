@@ -6,6 +6,7 @@ using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using EvaluationSystem.Application.Models.QuestionModels.Intefaces;
 using EvaluationSystem.Application.Services.HelpServices;
 using EvaluationSystem.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -41,6 +42,7 @@ namespace EvaluationSystem.Application.Services
                         Id = question.QuestionId,
                         Name = question.Name,
                         Type = question.Type,
+                        DateOfCreation = question.DateOfCreation,
                         Answers = new List<AnswerGetDto>()
                     };
                     result.Add(isQuestionIsCreated);
@@ -70,7 +72,7 @@ namespace EvaluationSystem.Application.Services
         {
             var question = _mapper.Map<QuestionTemplate>(model);
             question.IsReusable = true;
-
+            question.DateOfCreation = DateTime.Now;
             ThrowExceptionHeplService.ThrowExceptionWhenAnsersIsNotNumericalOptions(question.Type, question.Answers);
 
             int index = _questionRepository.Create(question);
@@ -86,6 +88,7 @@ namespace EvaluationSystem.Application.Services
             question.IsReusable = true;
             question.Id = questionId;
             question.Type = questionFromDB.Type;
+            question.DateOfCreation = questionFromDB.DateOfCreation;
 
             _questionRepository.Update(question);
             return model;

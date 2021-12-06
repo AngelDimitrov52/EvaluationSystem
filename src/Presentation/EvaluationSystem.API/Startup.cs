@@ -69,6 +69,7 @@ namespace EvaluationSystem.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseCors(builder =>
             {
                 builder.AllowAnyOrigin()
@@ -92,8 +93,6 @@ namespace EvaluationSystem.API
             app.UseRouting();
 
             app.UseAuthentication();
-
-            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseAuthorization();
 

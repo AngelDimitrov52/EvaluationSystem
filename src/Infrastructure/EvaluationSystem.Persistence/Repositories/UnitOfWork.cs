@@ -32,6 +32,7 @@ namespace EvaluationSystem.Persistence.Repositories
                 _transaction.Dispose();
                 _transaction = null;
             }
+            _connection.Dispose();
         }
         public void Rollback()
         {

@@ -4,11 +4,7 @@ using EvaluationSystem.Application.Models.ModuleModels.Dtos;
 using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Models.QuestionModels.Intefaces;
 using EvaluationSystem.Domain.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EvaluationSystem.Persistence.Repositories
 {
@@ -19,20 +15,11 @@ namespace EvaluationSystem.Persistence.Repositories
         }
         public List<QuestionRepositoryDto> GetAllQuestionTemplates()
         {
-            string query = @"SELECT q.Id AS QuestionId, q.[Name],q.IsReusable, q.[Type],a.Id AS AnswerId, a.AnswerText , a.Position, a.IsDefault
+            string query = @"SELECT q.Id AS QuestionId, q.[Name],q.IsReusable, q.[Type],q.DateOfCreation ,a.Id AS AnswerId, a.AnswerText , a.Position, a.IsDefault
                                  FROM AnswerTemplate AS a
                                  RIGHT JOIN QuestionTemplate AS q ON q.Id = a.IdQuestion
                                  WHERE IsReusable = 1 ";
             var result = Connection.Query<QuestionRepositoryDto>(query, null, Transaction);
-            return (List<QuestionRepositoryDto>)result;
-        }
-        public List<QuestionRepositoryDto> GetQuestionById(int questionId)
-        {
-            string query = @$"SELECT q.Id AS QuestionId, q.[Name],q.IsReusable, q.[Type],a.Id AS AnswerId, a.AnswerText , a.Position, a.IsDefault
-                                FROM AnswerTemplate AS a
-                                RIGHT JOIN QuestionTemplate AS q ON q.Id = a.IdQuestion
-                                WHERE q.Id = @Id";
-            var result = Connection.Query<QuestionRepositoryDto>(query, new { Id = questionId }, Transaction);
             return (List<QuestionRepositoryDto>)result;
         }
         public List<ModuleQuestionTemplateDto> GetModuleQuestions(int moduleId)

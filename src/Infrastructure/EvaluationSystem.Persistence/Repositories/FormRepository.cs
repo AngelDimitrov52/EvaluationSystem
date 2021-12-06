@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using EvaluationSystem.Application.Models.FormModels.Dtos;
 using EvaluationSystem.Application.Models.FormModels.Interface;
 using EvaluationSystem.Application.Models.GenericRepository;
 using EvaluationSystem.Domain.Entities;
@@ -11,6 +10,12 @@ namespace EvaluationSystem.Persistence.Repositories
     {
         public FormRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
+        }
+        public List<Attestation> GetAllAttestationsWithFormId(int formId)
+        {
+            string query = @"SELECT * FROM Attestation WHERE  IdFormTemplate = @IdForm";
+            var result = Connection.Query<Attestation>(query, new { IdForm = formId }, Transaction);
+            return (List<Attestation>)result;
         }
         public void DeleteFormFromFormModuleTable(int formId)
         {

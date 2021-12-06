@@ -7,6 +7,7 @@ using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using EvaluationSystem.Application.Models.QuestionModels.Intefaces;
 using EvaluationSystem.Application.Services.HelpServices;
 using EvaluationSystem.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -57,6 +58,7 @@ namespace EvaluationSystem.Application.Services
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
             var question = _mapper.Map<QuestionTemplate>(model);
             question.IsReusable = false;
+            question.DateOfCreation = DateTime.Now;
 
             ThrowExceptionHeplService.ThrowExceptionWhenAnsersIsNotNumericalOptions(question.Type, question.Answers);
 
@@ -80,6 +82,7 @@ namespace EvaluationSystem.Application.Services
             var question = _mapper.Map<QuestionTemplate>(model);
             question.Id = questionId;
             question.Type = questionFromDB.Type;
+            question.DateOfCreation = questionFromDB.DateOfCreation;
 
             _questionRepository.Update(question);
             _questionRepository.UpdateQuestionPosition( moduleId, questionId, model.Position);
