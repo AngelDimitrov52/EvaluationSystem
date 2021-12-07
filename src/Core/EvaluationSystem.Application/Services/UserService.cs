@@ -22,9 +22,12 @@ namespace EvaluationSystem.Application.Services
 
         public List<UserGetDto> GetAll()
         {
-          var users =_userRepository.GetAll();
+            var users = _userRepository.GetAll();
             return _mapper.Map<List<UserGetDto>>(users);
         }
-
+        public List<UserToEvaluationDto> GetAllUsersToEvaluation(int participantId)
+        {
+            return _userRepository.GetAllAttestationWithUsersToEvaluation(participantId);
+        }
     }
 }

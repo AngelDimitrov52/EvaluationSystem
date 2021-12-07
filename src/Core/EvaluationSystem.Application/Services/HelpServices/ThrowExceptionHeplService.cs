@@ -12,7 +12,20 @@ namespace EvaluationSystem.Application.Services.HelpServices
         public static void ThrowExceptionWhenEntityDoNotExist<T>(int id, IGenericRepository<T> repository)
         {
             var entity = repository.GetById(id);
-            var entityName = typeof(T).Name.Remove(typeof(T).Name.Length - 8);
+            string entityName = null;
+            if (typeof(T).Name == "User")
+            {
+                entityName = "User";
+            }
+            else if (typeof(T).Name == "Attestation")
+            {
+                entityName = "Attestation";
+            }
+            else
+            {
+                entityName = typeof(T).Name.Remove(typeof(T).Name.Length - 8);
+            }
+
             if (entity == null)
             {
                 throw new HttpException($"{entityName} with ID:{id} doesn't exist!", HttpStatusCode.NotFound);

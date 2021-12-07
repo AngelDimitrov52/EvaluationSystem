@@ -1,4 +1,5 @@
 ﻿using EvaluationSystem.Application.Models.AnswerModels;
+using EvaluationSystem.Application.Models.AttestationAnswerModel.Interface;
 using EvaluationSystem.Application.Models.AttestationModels.Interface;
 using EvaluationSystem.Application.Models.FormModels.Interface;
 using EvaluationSystem.Application.Models.GenericRepository;
@@ -22,6 +23,7 @@ namespace EvaluationSystem.Persistence.Configurations
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAttestationRepository, AttestationRepository>();
+            services.AddScoped<IAttestationAnswerRepository, AttestationAnswerRepository>();
 
             return services;
         }

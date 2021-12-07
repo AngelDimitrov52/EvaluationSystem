@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using EvaluationSystem.Application.Models.AttestationModels.Dtos;
+﻿using EvaluationSystem.Application.Models.AttestationModels.Dtos;
 using EvaluationSystem.Application.Models.AttestationModels.Interface;
 using EvaluationSystem.Application.Models.Exceptions;
 using EvaluationSystem.Application.Models.FormModels.Interface;
@@ -20,7 +19,7 @@ namespace EvaluationSystem.Application.Services
         private readonly IFormRepository _formRepository;
         private readonly IUserRepository _userRepository;
 
-        public AttestationService(IMapper mapper, IAttestationRepository attestationRepository, IFormRepository formRepository, IUserRepository userRepository)
+        public AttestationService(IAttestationRepository attestationRepository, IFormRepository formRepository, IUserRepository userRepository)
         {
             _attestationRepository = attestationRepository;
             _formRepository = formRepository;
@@ -64,12 +63,12 @@ namespace EvaluationSystem.Application.Services
         }
         public AttestationGetDto Create(int userId, int formId, List<int> participantsIds)
         {
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<User>(userId, _userRepository);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
             foreach (var participantId in participantsIds)
             {
-                ThrowExceptionWhenUserDoNotExist(participantId);
+                ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<User>(participantId, _userRepository);
             }
-            ThrowExceptionWhenUserDoNotExist(userId);
-            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
 
             var attestationToCreate = new Attestation { IdFormTemplate = formId, IdUserToEval = userId, CreateDate = DateTime.Now };
             var attestationId = _attestationRepository.Create(attestationToCreate);
@@ -100,15 +99,6 @@ namespace EvaluationSystem.Application.Services
         {
             _attestationRepository.DeleteAttestationFromAttestationParticipant(attestationId);
             _attestationRepository.DeleteAttestationFromAttestationTable(attestationId);
-        }
-
-        private void ThrowExceptionWhenUserDoNotExist(int id)
-        {
-            var entity = _userRepository.GetById(id);
-            if (entity == null)
-            {
-                throw new HttpException($"User with ID:{id} doesn't exist!", HttpStatusCode.NotFound);
-            }
         }
         private List<AttestationGetDto> SetAttestationStatus(List<AttestationGetDto> result)
         {

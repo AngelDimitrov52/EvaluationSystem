@@ -7,7 +7,7 @@ namespace EvaluationSystem.Persistence.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly IDbConnection _connection;
+        private IDbConnection _connection;
         private IDbTransaction _transaction;
         public UnitOfWork(IConfiguration configuration)
         {
@@ -32,7 +32,11 @@ namespace EvaluationSystem.Persistence.Repositories
                 _transaction.Dispose();
                 _transaction = null;
             }
-            _connection.Dispose();
+            if (_connection != null)
+            {
+                _connection.Dispose();
+                _connection = null;
+            }
         }
         public void Rollback()
         {

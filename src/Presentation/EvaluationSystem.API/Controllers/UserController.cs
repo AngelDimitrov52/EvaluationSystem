@@ -24,5 +24,10 @@ namespace EvaluationSystem.API.Controllers
         {
             return _userService.GetAll();
         }
+        [HttpGet("/AllUsersToEvaluation/{participantId}")]
+        public List<UserToEvaluationDto> GetAllAttestationWithUsersToEvaluation(int participantId)
+        {
+            return _userService.GetAllUsersToEvaluation(participantId);
+        }
     }
 }
