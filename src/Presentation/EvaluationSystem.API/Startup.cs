@@ -93,6 +93,8 @@ namespace EvaluationSystem.API
 
             app.UseAuthentication();
 
+            app.UseAuthorization();
+
             app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseEndpoints(endpoints =>
