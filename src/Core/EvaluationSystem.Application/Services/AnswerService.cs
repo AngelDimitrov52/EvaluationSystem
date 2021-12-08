@@ -26,7 +26,6 @@ namespace EvaluationSystem.Application.Services
 
         public List<AnswerGetDto> GetAll(int questionId)
         {
-
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
 
             var answers = _answerRepository.GetAllByQuestionId(questionId);

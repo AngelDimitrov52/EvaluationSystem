@@ -20,9 +20,9 @@ namespace EvaluationSystem.API.Controllers
             return _attestationService.GetAll();
         }
         [HttpPost]
-        public AttestationGetDto Create(int userId, int formId, [FromBody] List<int> participantsIds)
+        public AttestationGetDto Create([FromBody] AttestationCreateDto model)
         {
-            return _attestationService.Create(userId, formId, participantsIds);
+            return _attestationService.Create(model);
         }
 
         [HttpDelete("{attestationId}")]
