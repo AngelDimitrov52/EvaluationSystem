@@ -1,5 +1,6 @@
 ﻿using EvaluationSystem.Application.Models.AttestationModels.Dtos;
 using EvaluationSystem.Application.Models.AttestationModels.Interface;
+using EvaluationSystem.Application.Models.Exceptions;
 using EvaluationSystem.Application.Models.FormModels.Interface;
 using EvaluationSystem.Application.Models.UserModels.Interface;
 using EvaluationSystem.Application.Services.HelpServices;
@@ -8,6 +9,7 @@ using EvaluationSystem.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace EvaluationSystem.Application.Services
 {
@@ -59,13 +61,25 @@ namespace EvaluationSystem.Application.Services
             }
             return SetAttestationStatus(result);
         }
-        public AttestationGetDto Create( AttestationCreateDto model)
+        public AttestationGetDto Create(AttestationCreateDto model)
         {
             int userId = model.UserId;
             int formId = model.FormId;
-            List<int> participantsIds = model.ParticipantsIds;
+            List<int> participantsIds = new List<int>();
+            foreach (var id in model.ParticipantsIds)
+            {
+                if (!participantsIds.Contains(id))
+                {
+                    participantsIds.Add(id);
+                }
+            }
+
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<User>(userId, _userRepository);
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
+            if (participantsIds.Count == 0)
+            {
+                throw new HttpException("Participants count can't be zero!", HttpStatusCode.BadRequest);
+            }
             foreach (var participantId in participantsIds)
             {
                 ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<User>(participantId, _userRepository);

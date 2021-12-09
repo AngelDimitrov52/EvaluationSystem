@@ -15,7 +15,6 @@ namespace Tests
     [TestFixture]
     public class UserServiceTest
     {
-
         private IUserService _userService;
         private IUserRepository _userRepository;
 
