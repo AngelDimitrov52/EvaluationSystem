@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using EvaluationSystem.Application.Models.FormModels.Dtos;
 using EvaluationSystem.Application.Models.GenericRepository;
-using EvaluationSystem.Application.Models.ModuleModels.Dtos;
 using EvaluationSystem.Application.Models.ModuleModels.Interface;
 using EvaluationSystem.Domain.Entities;
 using System.Collections.Generic;
@@ -37,7 +36,7 @@ namespace EvaluationSystem.Persistence.Repositories
         public void UpdateModulePosition(int formId, int moduleId, int position)
         {
             string query = "UPDATE FormModule SET IdForm = @IdForm, IdModule = @IdModule, Position = @Position WHERE IdForm = @IdForm AND IdModule = @IdModule;";
-            Connection.Execute(query, new { IdForm = formId, IdModule = moduleId, Position =position }, Transaction);
+            Connection.Execute(query, new { IdForm = formId, IdModule = moduleId, Position = position }, Transaction);
         }
     }
 }

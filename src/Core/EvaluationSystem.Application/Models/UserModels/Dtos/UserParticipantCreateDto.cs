@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EvaluationSystem.Application.Models.UserModels.Dtos
+﻿namespace EvaluationSystem.Application.Models.UserModels.Dtos
 {
-   public class UserParticipantCreateDto
+    public class UserParticipantCreateDto
     {
         public int Id { get; set; }
         public string Email { get; set; }

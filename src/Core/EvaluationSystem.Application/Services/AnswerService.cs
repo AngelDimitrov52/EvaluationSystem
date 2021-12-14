@@ -49,6 +49,10 @@ namespace EvaluationSystem.Application.Services
 
             var answer = _mapper.Map<AnswerTemplate>(model);
             var question = _questionRepository.GetById(questionId);
+            if (question.Type == AnswersTypes.TextField)
+            {
+                throw new HttpException("Invalid create answer in question with type TextField!", HttpStatusCode.BadRequest);
+            }
             if (question.Type == AnswersTypes.NumericalOptions)
             {
                 int numericValue;

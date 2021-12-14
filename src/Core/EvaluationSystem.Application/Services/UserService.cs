@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
 using EvaluationSystem.Application.Models.UserModels.Dtos;
 using EvaluationSystem.Application.Models.UserModels.Interface;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EvaluationSystem.Application.Services
 {

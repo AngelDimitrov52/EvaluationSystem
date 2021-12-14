@@ -1,14 +1,17 @@
 ﻿using AutoMapper;
 using EvaluationSystem.Application.Models.AnswerModels;
 using EvaluationSystem.Application.Models.AnswerModels.Dtos;
+using EvaluationSystem.Application.Models.Exceptions;
 using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using EvaluationSystem.Application.Models.QuestionModels.Intefaces;
 using EvaluationSystem.Application.Services.HelpServices;
 using EvaluationSystem.Domain.Entities;
+using EvaluationSystem.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace EvaluationSystem.Application.Services
 {
@@ -76,6 +79,10 @@ namespace EvaluationSystem.Application.Services
             ThrowExceptionHeplService.ThrowExceptionWhenAnsersIsNotNumericalOptions(question.Type, question.Answers);
 
             int index = _questionRepository.Create(question);
+            if (question.Type == AnswersTypes.TextField && question.Answers.Count > 0)
+            {
+                throw new HttpException("Invalid create answer in question with type TextField!", HttpStatusCode.BadRequest);
+            }
             var questionWithAnswer = CreateQuestionAnswers(index, question);
             return _mapper.Map<QuestionTemplateGetDto>(questionWithAnswer);
         }
