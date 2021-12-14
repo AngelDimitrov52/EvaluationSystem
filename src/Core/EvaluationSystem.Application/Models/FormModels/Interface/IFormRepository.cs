@@ -8,5 +8,6 @@ namespace EvaluationSystem.Application.Models.FormModels.Interface
     {
         List<Attestation> GetAllAttestationsWithFormId(int formId);
         void DeleteFormFromFormModuleTable(int formId);
+        FormTemplate GetFormByName(string name);
     }
 }

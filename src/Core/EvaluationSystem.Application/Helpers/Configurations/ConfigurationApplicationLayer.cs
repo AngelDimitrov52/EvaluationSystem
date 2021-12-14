@@ -6,9 +6,11 @@ using EvaluationSystem.Application.Models.FormModels.Interface;
 using EvaluationSystem.Application.Models.ModuleModels.Interface;
 using EvaluationSystem.Application.Models.QuestionModels;
 using EvaluationSystem.Application.Models.QuestionModels.Intefaces;
+using EvaluationSystem.Application.Models.UserModels.Dtos;
 using EvaluationSystem.Application.Models.UserModels.Interface;
 using EvaluationSystem.Application.Services;
 using EvaluationSystem.Application.Validators;
+using EvaluationSystem.Domain.Entities;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -31,6 +33,7 @@ namespace EvaluationSystem.Application.Helpers.Configurations
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAttestationService, AttestationService>();
             services.AddScoped<IAttestationAnswerService, AttestationAnswerService>();
+            services.AddScoped<ICurrentUser, CurrentUser>();
 
             return services;
         }

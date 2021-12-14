@@ -13,11 +13,13 @@ namespace EvaluationSystem.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
+        private readonly ICurrentUser _currentUser;
 
-        public UserService(IUserRepository userRepository, IMapper mapper)
+        public UserService(IUserRepository userRepository, ICurrentUser currentUser, IMapper mapper)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _currentUser = currentUser;
         }
 
         public List<UserGetDto> GetAll()
@@ -25,9 +27,10 @@ namespace EvaluationSystem.Application.Services
             var users = _userRepository.GetAll();
             return _mapper.Map<List<UserGetDto>>(users);
         }
-        public List<UserToEvaluationDto> GetAllUsersToEvaluation(int participantId)
+        public List<UserToEvaluationDto> GetAllUsersToEvaluation()
         {
-            return _userRepository.GetAllAttestationWithUsersToEvaluation(participantId);
+            int id = _currentUser.Id;
+            return _userRepository.GetAllAttestationWithUsersToEvaluation(id);
         }
     }
 }

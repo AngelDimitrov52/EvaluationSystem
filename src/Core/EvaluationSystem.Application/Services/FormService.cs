@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EvaluationSystem.Application.Models.AttestationModels.Interface;
+using EvaluationSystem.Application.Models.Exceptions;
 using EvaluationSystem.Application.Models.FormModels.Dtos;
 using EvaluationSystem.Application.Models.FormModels.Interface;
 using EvaluationSystem.Application.Models.ModuleModels.Dtos;
@@ -7,6 +8,7 @@ using EvaluationSystem.Application.Models.ModuleModels.Interface;
 using EvaluationSystem.Application.Services.HelpServices;
 using EvaluationSystem.Domain.Entities;
 using System.Collections.Generic;
+using System.Net;
 
 namespace EvaluationSystem.Application.Services
 {
@@ -45,6 +47,12 @@ namespace EvaluationSystem.Application.Services
         }
         public FormGetDto Create(FormCreateDto model)
         {
+            var isFormExist = _formRepository.GetFormByName(model.Name);
+            if (isFormExist != null)
+            {
+                throw new HttpException($"Form with this name already exists!", HttpStatusCode.BadRequest);
+            }
+
             var form = _mapper.Map<FormTemplate>(model);
             int formId = _formRepository.Create(form);
             form.Id = formId;

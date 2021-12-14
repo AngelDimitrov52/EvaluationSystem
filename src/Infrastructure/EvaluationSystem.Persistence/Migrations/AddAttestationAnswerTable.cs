@@ -2,7 +2,7 @@
 
 namespace EvaluationSystem.Persistence.Migrations
 {
-    [Migration(071220211116)]
+    [Migration(202112071116)]
     public class AddAttestationAnswerTable : Migration
     {
         public override void Down()
@@ -18,8 +18,8 @@ namespace EvaluationSystem.Persistence.Migrations
               .WithColumn("IdUserParticipant").AsInt32().ForeignKey("User", "Id").NotNullable()
               .WithColumn("IdModule").AsInt32().ForeignKey("ModuleTemplate", "Id").NotNullable()
               .WithColumn("IdQuestion").AsInt32().ForeignKey("QuestionTemplate", "Id").NotNullable()
-              .WithColumn("IdAnswer").AsInt32().ForeignKey("AnswerTemplate", "Id").NotNullable()
-              .WithColumn("TextAnswer").AsString(255);
+              .WithColumn("IdAnswer").AsInt32().Nullable()
+              .WithColumn("TextAnswer").AsString(512).Nullable();
         }
     }
 }

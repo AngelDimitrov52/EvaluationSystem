@@ -17,6 +17,7 @@ namespace Tests
     {
         private IUserService _userService;
         private IUserRepository _userRepository;
+        private ICurrentUser curentUser;
 
         [SetUp]
         public void SetUp()
@@ -27,10 +28,10 @@ namespace Tests
                   .Build();
 
             _userRepository = new UserRepository(new UnitOfWork(config));
-            _userService = new UserService(_userRepository, new MapperConfiguration((mc) =>
-            {
-                mc.AddMaps(typeof(AnswerProfile).Assembly);
-            }).CreateMapper());
+            _userService = new UserService(_userRepository, curentUser, new MapperConfiguration((mc) =>
+           {
+               mc.AddMaps(typeof(AnswerProfile).Assembly);
+           }).CreateMapper());
         }
         [Test]
         public void Verify_UserGetAll_ReturnAllUsers()
@@ -55,18 +56,17 @@ namespace Tests
         {
             var participantId = 1;
 
-            var user = new UserToEvaluationDto { AttestationId = 9, FormName = "FORM 1", Email = "gosho@gmail.com" };
-            var result = _userService.GetAllUsersToEvaluation(participantId).FirstOrDefault();
+            var user = new UserToEvaluationDto { AttestationId = 9, FormId = 1, Email = "gosho@gmail.com" };
+            var result = _userService.GetAllUsersToEvaluation().FirstOrDefault();
 
             Assert.That(result.AttestationId == user.AttestationId); ;
-            Assert.That(result.FormName == user.FormName);
+            Assert.That(result.FormId == user.FormId);
             Assert.That(result.Email == user.Email);
         }
         [Test]
         public void Verify_UserGetAllUsersToEvaluation_ReturnCurrentCountOfUsers()
         {
-            var participantId = 1;
-            var result = _userService.GetAllUsersToEvaluation(participantId);
+            var result = _userService.GetAllUsersToEvaluation();
             var count = 2;
 
             Assert.That(result.Count == count);

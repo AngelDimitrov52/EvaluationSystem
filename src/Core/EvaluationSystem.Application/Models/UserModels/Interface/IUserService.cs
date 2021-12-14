@@ -6,6 +6,6 @@ namespace EvaluationSystem.Application.Models.UserModels.Interface
     public interface IUserService
     {
         List<UserGetDto> GetAll();
-        List<UserToEvaluationDto> GetAllUsersToEvaluation(int participantId);
+        List<UserToEvaluationDto> GetAllUsersToEvaluation();
     }
 }

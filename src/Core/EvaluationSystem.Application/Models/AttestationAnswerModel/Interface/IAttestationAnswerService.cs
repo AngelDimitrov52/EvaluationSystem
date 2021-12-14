@@ -5,6 +5,6 @@ namespace EvaluationSystem.Application.Models.AttestationAnswerModel.Interface
 {
     public interface IAttestationAnswerService
     {
-        void Create(List<AttestationAnswerCreateDto> attestationAnswerCreateDtos);
+        void Create(AttestationAnswerCreateDto attestationAnswerCreateDtos);
     }
 }

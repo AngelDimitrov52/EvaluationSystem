@@ -1,4 +1,5 @@
 using EvaluationSystem.Application.Helpers.Configurations;
+using EvaluationSystem.Application.Helpers.Middleware;
 using EvaluationSystem.Application.Middleware;
 using EvaluationSystem.Persistence.Configurations;
 using EvaluationSystem.Persistence.Migrations;
@@ -96,6 +97,7 @@ namespace EvaluationSystem.API
             app.UseAuthorization();
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseMiddleware<UserTokenMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

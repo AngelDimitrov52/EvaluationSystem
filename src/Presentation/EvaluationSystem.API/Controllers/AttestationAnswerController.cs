@@ -1,11 +1,6 @@
 ﻿using EvaluationSystem.Application.Models.AttestationAnswerModel.Dtos;
 using EvaluationSystem.Application.Models.AttestationAnswerModel.Interface;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EvaluationSystem.API.Controllers
 {
@@ -20,7 +15,7 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(List<AttestationAnswerCreateDto> attestationAnswerCreateDtos)
+        public IActionResult Create(AttestationAnswerCreateDto attestationAnswerCreateDtos)
         {
             _attestationAnswerService.Create(attestationAnswerCreateDtos);
             return NoContent();

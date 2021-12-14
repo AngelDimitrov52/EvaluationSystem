@@ -3,7 +3,7 @@
     public class UserToEvaluationDto
     {
         public int AttestationId { get; set; }
-        public string FormName { get; set; }
+        public int FormId { get; set; }
         public string Email { get; set; }
     }
 }

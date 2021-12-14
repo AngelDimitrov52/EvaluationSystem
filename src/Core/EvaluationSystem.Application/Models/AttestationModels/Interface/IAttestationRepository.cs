@@ -12,7 +12,7 @@ namespace EvaluationSystem.Application.Models.AttestationModels.Interface
     public interface IAttestationRepository : IGenericRepository<Attestation>
     {
         List<AttestationFromDbDto> GetAllAttestations();
-        void AddParticipantToAttestation(int attestationId ,int participantId);
+        void AddParticipantToAttestation(int attestationId ,int participantId,string position);
         void DeleteAttestationFromAttestationParticipant(int attestationId);
         void DeleteAttestationFromAttestationTable(int attestationId);
     }

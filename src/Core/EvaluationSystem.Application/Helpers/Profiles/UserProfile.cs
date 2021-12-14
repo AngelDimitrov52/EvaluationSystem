@@ -9,6 +9,8 @@ namespace EvaluationSystem.Application.Helpers.Profiles
         public UserProfile()
         {
             CreateMap<User, UserGetDto>().ReverseMap();
+            CreateMap<User, CurrentUser>().ReverseMap();
+            CreateMap<UserEvaluatorCreateDto, UserParticipantCreateDto>().ReverseMap();
         }
     }
 }

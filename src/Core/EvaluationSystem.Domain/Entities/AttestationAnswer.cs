@@ -6,7 +6,7 @@
         public int IdUserParticipant { get; set; }
         public int IdModule { get; set; }
         public int IdQuestion { get; set; }
-        public int IdAnswer { get; set; }
-        public string TextAnswer { get; set; }
+        public int? IdAnswer { get; set; }
+        public string? TextAnswer { get; set; }
     }
 }

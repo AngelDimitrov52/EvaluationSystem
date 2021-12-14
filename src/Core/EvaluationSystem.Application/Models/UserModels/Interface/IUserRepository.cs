@@ -8,5 +8,6 @@ namespace EvaluationSystem.Application.Models.UserModels.Interface
     public interface IUserRepository : IGenericRepository<User>
     {
         List<UserToEvaluationDto> GetAllAttestationWithUsersToEvaluation(int participantId);
+        User GetUserByEmail(string email);
     }
 }
