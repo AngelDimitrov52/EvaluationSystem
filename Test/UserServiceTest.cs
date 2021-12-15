@@ -54,8 +54,6 @@ namespace Tests
         [Test]
         public void Verify_UserGetAllUsersToEvaluation_ReturnCurrentUsers()
         {
-            var participantId = 1;
-
             var user = new UserToEvaluationDto { AttestationId = 9, FormId = 1, Email = "gosho@gmail.com" };
             var result = _userService.GetAllUsersToEvaluation().FirstOrDefault();
 

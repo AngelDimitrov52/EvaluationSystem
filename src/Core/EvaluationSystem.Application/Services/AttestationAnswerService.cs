@@ -1,13 +1,18 @@
-﻿using EvaluationSystem.Application.Models.AnswerModels;
+﻿using AutoMapper;
+using EvaluationSystem.Application.Models.AnswerModels;
 using EvaluationSystem.Application.Models.AttestationAnswerModel.Dtos;
 using EvaluationSystem.Application.Models.AttestationAnswerModel.Interface;
 using EvaluationSystem.Application.Models.AttestationModels.Interface;
 using EvaluationSystem.Application.Models.Exceptions;
+using EvaluationSystem.Application.Models.FormModels.Dtos;
+using EvaluationSystem.Application.Models.FormModels.Interface;
 using EvaluationSystem.Application.Models.ModuleModels.Interface;
 using EvaluationSystem.Application.Models.QuestionModels.Intefaces;
 using EvaluationSystem.Application.Models.UserModels.Interface;
 using EvaluationSystem.Application.Services.HelpServices;
 using EvaluationSystem.Domain.Entities;
+using EvaluationSystem.Domain.Enums;
+using System.Linq;
 using System.Net;
 
 namespace EvaluationSystem.Application.Services
@@ -19,6 +24,10 @@ namespace EvaluationSystem.Application.Services
         private readonly IModuleRepository _moduleRepository;
         private readonly IQuestionRepository _questionRepository;
         private readonly IAnswerRepository _answerRepository;
+        private readonly IFormService _formService;
+        private readonly IUserRepository _userRepository;
+        private readonly IAttestationService _attestationService;
+        private readonly IMapper _mapper;
 
         private readonly ICurrentUser _currentUser;
         public AttestationAnswerService(IAttestationAnswerRepository attestationAnswerRepository,
@@ -26,7 +35,11 @@ namespace EvaluationSystem.Application.Services
                                         IModuleRepository moduleRepository,
                                         IQuestionRepository questionRepository,
                                         IAnswerRepository answerRepository,
-                                        ICurrentUser currentUser)
+                                        ICurrentUser currentUser,
+                                        IFormService formService,
+                                        IUserRepository userRepository,
+                                        IAttestationService attestationService,
+                                        IMapper mapper)
         {
             _attestationAnswerRepository = attestationAnswerRepository;
             _attestationRepository = attestationRepository;
@@ -34,8 +47,12 @@ namespace EvaluationSystem.Application.Services
             _questionRepository = questionRepository;
             _answerRepository = answerRepository;
             _currentUser = currentUser;
+            _formService = formService;
+            _userRepository = userRepository;
+            _attestationService = attestationService;
+            _mapper = mapper;
         }
-
+       
         public void Create(AttestationAnswerCreateDto attestationAnswerCreateDtos)
         {
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<Attestation>(attestationAnswerCreateDtos.AttestationId, _attestationRepository);
@@ -73,6 +90,38 @@ namespace EvaluationSystem.Application.Services
                 }
             }
             _attestationAnswerRepository.ChangeUserStatusToDone(attestationAnswerCreateDtos.AttestationId, _currentUser.Id);
+        }
+        public FormAttestationDto GetFormWhithCurrentAnswers(int attestationId, string participantEmail)
+        {
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<Attestation>(attestationId, _attestationRepository);
+            var attestation = _attestationRepository.GetById(attestationId);
+            var formGet = _formService.GetById(attestation.IdFormTemplate);
+            var participant = _userRepository.GetUserByEmail(participantEmail);
+            var allAttestationAnswers = _attestationAnswerRepository.GetAllAttestationAnswerByUserAndAttestation(attestationId, participant.Id);
+
+            var resultForm = _mapper.Map<FormAttestationDto>(formGet);
+
+            foreach (var attestationAnswer in allAttestationAnswers)
+            {
+                var module = resultForm.Modules.Where(m => m.Id == attestationAnswer.IdModule).FirstOrDefault();
+                var question = module.Questions.Where(q => q.Id == attestationAnswer.IdQuestion).FirstOrDefault();
+
+                if (question.Type == AnswersTypes.TextField)
+                {
+                    question.TextAnswer = attestationAnswer.TextAnswer;
+                }
+                else
+                {
+                    foreach (var answer in question.Answers)
+                    {
+                        if (answer.Id == attestationAnswer.IdAnswer)
+                        {
+                            answer.IsAnswered = true;
+                        }
+                    }
+                }
+            }
+            return resultForm;
         }
     }
 }
