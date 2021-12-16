@@ -8,7 +8,7 @@ namespace EvaluationSystem.Application.Helpers.Profiles
     {
         public AttestationAnswerProfile()
         {
-            CreateMap<AttestationAnswerCreateDto, AttestationAnswer>().ReverseMap();
+            CreateMap<UserAnswerCreateDto, UserAnswer>().ReverseMap();
         }
     }
 }

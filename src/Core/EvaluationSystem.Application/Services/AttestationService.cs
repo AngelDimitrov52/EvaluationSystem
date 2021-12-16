@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using EvaluationSystem.Application.Models.AttestationAnswerModel.Interface;
+using EvaluationSystem.Application.Models.AttestationFormModels.Interface;
 using EvaluationSystem.Application.Models.AttestationModels.Dtos;
 using EvaluationSystem.Application.Models.AttestationModels.Interface;
 using EvaluationSystem.Application.Models.Exceptions;
+using EvaluationSystem.Application.Models.FormModels.Dtos;
 using EvaluationSystem.Application.Models.FormModels.Interface;
 using EvaluationSystem.Application.Models.UserModels.Dtos;
 using EvaluationSystem.Application.Models.UserModels.Interface;
@@ -21,14 +24,26 @@ namespace EvaluationSystem.Application.Services
         private readonly IAttestationRepository _attestationRepository;
         private readonly IFormRepository _formRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IUserAnswerService _userAnswerService;
+        private readonly IAttestationFormService _attestationFormService;
+        private readonly IFormService _formService;
         private readonly IMapper _mapper;
 
-        public AttestationService(IAttestationRepository attestationRepository, IFormRepository formRepository, IUserRepository userRepository, IMapper mapper)
+        public AttestationService(IAttestationRepository attestationRepository,
+                                  IFormRepository formRepository,
+                                  IUserRepository userRepository,
+                                  IMapper mapper,
+                                  IAttestationFormService attestationFormService,
+                                  IFormService formService,
+                                  IUserAnswerService userAnswerService)
         {
             _attestationRepository = attestationRepository;
             _formRepository = formRepository;
             _userRepository = userRepository;
             _mapper = mapper;
+            _attestationFormService = attestationFormService;
+            _formService = formService;
+            _userAnswerService = userAnswerService;
         }
 
         public List<AttestationGetDto> GetAll()
@@ -56,7 +71,8 @@ namespace EvaluationSystem.Application.Services
                 attestation.Participants.Add(new ParticipantGetDto
                 {
                     ParticipantStatus = attestationDb.Status,
-                    Name = attestationDb.ParticipantName
+                    Name = attestationDb.ParticipantName,
+                    Email = attestationDb.ParticipantEmail
                 });
 
                 if (attestationDb.Status == AttestationStatus.Done)
@@ -70,6 +86,9 @@ namespace EvaluationSystem.Application.Services
         {
             var formId = model.FormId;
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
+
+            var formTemplate = _formService.GetById(formId);
+            formId = _attestationFormService.Create(_mapper.Map<FormCreateDto>(formTemplate));
 
             var user = _userRepository.GetUserByEmail(model.User.Email);
             if (user == null)
@@ -105,14 +124,14 @@ namespace EvaluationSystem.Application.Services
                 participant.Id = part.Id;
             }
 
-            var attestationToCreate = new Attestation { IdFormTemplate = formId, IdUserToEval = user.Id, CreateDate = DateTime.Now };
+            var attestationToCreate = new Attestation { IdAttestationForm = formId, IdUserToEval = user.Id, CreateDate = DateTime.Now };
             var attestationId = _attestationRepository.Create(attestationToCreate);
             foreach (var participant in usersParticipantCreateDtos)
             {
                 _attestationRepository.AddParticipantToAttestation(attestationId, participant.Id, participant.Position);
             }
 
-            var form = _formRepository.GetById(formId);
+            var form = _attestationFormService.GetById(formId);
             var status = AttestationStatus.Open;
 
             var attestation = new AttestationGetDto
@@ -126,14 +145,18 @@ namespace EvaluationSystem.Application.Services
             };
             attestation.Participants.AddRange(from participantCreate in usersParticipantCreateDtos
                                               let participant = _userRepository.GetById(participantCreate.Id)
-                                              select new ParticipantGetDto { Name = participant.Name, ParticipantStatus = status });
+                                              select new ParticipantGetDto { Name = participant.Name, ParticipantStatus = status, Email = participant.Email });
             return attestation;
         }
 
         public void Delete(int attestationId)
         {
+            var attestation = _attestationRepository.GetById(attestationId);
+            _userAnswerService.DeleteWithAttestationId(attestationId);
+
             _attestationRepository.DeleteAttestationFromAttestationParticipant(attestationId);
-            _attestationRepository.DeleteAttestationFromAttestationTable(attestationId);
+            _attestationRepository.Delete(attestationId);
+            _attestationFormService.Delete(attestation.IdAttestationForm);
         }
         private List<AttestationGetDto> SetAttestationStatus(List<AttestationGetDto> model)
         {

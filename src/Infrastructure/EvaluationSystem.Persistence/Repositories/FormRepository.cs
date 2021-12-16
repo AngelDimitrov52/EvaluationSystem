@@ -13,7 +13,7 @@ namespace EvaluationSystem.Persistence.Repositories
         }
         public List<Attestation> GetAllAttestationsWithFormId(int formId)
         {
-            string query = @"SELECT * FROM Attestation WHERE  IdFormTemplate = @IdForm";
+            string query = @"SELECT * FROM Attestation WHERE  IdAttestationForm = @IdForm";
             var result = Connection.Query<Attestation>(query, new { IdForm = formId }, Transaction);
             return (List<Attestation>)result;
         }

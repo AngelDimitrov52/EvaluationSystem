@@ -14,6 +14,5 @@ namespace EvaluationSystem.Application.Models.AttestationModels.Interface
         List<AttestationFromDbDto> GetAllAttestations();
         void AddParticipantToAttestation(int attestationId ,int participantId,string position);
         void DeleteAttestationFromAttestationParticipant(int attestationId);
-        void DeleteAttestationFromAttestationTable(int attestationId);
     }
 }

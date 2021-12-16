@@ -3,9 +3,10 @@ using EvaluationSystem.Application.Models.FormModels.Dtos;
 
 namespace EvaluationSystem.Application.Models.AttestationAnswerModel.Interface
 {
-    public interface IAttestationAnswerService
+    public interface IUserAnswerService
     {
-        void Create(AttestationAnswerCreateDto attestationAnswerCreateDtos);
+        void Create(UserAnswerCreateDto attestationAnswerCreateDtos);
         FormAttestationDto GetFormWhithCurrentAnswers(int attestationId, string participantEmail);
+        void DeleteWithAttestationId(int atteatationId);
     }
 }

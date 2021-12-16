@@ -14,10 +14,10 @@ namespace EvaluationSystem.Persistence.Repositories
         }
         public List<AttestationFromDbDto> GetAllAttestations()
         {
-            string query = @"SELECT att.Id ,f.[Name] AS FormName, att.CreateDate,u.[Name] AS UserName,up.[Name] AS ParticipantName,ap.[Status]
+            string query = @"SELECT att.Id ,f.[Name] AS FormName, att.CreateDate,u.[Name] AS UserName,up.[Name] AS ParticipantName, up.[Email] AS ParticipantEmail, ap.[Status]
                              FROM Attestation AS att
                              RIGHT JOIN [User] AS u ON u.Id = att.IdUserToEval
-                             RIGHT JOIN FormTemplate AS f ON f.Id = att.IdFormTemplate
+                             RIGHT JOIN AttestationForm AS f ON f.Id = att.IdAttestationForm
                              RIGHT JOIN  AttestationParticipant ap ON ap.IdAttestation = att.Id
                              LEFT JOIN  [User] up ON up.Id = ap.IdUserParticipant";
             var result = Connection.Query<AttestationFromDbDto>(query, null, Transaction);
@@ -32,11 +32,6 @@ namespace EvaluationSystem.Persistence.Repositories
         public void DeleteAttestationFromAttestationParticipant(int attestationId)
         {
             string query = "DELETE FROM AttestationParticipant WHERE IdAttestation= @IdAttestation;";
-            Connection.Execute(query, new { IdAttestation = attestationId }, Transaction);
-        }
-        public void DeleteAttestationFromAttestationTable(int attestationId)
-        {
-            string query = "DELETE FROM Attestation WHERE Id=  @IdAttestation;";
             Connection.Execute(query, new { IdAttestation = attestationId }, Transaction);
         }
     }

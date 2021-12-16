@@ -1,6 +1,6 @@
 ﻿namespace EvaluationSystem.Domain.Entities
 {
-    public class AttestationAnswer : BaseEntity
+    public class UserAnswer : BaseEntity
     {
         public int IdAttestation { get; set; }
         public int IdUserParticipant { get; set; }

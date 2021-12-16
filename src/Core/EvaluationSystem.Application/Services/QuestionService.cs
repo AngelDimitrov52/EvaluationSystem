@@ -7,6 +7,7 @@ using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using EvaluationSystem.Application.Models.QuestionModels.Intefaces;
 using EvaluationSystem.Application.Services.HelpServices;
 using EvaluationSystem.Domain.Entities;
+using EvaluationSystem.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,6 +57,10 @@ namespace EvaluationSystem.Application.Services
         public QuestionGetDto Create(int moduleId, QuestionCreateDto model)
         {
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
+            if (model.Type == AnswersTypes.TextField && model.Answers.Count > 0)
+            {
+                throw new HttpException("Invalid create answer in question with type TextField!", HttpStatusCode.BadRequest);
+            }
             var question = _mapper.Map<QuestionTemplate>(model);
             question.IsReusable = false;
             question.DateOfCreation = DateTime.Now;

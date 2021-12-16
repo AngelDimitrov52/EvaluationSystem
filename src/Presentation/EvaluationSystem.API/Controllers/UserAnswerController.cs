@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EvaluationSystem.API.Controllers
 {
-    [Route("api/attestationAnswer")]
+    [Route("api/userAnswer")]
     [ApiController]
-    public class AttestationAnswerController : BaseController
+    public class UserAnswerController : BaseController
     {
-        private readonly IAttestationAnswerService _attestationAnswerService;
-        public AttestationAnswerController(IAttestationAnswerService attestationAnswerService)
+        private readonly IUserAnswerService _attestationAnswerService;
+        public UserAnswerController(IUserAnswerService attestationAnswerService)
         {
             _attestationAnswerService = attestationAnswerService;
         }
@@ -21,7 +21,7 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(AttestationAnswerCreateDto attestationAnswerCreateDtos)
+        public IActionResult Create(UserAnswerCreateDto attestationAnswerCreateDtos)
         {
             _attestationAnswerService.Create(attestationAnswerCreateDtos);
             return NoContent();

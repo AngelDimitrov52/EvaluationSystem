@@ -54,11 +54,11 @@ namespace Tests
         [Test]
         public void Verify_UserGetAllUsersToEvaluation_ReturnCurrentUsers()
         {
-            var user = new UserToEvaluationDto { AttestationId = 9, FormId = 1, Email = "gosho@gmail.com" };
+            var user = new UserToEvaluationDto { AttestationId = 9, AttestationFormId = 1, Email = "gosho@gmail.com" };
             var result = _userService.GetAllUsersToEvaluation().FirstOrDefault();
 
             Assert.That(result.AttestationId == user.AttestationId); ;
-            Assert.That(result.FormId == user.FormId);
+            Assert.That(result.AttestationFormId == user.AttestationFormId);
             Assert.That(result.Email == user.Email);
         }
         [Test]

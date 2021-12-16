@@ -4,9 +4,10 @@ using System.Collections.Generic;
 
 namespace EvaluationSystem.Application.Models.AttestationAnswerModel.Interface
 {
-    public interface IAttestationAnswerRepository : IGenericRepository<AttestationAnswer>
+    public interface IUserAnswerRepository : IGenericRepository<UserAnswer>
     {
         void ChangeUserStatusToDone(int attestationId, int userId);
-        List<AttestationAnswer> GetAllAttestationAnswerByUserAndAttestation(int attestationId, int userId);
+        List<UserAnswer> GetAllAttestationAnswerByUserAndAttestation(int attestationId, int userId);
+        void DeleteWithAttestationId(int atteatationId);
     }
 }

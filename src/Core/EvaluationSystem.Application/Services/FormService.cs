@@ -17,14 +17,12 @@ namespace EvaluationSystem.Application.Services
         private readonly IMapper _mapper;
         private readonly IFormRepository _formRepository;
         private readonly IModuleService _moduleService;
-        private readonly IAttestationService _attestation;
 
-        public FormService(IMapper mapper, IFormRepository repository, IModuleService moduleService, IAttestationService attestation)
+        public FormService(IMapper mapper, IFormRepository repository, IModuleService moduleService)// IAttestationService attestation)
         {
             _mapper = mapper;
             _formRepository = repository;
             _moduleService = moduleService;
-            _attestation = attestation;
         }
         public List<FormGetDto> GetAll()
         {
@@ -76,11 +74,6 @@ namespace EvaluationSystem.Application.Services
         }
         public void Delete(int formId)
         {
-            var attestations = _formRepository.GetAllAttestationsWithFormId(formId);
-            foreach (var attestation in attestations)
-            {
-                _attestation.Delete(attestation.Id);
-            }
             var form = GetById(formId);
             _formRepository.DeleteFormFromFormModuleTable(formId);
 

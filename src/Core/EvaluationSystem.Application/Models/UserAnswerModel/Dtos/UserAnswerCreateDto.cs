@@ -2,9 +2,9 @@
 
 namespace EvaluationSystem.Application.Models.AttestationAnswerModel.Dtos
 {
-    public class AttestationAnswerCreateDto
+    public class UserAnswerCreateDto
     {
         public int AttestationId { get; set; }
-        public List<BodyAttestationAnswerCreateDto> Body { get; set; }
+        public List<BodyUserAnswerCreateDto> Body { get; set; }
     }
 }
