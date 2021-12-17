@@ -22,9 +22,9 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpGet("{answerTemplateId}")]
-        public AnswerGetDto GetById(int answerId)
+        public AnswerGetDto GetById(int answerTemplateId)
         {
-            return _answerService.GetById(answerId);
+            return _answerService.GetById(answerTemplateId);
         }
 
         [HttpPost]
@@ -34,15 +34,15 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpPut("{answerTemplateId}")]
-        public AnswerGetDto Update(int questionId, int answerId, [FromBody] AnswerCreateDto model)
+        public AnswerGetDto Update(int questionId, int answerTemplateId, [FromBody] AnswerCreateDto model)
         {
-            return _answerService.Update(questionId, answerId, model);
+            return _answerService.Update(questionId, answerTemplateId, model);
         }
 
         [HttpDelete("{answerTemplateId}")]
-        public IActionResult Delete(int answerId)
+        public IActionResult Delete(int answerTemplateId)
         {
-            _answerService.Delete(answerId);
+            _answerService.Delete(answerTemplateId);
             return NoContent();
         }
     }
