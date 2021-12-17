@@ -2,7 +2,6 @@
 using EvaluationSystem.Application.Models.AttestationModuleModels.Interface;
 using EvaluationSystem.Application.Models.AttestationQuestionModels.Interface;
 using EvaluationSystem.Application.Models.ModuleModels.Dtos;
-using EvaluationSystem.Application.Services.HelpServices;
 using EvaluationSystem.Domain.Entities.AttestationEntities;
 using System.Collections.Generic;
 

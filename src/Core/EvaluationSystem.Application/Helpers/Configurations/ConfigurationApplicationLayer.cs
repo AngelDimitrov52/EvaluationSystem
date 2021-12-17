@@ -15,7 +15,6 @@ using EvaluationSystem.Application.Models.UserModels.Interface;
 using EvaluationSystem.Application.Services;
 using EvaluationSystem.Application.Services.AttestationServices;
 using EvaluationSystem.Application.Validators;
-using EvaluationSystem.Domain.Entities;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 

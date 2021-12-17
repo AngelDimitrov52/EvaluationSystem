@@ -9,9 +9,6 @@ using EvaluationSystem.Application.Models.AttestationModuleModels.Interface;
 using EvaluationSystem.Application.Models.AttestationQuestionModels.Interface;
 using EvaluationSystem.Application.Models.Exceptions;
 using EvaluationSystem.Application.Models.FormModels.Dtos;
-using EvaluationSystem.Application.Models.FormModels.Interface;
-using EvaluationSystem.Application.Models.ModuleModels.Interface;
-using EvaluationSystem.Application.Models.QuestionModels.Intefaces;
 using EvaluationSystem.Application.Models.UserModels.Interface;
 using EvaluationSystem.Application.Services.HelpServices;
 using EvaluationSystem.Domain.Entities;
@@ -95,8 +92,14 @@ namespace EvaluationSystem.Application.Services
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<Attestation>(attestationAnswerCreateDtos.AttestationId, _attestationRepository);
             foreach (var body in attestationAnswerCreateDtos.Body)
             {
-                ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<AttestationModule>(body.ModuleId, _attestationModuleRepository);
-                ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<AttestationQuestion>(body.QuestionId, _attestationQuestionRepository);
+                if (_attestationModuleRepository.GetById(body.ModuleId) == null)
+                {
+                    throw new HttpException($"Module with ID:{body.ModuleId} doesn't exist!", HttpStatusCode.NotFound);
+                }
+                if (_attestationQuestionRepository.GetById(body.QuestionId) == null)
+                {
+                    throw new HttpException($"Question with ID:{body.QuestionId} doesn't exist!", HttpStatusCode.NotFound);
+                }
 
                 var attestationAnswer = new UserAnswer
                 {

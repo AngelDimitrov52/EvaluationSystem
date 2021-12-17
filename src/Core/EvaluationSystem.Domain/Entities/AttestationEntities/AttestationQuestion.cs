@@ -1,5 +1,4 @@
 ﻿using EvaluationSystem.Domain.Enums;
-using System;
 using System.Collections.Generic;
 
 namespace EvaluationSystem.Domain.Entities.AttestationEntities
