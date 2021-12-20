@@ -23,18 +23,16 @@ namespace EvaluationSystem.Application.Services
     {
         private readonly IAttestationRepository _attestationRepository;
         private readonly IUserAnswerRepository _userAnswerRepository;
-        private readonly IAnswerRepository _answerRepository;
         private readonly IUserRepository _userRepository;
-        private readonly IMapper _mapper;
-        private readonly IAttestationFormService _attestationFormService;
-        private readonly IAttestationModuleRepository _attestationModuleRepository;
         private readonly IAttestationQuestionRepository _attestationQuestionRepository;
+        private readonly IAttestationModuleRepository _attestationModuleRepository;
         private readonly IAttestationAnswerRepository _attestationAnswerRepository;
+        private readonly IAttestationFormService _attestationFormService;
+        private readonly IMapper _mapper;
 
         private readonly ICurrentUser _currentUser;
         public UserAnswerService(IUserAnswerRepository userAnswerRepository,
                                  IAttestationRepository attestationRepository,
-                                 IAnswerRepository answerRepository,
                                  ICurrentUser currentUser,
                                  IUserRepository userRepository,
                                  IMapper mapper,
@@ -45,7 +43,6 @@ namespace EvaluationSystem.Application.Services
         {
             _userAnswerRepository = userAnswerRepository;
             _attestationRepository = attestationRepository;
-            _answerRepository = answerRepository;
             _currentUser = currentUser;
             _userRepository = userRepository;
             _mapper = mapper;

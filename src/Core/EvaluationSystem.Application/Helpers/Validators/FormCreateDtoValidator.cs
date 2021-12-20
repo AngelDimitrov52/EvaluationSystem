@@ -9,7 +9,8 @@ namespace EvaluationSystem.Application.Helpers.Validators
         {
             RuleFor(t => t.Name)
                  .NotEmpty().WithMessage("{PropertyName} can't be empty!")
-                    .NotNull().WithMessage("{PropertyName} can't be null!");
+                    .NotNull().WithMessage("{PropertyName} can't be null!")
+                    .Length(1, 255);
         }
     }
 }
