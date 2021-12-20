@@ -57,10 +57,14 @@ namespace EvaluationSystem.Application.Services
         public QuestionGetDto Create(int moduleId, QuestionCreateDto model)
         {
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
-            if (model.Type == AnswersTypes.TextField && model.Answers.Count > 0)
+            if (model.Answers != null)
             {
-                throw new HttpException("Invalid create answer in question with type TextField!", HttpStatusCode.BadRequest);
+                if (model.Type == AnswersTypes.TextField && model.Answers.Count > 0)
+                {
+                    throw new HttpException("Invalid create answer in question with type TextField!", HttpStatusCode.BadRequest);
+                }
             }
+
             var question = _mapper.Map<QuestionTemplate>(model);
             question.IsReusable = false;
             question.DateOfCreation = DateTime.Now;
@@ -90,7 +94,7 @@ namespace EvaluationSystem.Application.Services
             question.DateOfCreation = questionFromDB.DateOfCreation;
 
             _questionRepository.Update(question);
-            _questionRepository.UpdateQuestionPosition( moduleId, questionId, model.Position);
+            _questionRepository.UpdateQuestionPosition(moduleId, questionId, model.Position);
 
             return model;
         }
