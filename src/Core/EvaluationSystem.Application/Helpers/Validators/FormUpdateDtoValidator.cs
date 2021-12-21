@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace EvaluationSystem.Application.Helpers.Validators
 {
-    public class FormCreateDtoValidator : AbstractValidator<FormCreateDto>
+    public class FormUpdateDtoValidator : AbstractValidator<FormUpdateDto>
     {
-        public FormCreateDtoValidator()
+        public FormUpdateDtoValidator()
         {
             RuleFor(t => t.Name)
                  .NotEmpty().WithMessage("Form {PropertyName} can't be empty!")

@@ -8,9 +8,11 @@ namespace EvaluationSystem.Application.Validators
         public AnswerDtoValidator()
         {
             RuleFor(t => t.AnswerText)
-                  .NotEmpty().WithMessage("{PropertyName} can't be empty!")
-                    .NotNull().WithMessage("{PropertyName} can't be null!")
+                  .NotEmpty().WithMessage("Answer {PropertyName} can't be empty!")
+                    .NotNull().WithMessage("Answer {PropertyName} can't be null!")
                     .Length(1, 255);
+            RuleFor(t => t.Position)
+                    .GreaterThan(-1).WithMessage("Answer {PropertyName} must be positive number!");
         }
     }
 }
