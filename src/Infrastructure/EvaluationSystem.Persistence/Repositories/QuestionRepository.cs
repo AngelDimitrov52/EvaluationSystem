@@ -39,7 +39,7 @@ namespace EvaluationSystem.Persistence.Repositories
             string query = @"SELECT qt.Id, qt.[Name], qt.DateOfCreation , qt.[Type] , qt.IsReusable
                              FROM QuestionTemplate AS qt
                              RIGHT JOIN ModuleQuestion AS mq ON mq.IdQuestion = qt.Id  
-                             WHERE qt.[Name] = @QuestionName AND mq.Id = @ModuleId AND qt.Id != @QuestoinId;";
+                             WHERE qt.[Name] = @QuestionName AND mq.IdModule = @ModuleId AND qt.Id != @QuestoinId;";
             var result = Connection.QueryFirstOrDefault<QuestionTemplate>(query, new { QuestionName = name, QuestoinId = questoinId, ModuleId = moduleId}, Transaction);
             return result;
         }
