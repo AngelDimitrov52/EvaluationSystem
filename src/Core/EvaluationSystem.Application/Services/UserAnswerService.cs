@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using EvaluationSystem.Application.Models.AnswerModels;
 using EvaluationSystem.Application.Models.AttestationAnswerModel.Dtos;
 using EvaluationSystem.Application.Models.AttestationAnswerModel.Interface;
 using EvaluationSystem.Application.Models.AttestationAnswerModels.Interface;

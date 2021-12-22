@@ -7,6 +7,7 @@ using EvaluationSystem.Application.Services.HelpServices;
 using EvaluationSystem.Domain.Entities;
 using EvaluationSystem.Domain.Enums;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
 namespace EvaluationSystem.Application.Services
@@ -46,6 +47,11 @@ namespace EvaluationSystem.Application.Services
         public AnswerGetDto Create(int questionId, AnswerCreateDto model)
         {
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
+            var isAnswerExists = GetAll(questionId).FirstOrDefault(x => x.AnswerText == model.AnswerText);
+            if (isAnswerExists != null)
+            {
+                throw new HttpException($"Answer with this name already exists in this Question!", HttpStatusCode.BadRequest);
+            }
 
             var answer = _mapper.Map<AnswerTemplate>(model);
             var question = _questionRepository.GetById(questionId);
@@ -69,15 +75,20 @@ namespace EvaluationSystem.Application.Services
             return _mapper.Map<AnswerGetDto>(answer);
         }
 
-        public AnswerGetDto Update(int questionId, int id, AnswerCreateDto model)
+        public AnswerGetDto Update(int questionId, int answerId, AnswerCreateDto model)
         {
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
-            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<AnswerTemplate>(id, _answerRepository);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<AnswerTemplate>(answerId, _answerRepository);
+            var isAnswerExists = GetAll(questionId).FirstOrDefault(x => x.AnswerText == model.AnswerText && x.Id != answerId);
+            if (isAnswerExists != null)
+            {
+                throw new HttpException($"Answer with this name already exists in this Question!", HttpStatusCode.BadRequest);
+            }
 
             var answer = _mapper.Map<AnswerTemplate>(model);
 
             answer.IdQuestion = questionId;
-            answer.Id = id;
+            answer.Id = answerId;
             _answerRepository.Update(answer);
 
             return _mapper.Map<AnswerGetDto>(answer);
