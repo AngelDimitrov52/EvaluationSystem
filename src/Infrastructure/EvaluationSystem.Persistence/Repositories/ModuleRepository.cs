@@ -12,6 +12,15 @@ namespace EvaluationSystem.Persistence.Repositories
         public ModuleRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
+        public ModuleTemplate GetAllModulesWithModileIdFormIdModuleName(int formId, int moduleId, string moduleName)
+        {
+            string query = @"SELECT mt.Id , mt.[Name]
+                            FROM ModuleTemplate AS mt 
+                            RIGHT JOIN FormModule AS fm ON fm.IdModule = mt.Id 
+                            WHERE mt.[Name] = @ModuleName AND fm.IdForm = @IdForm AND mt.Id != @IdModule";
+            var result = Connection.QueryFirstOrDefault<ModuleTemplate>(query, new { IdForm = formId, IdModule = moduleId, ModuleName = moduleName }, Transaction);
+            return result;
+        }
         public List<FormModuleTemplateDto> GetFormModulesByFormId(int formId)
         {
             string query = @"SELECT * FROM FormModule WHERE IdForm = @IdForm  ORDER BY [Position] ASC";

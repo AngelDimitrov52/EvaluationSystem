@@ -61,6 +61,11 @@ namespace EvaluationSystem.Application.Services
         public ModuleGetDto Create(int formId, ModuleCreateDto model)
         {
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
+            var isModuleExist = _moduleRepository.GetAllModulesWithModileIdFormIdModuleName(formId,0,model.Name);
+            if (isModuleExist != null)
+            {
+                throw new HttpException($"Module with this name already exists in this form!", HttpStatusCode.BadRequest);
+            }
 
             var module = _mapper.Map<ModuleTemplate>(model);
             int moduleId = _moduleRepository.Create(module);
@@ -81,6 +86,11 @@ namespace EvaluationSystem.Application.Services
         {
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
+            var isModuleExist = _moduleRepository.GetAllModulesWithModileIdFormIdModuleName(formId, moduleId, model.Name);
+            if (isModuleExist != null)
+            {
+                throw new HttpException($"Module with this name already exists in this form!", HttpStatusCode.BadRequest);
+            }
             var modulePosition = _moduleRepository.GetFormModulesByFormId(formId).Where(x => x.IdModule == moduleId && x.IdForm == formId).FirstOrDefault();
             ThrowExceptionWhenModuleIsNotInForm(formId, moduleId, modulePosition);
 

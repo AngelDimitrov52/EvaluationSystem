@@ -57,6 +57,12 @@ namespace EvaluationSystem.Application.Services
         public QuestionGetDto Create(int moduleId, QuestionCreateDto model)
         {
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
+            var isQuestionExist = _questionRepository.GetQuestionCustomByNameModuleIdAndQuestionId(model.Name, moduleId, 0);
+            if (isQuestionExist != null)
+            {
+                throw new HttpException($"Question with this name already exists!", HttpStatusCode.BadRequest);
+            }
+
             if (model.Answers != null)
             {
                 if (model.Type == AnswersTypes.TextField && model.Answers.Count > 0)
@@ -84,6 +90,11 @@ namespace EvaluationSystem.Application.Services
         {
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<ModuleTemplate>(moduleId, _moduleRepository);
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
+            var isQuestionExist = _questionRepository.GetQuestionCustomByNameModuleIdAndQuestionId(model.Name, moduleId, questionId);
+            if (isQuestionExist != null)
+            {
+                throw new HttpException($"Question with this name already exists!", HttpStatusCode.BadRequest);
+            }
             var questionPosition = _questionRepository.GetModuleQuestions(moduleId).Where(x => x.IdModule == moduleId && x.IdQuestion == questionId).FirstOrDefault();
             ThrowExceptionWhenQustionIsNotInModule(moduleId, questionId, questionPosition);
 

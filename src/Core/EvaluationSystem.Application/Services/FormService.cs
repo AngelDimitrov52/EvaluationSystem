@@ -62,17 +62,17 @@ namespace EvaluationSystem.Application.Services
             }
             return createForm;
         }
-        public FormUpdateDto Update(int id, FormUpdateDto model)
+        public FormUpdateDto Update(int formId, FormUpdateDto model)
         {
-            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(id, _formRepository);
-            var isFormExist = _formRepository.GetFormByName(model.Name);
+            ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(formId, _formRepository);
+            var isFormExist = _formRepository.GetFormByNameAndId(model.Name, formId);
             if (isFormExist != null)
             {
                 throw new HttpException($"Form with this name already exists!", HttpStatusCode.BadRequest);
             }
 
             var form = _mapper.Map<FormTemplate>(model);
-            form.Id = id;
+            form.Id = formId;
             _formRepository.Update(form);
             return _mapper.Map<FormUpdateDto>(form);
         }

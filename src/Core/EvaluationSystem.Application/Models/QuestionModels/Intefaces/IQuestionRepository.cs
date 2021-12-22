@@ -12,5 +12,7 @@ namespace EvaluationSystem.Application.Models.QuestionModels.Intefaces
         void AddQuestionToModule(int moduleId, int questionId, int position);
         void DeleteQuestionFromModule(int questionId);
         void UpdateQuestionPosition(int moduleId, int questionId, int position);
+        QuestionTemplate GetQuestionTemplateByNameAndId(string name, int questoinId);
+        QuestionTemplate GetQuestionCustomByNameModuleIdAndQuestionId(string name, int moduleId, int questoinId);
     }
 }

@@ -73,6 +73,12 @@ namespace EvaluationSystem.Application.Services
         }
         public QuestionTemplateGetDto Create(QuestionTemplateCreateDto model)
         {
+            var isQuestionExist = _questionRepository.GetQuestionTemplateByNameAndId(model.Name, 0);
+            if (isQuestionExist != null)
+            {
+                throw new HttpException($"Question template with this name already exists!", HttpStatusCode.BadRequest);
+            }
+
             var question = _mapper.Map<QuestionTemplate>(model);
             question.IsReusable = true;
             question.DateOfCreation = DateTime.Now;
@@ -89,6 +95,11 @@ namespace EvaluationSystem.Application.Services
         public QuestionTemplateUpdateDto Update(int questionId, QuestionTemplateUpdateDto model)
         {
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<QuestionTemplate>(questionId, _questionRepository);
+            var isQuestionExist = _questionRepository.GetQuestionTemplateByNameAndId(model.Name, questionId);
+            if (isQuestionExist != null)
+            {
+                throw new HttpException($"Question template with this name already exists!", HttpStatusCode.BadRequest);
+            }
 
             var questionFromDB = _questionRepository.GetById(questionId);
             var question = _mapper.Map<QuestionTemplate>(model);

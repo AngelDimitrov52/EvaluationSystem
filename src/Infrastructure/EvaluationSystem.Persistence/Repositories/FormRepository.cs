@@ -23,6 +23,12 @@ namespace EvaluationSystem.Persistence.Repositories
             var result = Connection.QueryFirstOrDefault<FormTemplate>(query, new { FormName = name }, Transaction);
             return result;
         }
+        public FormTemplate GetFormByNameAndId(string name, int formId)
+        {
+            string query = @"SELECT * FROM FormTemplate WHERE [Name] = @FormName AND Id != @Id;";
+            var result = Connection.QueryFirstOrDefault<FormTemplate>(query, new { FormName = name, Id = formId }, Transaction);
+            return result;
+        }
         public void DeleteFormFromFormModuleTable(int formId)
         {
             string query = @"Delete from FormModule where IdForm = @IdForm";
