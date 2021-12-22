@@ -65,6 +65,11 @@ namespace EvaluationSystem.Application.Services
         public FormUpdateDto Update(int id, FormUpdateDto model)
         {
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<FormTemplate>(id, _formRepository);
+            var isFormExist = _formRepository.GetFormByName(model.Name);
+            if (isFormExist != null)
+            {
+                throw new HttpException($"Form with this name already exists!", HttpStatusCode.BadRequest);
+            }
 
             var form = _mapper.Map<FormTemplate>(model);
             form.Id = id;
