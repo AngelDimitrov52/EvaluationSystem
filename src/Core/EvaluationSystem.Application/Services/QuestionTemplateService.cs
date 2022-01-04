@@ -84,12 +84,13 @@ namespace EvaluationSystem.Application.Services
             question.DateOfCreation = DateTime.Now;
             ThrowExceptionHeplService.ThrowExceptionWhenAnsersIsNotNumericalOptions(question.Type, question.Answers);
 
-            int index = _questionRepository.Create(question);
+            int questionId = _questionRepository.Create(question);
             if (question.Type == AnswersTypes.TextField && question.Answers.Count > 0)
             {
                 throw new HttpException("Invalid create answer in question with type TextField!", HttpStatusCode.BadRequest);
             }
-            var questionWithAnswer = CreateQuestionAnswers(index, question);
+
+            var questionWithAnswer = CreateQuestionAnswers(questionId, question);
             return _mapper.Map<QuestionTemplateGetDto>(questionWithAnswer);
         }
         public QuestionTemplateUpdateDto Update(int questionId, QuestionTemplateUpdateDto model)
@@ -123,6 +124,11 @@ namespace EvaluationSystem.Application.Services
             model.Id = questionId;
             foreach (var answer in model.Answers)
             {
+                var isAnswerExists = _answerService.GetAll(questionId).FirstOrDefault(x => x.AnswerText == answer.AnswerText);
+                if (isAnswerExists != null)
+                {
+                    throw new HttpException($"Answer with this name already exists in this Question!", HttpStatusCode.BadRequest);
+                }
                 answer.IdQuestion = questionId;
                 int answerId = _answerRepository.Create(answer);
                 answer.Id = answerId;

@@ -30,10 +30,11 @@ namespace EvaluationSystem.Persistence.Repositories
         }
         public QuestionTemplate GetQuestionTemplateByNameAndId(string name, int questoinId)
         {
-            string query = @"SELECT * FROM [EvaluationSystem].[dbo].QuestionTemplate WHERE [Name] = @QuestionName AND IsReusable = 1 And Id != @QuestoinId";
+            string query = @"SELECT * FROM QuestionTemplate WHERE [Name] = @QuestionName AND IsReusable = 1 And Id != @QuestoinId";
             var result = Connection.QueryFirstOrDefault<QuestionTemplate>(query, new { QuestionName = name, QuestoinId = questoinId }, Transaction);
             return result;
         }
+ 
         public QuestionTemplate GetQuestionCustomByNameModuleIdAndQuestionId(string name, int moduleId, int questoinId)
         {
             string query = @"SELECT qt.Id, qt.[Name], qt.DateOfCreation , qt.[Type] , qt.IsReusable
