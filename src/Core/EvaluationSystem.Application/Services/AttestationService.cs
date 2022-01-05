@@ -156,7 +156,10 @@ namespace EvaluationSystem.Application.Services
 
             _attestationRepository.DeleteAttestationFromAttestationParticipant(attestationId);
             _attestationRepository.Delete(attestationId);
-            _attestationFormService.Delete(attestation.IdAttestationForm);
+            if (attestation != null)
+            {
+                _attestationFormService.Delete(attestation.IdAttestationForm);
+            }
         }
         private List<AttestationGetDto> SetAttestationStatus(List<AttestationGetDto> model)
         {
