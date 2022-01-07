@@ -2,6 +2,7 @@
 using EvaluationSystem.Application.Models.UserModels.Interface;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace EvaluationSystem.API.Controllers
 {
@@ -16,7 +17,7 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpGet]
-        public List<UserGetDto> GetAll()
+        public Task<List<UserGetDto>> GetAll()
         {
             return _userService.GetAll();
         }

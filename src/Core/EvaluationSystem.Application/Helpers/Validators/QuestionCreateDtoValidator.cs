@@ -5,7 +5,6 @@ namespace EvaluationSystem.Application.Helpers.Validators
 {
     public class QuestionCreateDtoValidator : AbstractValidator<QuestionCreateDto>
     {
-
         public QuestionCreateDtoValidator()
         {
             RuleFor(t => t.Name)
