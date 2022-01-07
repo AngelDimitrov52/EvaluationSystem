@@ -4,12 +4,18 @@ using EvaluationSystem.Application.Models.UserModels.Dtos;
 using EvaluationSystem.Application.Models.UserModels.Interface;
 using Microsoft.Graph;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EvaluationSystem.Application.Services
 {
     public class UserService : IUserService
     {
+        private readonly string[] scopes = new[] { "https://graph.microsoft.com/.default" };
+        private const string tenantId = "50ae1bf7-d359-4aff-91ac-b084dc52111e";
+        private const string clientId = "dc32305c-c493-44e0-9654-0de398e76d50";
+        private const string clientSecret = "1m57Q~ClngoPOBs-AQzcLuRnrQIXYyoX5-yLQ";
+
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly ICurrentUser _currentUser;
@@ -23,17 +29,12 @@ namespace EvaluationSystem.Application.Services
 
         public async Task<List<UserGetDto>> GetAll()
         {
-            var scopes = new[] { "https://graph.microsoft.com/.default" };
-            var tenantId = "50ae1bf7-d359-4aff-91ac-b084dc52111e";
-            var clientId = "dc32305c-c493-44e0-9654-0de398e76d50";
-            var clientSecret = "1m57Q~ClngoPOBs-AQzcLuRnrQIXYyoX5-yLQ";
             var clientSecretCredential = new ClientSecretCredential(
                 tenantId, clientId, clientSecret);
             var graphClient = new GraphServiceClient(clientSecretCredential, scopes);
-            var allUsersFormAzure = await GetAllUsersFromAzure(graphClient);
+            var allUsersFormAzure = await UpdatingUserInDB(graphClient);
 
-
-            var users = _userRepository.GetAll();
+            var users = _userRepository.GetAll().OrderBy(x => x.Email).ToList();
             return _mapper.Map<List<UserGetDto>>(users);
         }
         public List<UserToEvaluationDto> GetAllUsersToEvaluation()
@@ -42,9 +43,8 @@ namespace EvaluationSystem.Application.Services
             return _userRepository.GetAllAttestationWithUsersToEvaluation(id);
         }
 
-        private async Task<List<UsersFromAzure>> GetAllUsersFromAzure(GraphServiceClient graphClient)
+        private async Task<List<UsersFromAzure>> UpdatingUserInDB(GraphServiceClient graphClient)
         {
-
             var users = await graphClient.Users
                      .Request()
                      .Filter("(accountEnabled eq true)")
@@ -70,7 +70,6 @@ namespace EvaluationSystem.Application.Services
             var allUsersFormAzure = _mapper.Map<List<UsersFromAzure>>(allUsers);
             foreach (var userFromAzure in allUsersFormAzure)
             {
-
                 var user = _userRepository.GetUserByEmail(userFromAzure.Email);
                 if (user == null)
                 {
