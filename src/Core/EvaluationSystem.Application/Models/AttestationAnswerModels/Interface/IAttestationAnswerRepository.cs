@@ -7,7 +7,7 @@ namespace EvaluationSystem.Application.Models.AttestationAnswerModels.Interface
 {
     public interface IAttestationAnswerRepository : IGenericRepository<AttestationAnswer>
     {
-        List<AnswerTemplate> GetAllByQuestionId(int questionId);
+        List<AttestationAnswer> GetAllByQuestionId(int questionId);
         void DeleteWithQuestionId(int idQuestion);
     }
 }

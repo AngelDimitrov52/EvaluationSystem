@@ -14,7 +14,7 @@ namespace EvaluationSystem.API.Controllers
         {
             _attestationAnswerService = attestationAnswerService;
         }
-        [HttpGet("attestationId{attestationId}/participantEmail/{participantEmail}")]
+        [HttpGet("attestationId/{attestationId}/participantEmail/{participantEmail}")]
         public FormAttestationDto GetAll(int attestationId, string participantEmail)
         {
             return _attestationAnswerService.GetFormWhithCurrentAnswers(attestationId, participantEmail);

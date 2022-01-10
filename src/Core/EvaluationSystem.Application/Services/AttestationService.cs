@@ -3,6 +3,7 @@ using EvaluationSystem.Application.Models.AttestationAnswerModel.Interface;
 using EvaluationSystem.Application.Models.AttestationFormModels.Interface;
 using EvaluationSystem.Application.Models.AttestationModels.Dtos;
 using EvaluationSystem.Application.Models.AttestationModels.Interface;
+using EvaluationSystem.Application.Models.AttestationParicipantModels.Interface;
 using EvaluationSystem.Application.Models.Exceptions;
 using EvaluationSystem.Application.Models.FormModels.Dtos;
 using EvaluationSystem.Application.Models.FormModels.Interface;
@@ -28,6 +29,7 @@ namespace EvaluationSystem.Application.Services
         private readonly IAttestationFormService _attestationFormService;
         private readonly IFormService _formService;
         private readonly IMapper _mapper;
+        private readonly IAttestationParticipantRepository _attestationParticipantRepository;
 
         public AttestationService(IAttestationRepository attestationRepository,
                                   IFormRepository formRepository,
@@ -35,7 +37,8 @@ namespace EvaluationSystem.Application.Services
                                   IMapper mapper,
                                   IAttestationFormService attestationFormService,
                                   IFormService formService,
-                                  IUserAnswerService userAnswerService)
+                                  IUserAnswerService userAnswerService,
+                                  IAttestationParticipantRepository attestationParticipantRepository)
         {
             _attestationRepository = attestationRepository;
             _formRepository = formRepository;
@@ -44,6 +47,7 @@ namespace EvaluationSystem.Application.Services
             _attestationFormService = attestationFormService;
             _formService = formService;
             _userAnswerService = userAnswerService;
+            _attestationParticipantRepository = attestationParticipantRepository;
         }
 
         public List<AttestationGetDto> GetAll()
@@ -128,7 +132,8 @@ namespace EvaluationSystem.Application.Services
             var attestationId = _attestationRepository.Create(attestationToCreate);
             foreach (var participant in usersParticipantCreateDtos)
             {
-                _attestationRepository.AddParticipantToAttestation(attestationId, participant.Id, participant.Position);
+                var attestationFormId = _attestationFormService.Create(_mapper.Map<FormCreateDto>(formTemplate));
+                _attestationRepository.AddParticipantToAttestation(attestationId, participant.Id, participant.Position, attestationFormId);
             }
 
             var form = _attestationFormService.GetById(formId);
@@ -151,6 +156,8 @@ namespace EvaluationSystem.Application.Services
 
         public void Delete(int attestationId)
         {
+            var allParticipants = _attestationParticipantRepository.GetAllUserParticipatnByAttestationId(attestationId);
+
             var attestation = _attestationRepository.GetById(attestationId);
             _userAnswerService.DeleteWithAttestationId(attestationId);
 
@@ -159,6 +166,11 @@ namespace EvaluationSystem.Application.Services
             if (attestation != null)
             {
                 _attestationFormService.Delete(attestation.IdAttestationForm);
+            }
+
+            foreach (var participant in allParticipants)
+            {
+                _attestationFormService.Delete(participant.AttestationFormId);
             }
         }
         private List<AttestationGetDto> SetAttestationStatus(List<AttestationGetDto> model)

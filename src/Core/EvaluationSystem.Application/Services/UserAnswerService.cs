@@ -54,9 +54,13 @@ namespace EvaluationSystem.Application.Services
         public FormAttestationDto GetFormWhithCurrentAnswers(int attestationId, string participantEmail)
         {
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<Attestation>(attestationId, _attestationRepository);
+            var participant = _userRepository.GetUserByEmail(participantEmail);
+            if (participant == null)
+            {
+                throw new HttpException("User with this name do not exists!", HttpStatusCode.NotFound);
+            }
             var attestation = _attestationRepository.GetById(attestationId);
             var formGet = _attestationFormService.GetById(attestation.IdAttestationForm);
-            var participant = _userRepository.GetUserByEmail(participantEmail);
             var allAttestationAnswers = _userAnswerRepository.GetAllAttestationAnswerByUserAndAttestation(attestationId, participant.Id);
 
             var resultForm = _mapper.Map<FormAttestationDto>(formGet);

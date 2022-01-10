@@ -9,5 +9,6 @@ namespace EvaluationSystem.Application.Models.UserModels.Interface
     {
         List<UserToEvaluationDto> GetAllAttestationWithUsersToEvaluation(int participantId);
         User GetUserByEmail(string email);
+        void DeleteByEmail(string email);
     }
 }

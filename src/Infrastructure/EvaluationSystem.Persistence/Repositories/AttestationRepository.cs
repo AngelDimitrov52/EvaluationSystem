@@ -23,11 +23,11 @@ namespace EvaluationSystem.Persistence.Repositories
             var result = Connection.Query<AttestationFromDbDto>(query, null, Transaction);
             return (List<AttestationFromDbDto>)result;
         }
-        public void AddParticipantToAttestation(int attestationId, int participantId, string position)
+        public void AddParticipantToAttestation(int attestationId, int participantId, string position, int attestationFormId)
         {
             var status = "Open";
-            string query = "INSERT INTO [AttestationParticipant] (IdAttestation , IdUserParticipant , [Status],Position) VALUES(@IdAttestation, @IdUserParticipant, @Status,@Position);";
-            Connection.Execute(query, new { IdAttestation = attestationId, IdUserParticipant = participantId, Status = status, Position = position }, Transaction);
+            string query = "INSERT INTO [AttestationParticipant] (IdAttestation , IdUserParticipant , [Status],Position, AttestationFormId) VALUES(@IdAttestation, @IdUserParticipant, @Status,@Position,@AttestationFormId);";
+            Connection.Execute(query, new { IdAttestation = attestationId, IdUserParticipant = participantId, Status = status, Position = position, AttestationFormId = attestationFormId }, Transaction);
         }
         public void DeleteAttestationFromAttestationParticipant(int attestationId)
         {

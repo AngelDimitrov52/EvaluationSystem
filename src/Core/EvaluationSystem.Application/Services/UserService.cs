@@ -68,14 +68,37 @@ namespace EvaluationSystem.Application.Services
             }
 
             var allUsersFormAzure = _mapper.Map<List<UsersFromAzure>>(allUsers);
-            foreach (var userFromAzure in allUsersFormAzure)
+            var usersFromDB = _userRepository.GetAll();
+            if (allUsersFormAzure.Count > usersFromDB.Count)
             {
-                var user = _userRepository.GetUserByEmail(userFromAzure.Email);
-                if (user == null)
+                foreach (var userFromAzure in allUsersFormAzure)
                 {
-                    var userName = userFromAzure.Name;
-                    user = new Domain.Entities.User { Name = userName, Email = userFromAzure.Email };
-                    _userRepository.Create(user);
+                    var user = _userRepository.GetUserByEmail(userFromAzure.Email);
+                    if (user == null)
+                    {
+                        var userName = userFromAzure.Name;
+                        user = new Domain.Entities.User { Name = userName, Email = userFromAzure.Email };
+                        _userRepository.Create(user);
+                    }
+                }
+            }
+            else if (allUsersFormAzure.Count < usersFromDB.Count)
+            {
+                foreach (var userFromDb in usersFromDB)
+                {
+                    bool isExists = false;
+                    foreach (var userFromAzure in allUsersFormAzure)
+                    {
+                        if (userFromDb.Email == userFromAzure.Email)
+                        {
+                            isExists = true;
+                            break;
+                        }
+                    }
+                    if (isExists == false)
+                    {
+                        _userRepository.DeleteByEmail(userFromDb.Email);
+                    }
                 }
             }
             return allUsersFormAzure;

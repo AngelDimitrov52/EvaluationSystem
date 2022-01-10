@@ -12,11 +12,11 @@ namespace EvaluationSystem.Persistence.Repositories.AttestationRepositories
         public AttestationAnswerRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
-        public List<AnswerTemplate> GetAllByQuestionId(int questionId)
+        public List<AttestationAnswer> GetAllByQuestionId(int questionId)
         {
             string query = @"SELECT * FROM AttestationAnswer WHERE IdQuestion = @questionId";
-            var result = Connection.Query<AnswerTemplate>(query, new { questionId = questionId }, Transaction);
-            return (List<AnswerTemplate>)result;
+            var result = Connection.Query<AttestationAnswer>(query, new { questionId = questionId }, Transaction);
+            return (List<AttestationAnswer>)result;
         }
         public void DeleteWithQuestionId(int idQuestion)
         {

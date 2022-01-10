@@ -9,5 +9,6 @@ namespace EvaluationSystem.Domain.Entities.AttestationEntities
         public bool IsReusable { get; set; }
         public AnswersTypes Type { get; set; }
         public List<AttestationAnswer> Answers { get; set; }
+        public string AnswerText { get; set; }
     }
 }

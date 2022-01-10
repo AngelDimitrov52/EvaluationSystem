@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using EvaluationSystem.Application.Models.AttestationAnswerModels.Interface;
+using EvaluationSystem.Application.Models.AttestationQuestionModels.Dtos;
 using EvaluationSystem.Application.Models.AttestationQuestionModels.Interface;
 using EvaluationSystem.Application.Models.QuestionModels.Dtos;
 using EvaluationSystem.Domain.Entities.AttestationEntities;
+using EvaluationSystem.Domain.Enums;
 using System.Collections.Generic;
 
 namespace EvaluationSystem.Application.Services.AttestationServices
@@ -50,6 +52,36 @@ namespace EvaluationSystem.Application.Services.AttestationServices
                 result.Add(mapQuestion);
             }
             return result;
+        }
+        public void Update(AttestationQuestionUpdateDto attestationQuestionUpdateDto)
+        {
+            var questionFromDB = _attestationQuestionRepository.GetById(attestationQuestionUpdateDto.attestationQuestionId);
+
+            if (questionFromDB.Type == AnswersTypes.TextField)
+            {
+                questionFromDB.AnswerText = attestationQuestionUpdateDto.AnswerText;
+                _attestationQuestionRepository.Update(questionFromDB);
+            }
+            else
+            {
+                var answers = _attestationAnswerRepository.GetAllByQuestionId(attestationQuestionUpdateDto.attestationQuestionId);
+                foreach (var answer in answers)
+                {
+                    if (answer.IsDefault == true)
+                    {
+                        answer.IsDefault = false;
+                        _attestationAnswerRepository.Update(answer);
+                    }
+                }
+
+                foreach (var answerId in attestationQuestionUpdateDto.AnswerIds)
+                {
+                    var defaultAnswer = _attestationAnswerRepository.GetById(answerId);
+                    defaultAnswer.IsDefault = true;
+                    _attestationAnswerRepository.Update(defaultAnswer);
+                }
+
+            }
         }
         public void Delete(int questionId)
         {
