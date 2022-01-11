@@ -5,6 +5,7 @@ using EvaluationSystem.Application.Models.AttestationAnswerModels.Interface;
 using EvaluationSystem.Application.Models.AttestationFormModels.Interface;
 using EvaluationSystem.Application.Models.AttestationModels.Interface;
 using EvaluationSystem.Application.Models.AttestationModuleModels.Interface;
+using EvaluationSystem.Application.Models.AttestationParicipantModels.Interface;
 using EvaluationSystem.Application.Models.AttestationQuestionModels.Interface;
 using EvaluationSystem.Application.Models.Exceptions;
 using EvaluationSystem.Application.Models.FormModels.Dtos;
@@ -27,6 +28,7 @@ namespace EvaluationSystem.Application.Services
         private readonly IAttestationModuleRepository _attestationModuleRepository;
         private readonly IAttestationAnswerRepository _attestationAnswerRepository;
         private readonly IAttestationFormService _attestationFormService;
+        private readonly IAttestationParticipantRepository _attestationParticipantRepository;
         private readonly IMapper _mapper;
 
         private readonly ICurrentUser _currentUser;
@@ -38,7 +40,8 @@ namespace EvaluationSystem.Application.Services
                                  IAttestationFormService attestationFormService,
                                  IAttestationModuleRepository attestationModuleRepository,
                                  IAttestationQuestionRepository attestationQuestionRepository,
-                                 IAttestationAnswerRepository attestationAnswerRepository)
+                                 IAttestationAnswerRepository attestationAnswerRepository,
+                                 IAttestationParticipantRepository attestationParticipantRepository)
         {
             _userAnswerRepository = userAnswerRepository;
             _attestationRepository = attestationRepository;
@@ -49,6 +52,7 @@ namespace EvaluationSystem.Application.Services
             _attestationModuleRepository = attestationModuleRepository;
             _attestationQuestionRepository = attestationQuestionRepository;
             _attestationAnswerRepository = attestationAnswerRepository;
+            _attestationParticipantRepository = attestationParticipantRepository;
         }
 
         public FormAttestationDto GetFormWhithCurrentAnswers(int attestationId, string participantEmail)
@@ -59,8 +63,11 @@ namespace EvaluationSystem.Application.Services
             {
                 throw new HttpException("User with this name do not exists!", HttpStatusCode.NotFound);
             }
+            var user = _userRepository.GetUserByEmail(participantEmail);
+            var participantFormId = _attestationParticipantRepository.GetAllParticipantFormId(attestationId, user.Id);
+
             var attestation = _attestationRepository.GetById(attestationId);
-            var formGet = _attestationFormService.GetById(attestation.IdAttestationForm);
+            var formGet = _attestationFormService.GetById(participantFormId.AttestationFormId);
             var allAttestationAnswers = _userAnswerRepository.GetAllAttestationAnswerByUserAndAttestation(attestationId, participant.Id);
 
             var resultForm = _mapper.Map<FormAttestationDto>(formGet);

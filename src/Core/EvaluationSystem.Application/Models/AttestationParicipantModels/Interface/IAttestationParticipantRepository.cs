@@ -7,6 +7,7 @@ namespace EvaluationSystem.Application.Models.AttestationParicipantModels.Interf
     public interface IAttestationParticipantRepository : IGenericRepository<AttestationParticipant>
     {
         List<AttestationParticipant> GetAllUserParticipatnByAttestationId(int attestationId);
+        AttestationParticipant GetAllParticipantFormId(int attestationId, int userId);
 
     }
 }
