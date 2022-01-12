@@ -1,5 +1,4 @@
 ﻿using EvaluationSystem.Application.Models.GenericRepository;
-using EvaluationSystem.Domain.Entities;
 using EvaluationSystem.Domain.Entities.AttestationEntities;
 using System.Collections.Generic;
 
