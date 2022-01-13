@@ -8,6 +8,6 @@ namespace EvaluationSystem.Application.Models.AttestationParicipantModels.Interf
     {
         List<AttestationParticipant> GetAllUserParticipatnByAttestationId(int attestationId);
         AttestationParticipant GetAllParticipantFormId(int attestationId, int userId);
-
+        List<AttestationParticipant> GetAllParticipantWithUserId(int userId);
     }
 }

@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
 using Azure.Identity;
+using EvaluationSystem.Application.Models.AttestationModels.Interface;
+using EvaluationSystem.Application.Models.AttestationParicipantModels.Interface;
+using EvaluationSystem.Application.Models.Exceptions;
 using EvaluationSystem.Application.Models.UserModels.Dtos;
 using EvaluationSystem.Application.Models.UserModels.Interface;
 using Microsoft.Graph;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace EvaluationSystem.Application.Services
@@ -18,13 +22,21 @@ namespace EvaluationSystem.Application.Services
 
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
+        private readonly IAttestationParticipantRepository _attestationParticipantRepository;
+        private readonly IAttestationService _attestationService;
         private readonly ICurrentUser _currentUser;
 
-        public UserService(IUserRepository userRepository, ICurrentUser currentUser, IMapper mapper)
+        public UserService(IUserRepository userRepository,
+                           ICurrentUser currentUser,
+                           IMapper mapper,
+                           IAttestationParticipantRepository attestationParticipantRepository,
+                           IAttestationService attestationService)
         {
             _userRepository = userRepository;
+            _attestationService = attestationService;
             _mapper = mapper;
             _currentUser = currentUser;
+            _attestationParticipantRepository = attestationParticipantRepository;
         }
 
         public async Task<List<UserGetDto>> GetAll()
@@ -67,39 +79,45 @@ namespace EvaluationSystem.Application.Services
             }
 
             var allUsersFormAzure = _mapper.Map<List<UsersFromAzure>>(allUsers);
-            var usersFromDB = _userRepository.GetAll();
-            if (allUsersFormAzure.Count > usersFromDB.Count)
+            if (allUsersFormAzure.Count == 0)
             {
+                throw new HttpException("Something wrong with users from Graph Microsoft!", HttpStatusCode.BadRequest);
+            }
+            var usersFromDB = _userRepository.GetAll();
+
+            foreach (var userFromAzure in allUsersFormAzure)
+            {
+                var user = _userRepository.GetUserByEmail(userFromAzure.Email);
+                if (user == null)
+                {
+                    var userName = userFromAzure.Name;
+                    user = new Domain.Entities.User { Name = userName, Email = userFromAzure.Email };
+                    _userRepository.Create(user);
+                }
+            }
+
+            foreach (var userFromDb in usersFromDB)
+            {
+                bool isExists = false;
                 foreach (var userFromAzure in allUsersFormAzure)
                 {
-                    var user = _userRepository.GetUserByEmail(userFromAzure.Email);
-                    if (user == null)
+                    if (userFromDb.Email == userFromAzure.Email)
                     {
-                        var userName = userFromAzure.Name;
-                        user = new Domain.Entities.User { Name = userName, Email = userFromAzure.Email };
-                        _userRepository.Create(user);
+                        isExists = true;
+                        break;
                     }
                 }
-            }
-            else if (allUsersFormAzure.Count < usersFromDB.Count)
-            {
-                foreach (var userFromDb in usersFromDB)
+                if (isExists == false)
                 {
-                    bool isExists = false;
-                    foreach (var userFromAzure in allUsersFormAzure)
+                    var allParicipatUsers = _attestationParticipantRepository.GetAllParticipantWithUserId(userFromDb.Id);
+                    foreach (var user in allParicipatUsers)
                     {
-                        if (userFromDb.Email == userFromAzure.Email)
-                        {
-                            isExists = true;
-                            break;
-                        }
+                        _attestationService.Delete(user.IdAttestation);
                     }
-                    if (isExists == false)
-                    {
-                        _userRepository.DeleteByEmail(userFromDb.Email);
-                    }
+                    _userRepository.DeleteByEmail(userFromDb.Email);
                 }
             }
+
             return allUsersFormAzure;
         }
     }

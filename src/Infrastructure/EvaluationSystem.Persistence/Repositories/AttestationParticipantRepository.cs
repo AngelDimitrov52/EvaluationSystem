@@ -25,5 +25,12 @@ namespace EvaluationSystem.Persistence.Repositories
             var result = Connection.QueryFirstOrDefault<AttestationParticipant>(query, new { IdAttestation = attestationId, IdUserParticipant = userId }, Transaction);
             return (AttestationParticipant)result;
         }
+        public List<AttestationParticipant> GetAllParticipantWithUserId(int userId)
+        {
+            string query = @"SELECT * FROM AttestationParticipant
+                                      WHERE IdUserParticipant = @IdUserParticipant";
+            var result = Connection.Query<AttestationParticipant>(query, new { IdUserParticipant = userId }, Transaction);
+            return (List<AttestationParticipant>)result;
+        }
     }
 }
