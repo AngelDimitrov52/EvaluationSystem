@@ -8,7 +8,7 @@ namespace EvaluationSystem.API.Controllers
 {
     [Route("api/questionTemplate")]
     [ApiController]
-    public class QuestionTemplateController : BaseController
+    public class QuestionTemplateController : BaseAdminController
     {
         private readonly IQuestionTemplateService _questionTemplateService;
 

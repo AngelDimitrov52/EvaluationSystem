@@ -29,8 +29,7 @@ namespace EvaluationSystem.Application.Services
 
         public async Task<List<UserGetDto>> GetAll()
         {
-            var clientSecretCredential = new ClientSecretCredential(
-                tenantId, clientId, clientSecret);
+            var clientSecretCredential = new ClientSecretCredential(tenantId, clientId, clientSecret);
             var graphClient = new GraphServiceClient(clientSecretCredential, scopes);
             var allUsersFormAzure = await UpdatingUserInDB(graphClient);
 

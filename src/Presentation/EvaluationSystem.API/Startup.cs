@@ -65,6 +65,11 @@ namespace EvaluationSystem.API
                 options.Authority = Configuration["Auth2:Domain"];
                 options.Audience = Configuration["Auth2:Audience"];
             });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireRole("3ec073da-256d-4a76-a135-846325d5f464"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
