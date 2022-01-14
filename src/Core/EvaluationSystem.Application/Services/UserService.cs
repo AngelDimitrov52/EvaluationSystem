@@ -59,6 +59,11 @@ namespace EvaluationSystem.Application.Services
             var users = await graphClient.Users
                      .Request()
                      .Filter("(accountEnabled eq true)")
+                     .Select(u => new
+                     {
+                         u.DisplayName,
+                         u.UserPrincipalName
+                     })
                      .GetAsync();
 
             var allUsers = new List<User>();
