@@ -77,12 +77,12 @@ namespace EvaluationSystem.Application.Services
                 }
                 users = await users.NextPageRequest.GetAsync();
             }
-
             var allUsersFormAzure = _mapper.Map<List<UsersFromAzure>>(allUsers);
             if (allUsersFormAzure.Count == 0)
             {
                 throw new HttpException("Something wrong with users from Graph Microsoft!", HttpStatusCode.BadRequest);
             }
+
             var usersFromDB = _userRepository.GetAll();
 
             foreach (var userFromAzure in allUsersFormAzure)
@@ -95,7 +95,6 @@ namespace EvaluationSystem.Application.Services
                     _userRepository.Create(user);
                 }
             }
-
             foreach (var userFromDb in usersFromDB)
             {
                 bool isExists = false;
@@ -117,7 +116,6 @@ namespace EvaluationSystem.Application.Services
                     _userRepository.DeleteByEmail(userFromDb.Email);
                 }
             }
-
             return allUsersFormAzure;
         }
     }

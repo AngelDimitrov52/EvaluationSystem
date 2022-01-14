@@ -30,7 +30,6 @@ namespace EvaluationSystem.Application.Services
         private readonly IAttestationFormService _attestationFormService;
         private readonly IAttestationParticipantRepository _attestationParticipantRepository;
         private readonly IMapper _mapper;
-
         private readonly ICurrentUser _currentUser;
         public UserAnswerService(IUserAnswerRepository userAnswerRepository,
                                  IAttestationRepository attestationRepository,
