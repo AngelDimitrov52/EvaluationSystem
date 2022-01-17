@@ -18,19 +18,6 @@ namespace EvaluationSystem.Application.Services.AttestationServices
             _mapper = mapper;
             _attestationModuleService = attestationModuleService;
         }
-
-        public int Create(FormCreateDto model)
-        {
-            var form = _mapper.Map<AttestationForm>(model);
-            var formId = _attestationFormRepository.Create(form);
-            form.Id = formId;
-
-            foreach (var module in model.Modules)
-            {
-               _attestationModuleService.Create(formId, module);
-            }
-            return formId;
-        }
         public FormGetDto GetById(int formId)
         {
             ThrowExceptionHeplService.ThrowExceptionWhenEntityDoNotExist<AttestationForm>(formId, _attestationFormRepository);
@@ -40,6 +27,19 @@ namespace EvaluationSystem.Application.Services.AttestationServices
             form.Modules = _attestationModuleService.GetAllModules(formId);
             return form;
         }
+        public int Create(FormCreateDto model)
+        {
+            var form = _mapper.Map<AttestationForm>(model);
+            var formId = _attestationFormRepository.Create(form);
+            form.Id = formId;
+
+            foreach (var module in model.Modules)
+            {
+                _attestationModuleService.Create(formId, module);
+            }
+            return formId;
+        }
+
         public void Delete(int formId)
         {
             var form = GetById(formId);

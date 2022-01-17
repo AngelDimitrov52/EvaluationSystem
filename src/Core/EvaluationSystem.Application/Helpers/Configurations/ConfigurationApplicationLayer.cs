@@ -6,6 +6,7 @@ using EvaluationSystem.Application.Models.AttestationFormModels.Interface;
 using EvaluationSystem.Application.Models.AttestationModels.Interface;
 using EvaluationSystem.Application.Models.AttestationModuleModels.Interface;
 using EvaluationSystem.Application.Models.AttestationQuestionModels.Interface;
+using EvaluationSystem.Application.Models.ExportModels.Interface;
 using EvaluationSystem.Application.Models.FormModels.Interface;
 using EvaluationSystem.Application.Models.ModuleModels.Interface;
 using EvaluationSystem.Application.Models.QuestionModels;
@@ -43,6 +44,8 @@ namespace EvaluationSystem.Application.Helpers.Configurations
             services.AddScoped<IAttestationService, AttestationService>();
             services.AddScoped<IUserAnswerService, UserAnswerService>();
             services.AddScoped<ICurrentUser, CurrentUser>();
+            services.AddScoped<IExportService, ExportService>();
+
 
             return services;
         }

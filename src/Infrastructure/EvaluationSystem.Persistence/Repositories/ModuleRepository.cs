@@ -21,6 +21,7 @@ namespace EvaluationSystem.Persistence.Repositories
             var result = Connection.QueryFirstOrDefault<ModuleTemplate>(query, new { IdForm = formId, IdModule = moduleId, ModuleName = moduleName }, Transaction);
             return result;
         }
+
         public List<FormModuleTemplateDto> GetFormModulesByFormId(int formId)
         {
             string query = @"SELECT * FROM FormModule WHERE IdForm = @IdForm  ORDER BY [Position] ASC";
