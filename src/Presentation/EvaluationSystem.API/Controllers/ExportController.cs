@@ -15,9 +15,15 @@ namespace EvaluationSystem.API.Controllers
         }
 
         [HttpGet("Self-Assessment/{attestationId}")]
-        public ExportSelfAssessmentDto GetAll(int attestationId)
+        public ExportSelfAssessmentDto GetSelfAssessment(int attestationId)
         {
             return _exportService.GetExportForSelfAssesmentForm(attestationId);
+        }
+
+        [HttpGet("360/{attestationId}")]
+        public ExportThreeSixtyAssessmentDto GetThreeSixty(int attestationId)
+        {
+            return _exportService.GetExportForThreeSixtyForm(attestationId);
         }
     }
 }
