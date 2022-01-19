@@ -71,6 +71,11 @@ namespace EvaluationSystem.Application.Services
                 }
             }
 
+            if (model.IsTemplate == true)
+            {
+                _questionTemplateService.Create(_mapper.Map<QuestionTemplateCreateDto>(model));
+            }
+
             var question = _mapper.Map<QuestionTemplate>(model);
             question.IsReusable = false;
             question.DateOfCreation = DateTime.Now;

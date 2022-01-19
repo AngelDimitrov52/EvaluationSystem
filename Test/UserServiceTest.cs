@@ -32,7 +32,7 @@ namespace Tests
         [Test]
         public void Verify_UserGetAll_ReturnAllUsers()
         {
-            var count = 69;
+            var count = 68;
             var users = _userRepository.GetAll();
             Assert.That(count == users.Count);
         }
@@ -40,12 +40,12 @@ namespace Tests
         [Test]
         public void Verify_UserGetAll_ReturnCurrentUsers()
         {
-            var user = new User { Id = 1, Name = "Angel Dimitrov", Email = "ADimitrov@vsgbg.com" };
-            var result = _userRepository.GetAll();
+            var user = new User { Id = 216, Name = "Angel Dimitrov", Email = "ADimitrov@vsgbg.com" };
+            var result = _userRepository.GetById(216);
 
-            Assert.That(result[0].Id == user.Id);
-            Assert.That(result[0].Name == user.Name);
-            Assert.That(result[0].Email == user.Email);
+            Assert.That(result.Id == user.Id);
+            Assert.That(result.Name == user.Name);
+            Assert.That(result.Email == user.Email);
         }
     }
 }
