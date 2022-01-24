@@ -109,6 +109,10 @@ namespace EvaluationSystem.Application.Services
             var participants = new List<UserEvaluatorCreateDto>();
             foreach (var participant in model.Participants)
             {
+
+                // Email sending
+                //SendEmailService.SendEmail(formTemplate.Name, user.Name, participant.Email);
+
                 if (!participants.Any(x => x.Email == participant.Email))
                 {
                     participants.Add(participant);
