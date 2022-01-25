@@ -16,7 +16,6 @@ namespace EvaluationSystem.Application.Services.HelpServices
 
         public static void SendEmail(string formName, string userToEvalName, string participantEmail)
         {
-
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(sendName, sendEmailAddress));
             message.To.Add(MailboxAddress.Parse(participantEmail));
@@ -31,7 +30,6 @@ namespace EvaluationSystem.Application.Services.HelpServices
             client.Connect(host, port, true);
             client.Authenticate(sendEmailAddress, password);
             client.Send(message);
-
         }
     }
 }
